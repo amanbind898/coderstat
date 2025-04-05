@@ -38,8 +38,7 @@ export const metadata = {
     "coding progress",
     "software developer tools"
   ],
-  metadataBase: new URL("https://coderstat.vercel.app"), // replace with your domain
-  themeColor: "#f97316", // Tailwind orange-500
+  metadataBase: new URL("https://coderstat.vercel.app"),
   openGraph: {
     title: "CoderSTAT – Track Your Coding Journey",
     description: "Monitor your coding growth with question, event, and profile trackers – built for devs who mean business.",
@@ -56,23 +55,17 @@ export const metadata = {
     locale: "en_US",
     type: "website",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "CoderSTAT – Track Your Coding Journey",
-    description: "Track and showcase your coding skills with question, event, and profile insights.",
-    images: ["/og-image.png"],
-    creator: "@yourTwitterHandle", // Optional
-  },
+ 
   icons: {
     icon: "./mascot.png",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+   
   },
 };
 
 
 export default function RootLayout({ children }) {
   return (
+    <ClerkProvider>
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -87,5 +80,6 @@ export default function RootLayout({ children }) {
   
       </body>
     </html>
+    </ClerkProvider>
   );
 }

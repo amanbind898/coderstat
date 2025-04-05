@@ -1,65 +1,121 @@
 "use client";
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Menu, X } from "lucide-react"; 
 
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
+
+const navLinks = [
+  { href: "/question-tracker", label: "Question Tracker" },
+  { href: "/profile-tracker", label: "Profile Tracker" },
+];
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasShadow, setHasShadow] = useState(false);
+  const pathname = usePathname();
+  const { user } = useUser();
+
+  // Scroll shadow effect
+  useEffect(() => {
+    const handleScroll = () => setHasShadow(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  const NavLink = ({ href, label }) => (
+
+    <Link
+      href={href}
+      className={`px-4 py-2 transition-colors duration-150 ${
+        pathname === href
+          ? "text-[var(--graph-blue)] font-semibold"
+          : "text-gray-600 hover:text-[var(--graph-blue)]"
+      }`}
+    >
+      {label}
+    </Link>
+  );
 
   return (
-    <nav className="flex items-center justify-between px-2 py-2  shadow-sm sticky top-0 bg-white z-50">
-      <div className="flex items-center">
-        <a href="/"><Image 
-          src="/logo.png" 
-          alt="Codfolio Logo" 
-          width={200} 
-          height={80} 
-          className="mr-2"
-        /> 
-        </a>
+    <nav
+      className={`sticky top-0 z-50 bg-white transition-shadow duration-200 ${
+        hasShadow ? "shadow-md" : "shadow-none"
+      }`}
+    >
+      <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
+        {/* Logo */}
+        <Link href="/" className="flex items-center space-x-2">
+          <Image src="/logo.png" alt="Logo" width={160} height={60} />
+        </Link>
+
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center space-x-4">
+          {navLinks.map((link) => (
+            <NavLink key={link.href} href={link.href} label={link.label} />
+          ))}
+
+          {/* Theme Toggle (placeholder) */}
+          <button className="text-gray-500 hover:text-gray-800">
+            <Sun className="w-5 h-5" />
+          </button>
+
+          {/* Auth Buttons */}
+          <SignedOut>
+           
+              <a href="/sign-up"><button className="px-4 py-2 font-semibold text-white bg-[var(--graph-blue)] rounded hover:bg-[var(--logo-blue)]" >
+                Login
+              </button>
+              </a>
+            
+          </SignedOut>
+
+          <SignedIn>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-700 hidden lg:inline">
+                Hi, {user?.firstName}
+              </span>
+              <UserButton afterSignOutUrl="/" />
+            </div>
+          </SignedIn>
+        </div>
+
+        {/* Mobile Toggle */}
+        <div className="md:hidden">
+          <button onClick={toggleMenu} className="text-gray-600 hover:text-gray-900">
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
       </div>
 
-      {/* Desktop Menu */}
-      <div className="hidden md:flex items-center space-x-4">
-        <Link href="/question-tracker" className="px-4 py-2 text-[var(--logo-blue)]  hover:text-[var(--graph-blue)]">
-          Question Tracker
-        </Link>
-      
-        <Link href="/profile-tracker" className="px-4 py-2 text-[var(--logo-blue)] hover:text-[var(--graph-blue)]">
-          Profile Tracker
-        </Link>
-        <button className="p-2 text-gray-500 hover:text-gray-800">
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-        </button>
-        <Link href="/login" className="px-4 py-2 font-bold text-white bg-[var(--graph-blue)] rounded hover:bg-[var(--logo-blue)]">
-          Login
-        </Link>
-      </div>
-
-      {/* Mobile Menu Button */}
-      <div className="md:hidden">
-        <button onClick={() => setIsOpen(!isOpen)} className="text-gray-600 hover:text-gray-900">
-          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </div>
-
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Dropdown */}
       {isOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white shadow-md md:hidden z-50 px-6 py-4 flex flex-col space-y-3">
-          <Link href="/question-tracker" className="hover:text-orange-500" onClick={() => setIsOpen(false)}>
-            Question Tracker
-          </Link>
-         
-          <Link href="/profile-tracker" className="hover:text-orange-500" onClick={() => setIsOpen(false)}>
-            Profile Tracker
-          </Link>
-          <Link href="/login" className="font-bold text-white bg-[var(--graph-blue)] rounded px-4 py-2 hover:bg-[var(--logo-blue)] text-center" onClick={() => setIsOpen(false)}>
-            Login
-          </Link>
+        <div className="md:hidden bg-white border-t px-6 py-4 space-y-3">
+          {navLinks.map((link) => (
+            <NavLink key={link.href} href={link.href} label={link.label} />
+          ))}
+
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button
+                className="w-full font-semibold text-white bg-[var(--graph-blue)] rounded px-4 py-2 hover:bg-[var(--logo-blue)]"
+                onClick={() => setIsOpen(false)}
+              >
+                Login
+              </button>
+            </SignInButton>
+          </SignedOut>
+
+          <SignedIn>
+            <div className="flex justify-start items-center gap-2">
+              <UserButton afterSignOutUrl="/" />
+              <span className="text-sm text-gray-700">Hi, {user?.firstName}</span>
+            </div>
+          </SignedIn>
         </div>
       )}
     </nav>
