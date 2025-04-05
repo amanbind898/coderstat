@@ -72,10 +72,10 @@ export default function RootLayout({ children }) {
       >
         <Navbar />
         <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-[calc(100vh-72px)] p-8 pb-20 gap-16 sm:p-20">
-        <main className="flex flex-col gap-[32px] row-start-2 items-center max-w-6xl w-full">
-        
-        {children}
-        </main>
+        <main className="w-full max-w-6xl mx-auto flex flex-col items-center gap-8 px-4 sm:px-6 md:px-8 py-6">
+  {children}
+</main>
+
         </div>
   
       </body>

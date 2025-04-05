@@ -1,10 +1,10 @@
 import { SignUp } from '@clerk/nextjs'
 import { Shield, Mail } from 'lucide-react'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+
 
 export default function Page() {
   return (
-    <section className=" bg-gradient-to-br from-blue-50 to-white">
+    <section className=" border-4 bg-gradient-to-br from-blue-50 to-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
         {/* Left Panel (hidden on small screens) */}
         <section className="relative hidden lg:flex items-center bg-[var(--graph-blue)] lg:col-span-5 xl:col-span-6">
@@ -66,15 +66,7 @@ export default function Page() {
               </p>
             </div>
 
-            {/* Alert */}
-            <Alert className="border-blue-200 bg-blue-50">
-              <Shield className="h-5 w-5 text-[var(--logo-blue)]" />
-              <AlertTitle className="text-blue-800">Get Started with CoderSTAT</AlertTitle>
-              <AlertDescription className="text-blue-700">
-                Create your account to track your coding progress across platforms. You’ll be
-                redirected to complete your developer profile after registration.
-              </AlertDescription>
-            </Alert>
+            
 
             {/* SignUp Form */}
             <SignUp
