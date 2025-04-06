@@ -7,9 +7,7 @@ function Hero1() {
     <div className="w-full relative px-4 sm:px-8 lg:px-16 ">
       {/* Headings */}
       <div className="text-center mb-2 sm:mb-16">
-        <h1 className="mb-6 text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
-          Track, analyze &amp; share
-        </h1>
+        
         <h2 className="mb-10 text-xl sm:text-2xl md:text-3xl font-normal text-[var(--primary-gray)]">
           <span className="text-[var(--logo-blue)] font-bold">CoderSTAT</span> helps you navigate and track your<br className="hidden sm:inline" />
           coding journey to success
