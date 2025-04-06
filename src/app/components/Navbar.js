@@ -50,7 +50,7 @@ export default function Navbar() {
       <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2">
-          <Image src="/logo.png" alt="Logo" width={160} height={60} />
+          <Image src="/logo.png" alt="Logo" width={200} height={80} />
         </Link>
 
         {/* Desktop Nav */}

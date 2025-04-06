@@ -4,52 +4,64 @@ import { eq, and, sql } from 'drizzle-orm';
 
 export async function importQuestionsFromJson(questions) {
   const result = { added: 0, skipped: 0, errors: [] };
-  
+
   try {
     for (const sheetName in questions) {
       const sheetQuestions = questions[sheetName];
-      
+
       for (const q of sheetQuestions) {
         try {
-          const problem = q['Problem: '] || q['Problem:'] || '';
+          const problem = q["Problem: "] || q["Problem:"] || "";
           if (!problem) {
             result.errors.push(`Missing problem title in question: ${JSON.stringify(q)}`);
             continue;
           }
-          
+
+          // Handle missing or invalid URL
+          let url = q.URL || "";
+          let source = "";
+          let sourceId = null;
+          if (url) {
+            try {
+              const urlObj = new URL(url);
+              source = urlObj.hostname.replace("www.", "").split(".")[0];
+              // Extract sourceId (e.g., LeetCode problem number)
+              const pathParts = urlObj.pathname.split("/").filter(Boolean);
+              sourceId = pathParts[pathParts.length - 1] || null; // Last segment as a basic heuristic
+            } catch (e) {
+              result.errors.push(`Invalid URL in question: ${JSON.stringify(q)}, Error: ${e.message}`);
+              url = null;
+            }
+          }
+
           const existingQuestion = await db
             .select()
             .from(MasterQuestions)
-            .where(and(
-              eq(MasterQuestions.problem, problem),
-              eq(MasterQuestions.url, q.URL)
-            ))
+            .where(and(eq(MasterQuestions.problem, problem), eq(MasterQuestions.url, url)))
             .limit(1);
-          
+
           if (existingQuestion.length > 0) {
             result.skipped++;
             continue;
           }
-          
-          const urlObj = new URL(q.URL);
-          const source = urlObj.hostname.replace('www.', '').split('.')[0];
-          
+
           await db.insert(MasterQuestions).values({
-            topic: q['Topic:'],
-            problem: problem,
-            url: q.URL,
-            difficulty: q['Difficulty'] || null,
-            source: source,
-            tags: JSON.stringify([q['Topic:']]),
+            topic: q["Topic:"] || "Uncategorized",
+            problem,
+            url,
+            difficulty: q["Difficulty"] || null,
+            source: source || "unknown",
+            sourceId,
+            tags: JSON.stringify([q["Topic:"]].filter(Boolean)), // Filter out null/undefined
           });
-          
+
           result.added++;
         } catch (error) {
           result.errors.push(`Error processing question: ${JSON.stringify(q)}, Error: ${error.message}`);
         }
       }
     }
-    
+
     return result;
   } catch (error) {
     result.errors.push(`General import error: ${error.message}`);
