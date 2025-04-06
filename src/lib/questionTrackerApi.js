@@ -17,7 +17,6 @@ export async function importQuestionsFromJson(questions) {
             continue;
           }
 
-          // Handle missing or invalid URL
           let url = q.URL || "";
           let source = "";
           let sourceId = null;
@@ -27,7 +26,7 @@ export async function importQuestionsFromJson(questions) {
               source = urlObj.hostname.replace("www.", "").split(".")[0];
               // Extract sourceId (e.g., LeetCode problem number)
               const pathParts = urlObj.pathname.split("/").filter(Boolean);
-              sourceId = pathParts[pathParts.length - 1] || null; // Last segment as a basic heuristic
+              sourceId = pathParts[pathParts.length - 1] || null; 
             } catch (e) {
               result.errors.push(`Invalid URL in question: ${JSON.stringify(q)}, Error: ${e.message}`);
               url = null;
