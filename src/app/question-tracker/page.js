@@ -2,39 +2,53 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { getUserQuestions, updateQuestionStatus, getUserProgressStats } from "../../lib/questionTrackerApi";
-import { ChevronDown, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronDown, ChevronRight,ChevronLeft, Loader2, Search, Filter, Calendar, Award, BookOpen, Clock, CheckCircle, BookmarkIcon, AlertCircle, TrendingUp } from "lucide-react";
 import Image from "next/image";
+import Leaderboard from "../components/Leaderboard";
 
 export default function QuestionTracker() {
   const { user, isLoaded } = useUser();
   const [questions, setQuestions] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState({ status: "" });
+  const [activeFilter, setActiveFilter] = useState({ status: "", difficulty: "", search: "" });
   const [expandedTopics, setExpandedTopics] = useState({});
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [showStats, setShowStats] = useState(true);
+  const [activeTab, setActiveTab] = useState("tracker");
+  const [sortBy, setSortBy] = useState("topic");
+  const [streakDays, setStreakDays] = useState(0);
 
-  const sourceimgmap = {
+  const sourceImgMap = {
     leetcode: "/leetcode.png",
     geeksforgeeks: "/gfg.png",
     practice: "/gfg.png",
     spoj: "/spoj.png",
-    techiedelight:"/TechieDelight.png",
+    techiedelight: "/TechieDelight.png",
     programiz: "/programiz.png",
     baeldung: "/baeldung.png",
     hackerearth: "/hackerearth.png",
     hackerrank: "/hackerrank.png",
     tutorialspoint: "/tutorialspoint.png",
-    onedrv:"/mascot-head.png",
+    onedrv: "/mascot-head.png",
   };
+
+  
 
   useEffect(() => {
     if (isLoaded && user?.id) {
       fetchQuestions();
       fetchStats();
+      calculateStreak();
     } else if (isLoaded) {
       setLoading(false);
     }
   }, [user?.id, isLoaded]);
+
+  const calculateStreak = () => {
+    // Mock implementation - in production this would call an API
+    setStreakDays(7);
+  };
 
   async function fetchQuestions() {
     setLoading(true);
@@ -71,7 +85,7 @@ export default function QuestionTracker() {
       fetchStats();
       
       // Open question in new tab if URL is provided
-      if (url && (status === "in_progress" || status === "bookmarked")) {
+      if (url && (status === "in_progress" )) {
         window.open(url, '_blank');
       }
     } catch (error) {
@@ -88,24 +102,41 @@ export default function QuestionTracker() {
     window.open(question.url, '_blank');
   };
 
-  const filteredQuestions = questions.filter(
-    (q) => activeFilter.status === "" || q.status === activeFilter.status
-  );
+  const filteredQuestions = questions.filter((q) => {
+    const matchesStatus = activeFilter.status === "" || q.status === activeFilter.status;
+    const matchesDifficulty = activeFilter.difficulty === "" || q.difficulty === activeFilter.difficulty;
+    const matchesSearch = activeFilter.search === "" || 
+      q.problem.toLowerCase().includes(activeFilter.search.toLowerCase()) ||
+      (q.topic && q.topic.toLowerCase().includes(activeFilter.search.toLowerCase()));
+    
+    return matchesStatus && matchesDifficulty && matchesSearch;
+  });
 
-  const questionsByTopic = {};
+  // Group questions by chosen sorting method
+  const groupedQuestions = {};
   filteredQuestions.forEach((question) => {
-    const topic = question.topic || "Uncategorized";
-    if (!questionsByTopic[topic]) questionsByTopic[topic] = [];
-    questionsByTopic[topic].push(question);
+    const groupKey = sortBy === "topic" 
+      ? (question.topic || "Uncategorized") 
+      : sortBy === "difficulty" 
+        ? (question.difficulty || "Unspecified")
+        : question.source || "Unknown Source";
+    
+    if (!groupedQuestions[groupKey]) groupedQuestions[groupKey] = [];
+    groupedQuestions[groupKey].push(question);
   });
 
   const toggleTopic = (topic) => {
     setExpandedTopics((prev) => ({ ...prev, [topic]: !prev[topic] }));
   };
 
+  // Reset all filters
+  const resetFilters = () => {
+    setActiveFilter({ status: "", search: "" });
+  };
+
   if (!isLoaded || loading || !user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-b from-gray-50 to-gray-100">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-b from-blue-50 to-indigo-50">
         <div className="flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg max-w-md w-full">
           <div className="relative w-40 h-40 mb-6">
             <div className="absolute inset-0 flex items-center justify-center">
@@ -118,7 +149,19 @@ export default function QuestionTracker() {
               />
             </div>
             <div className="absolute inset-0">
-              <div className="w-full h-full rounded-full border-t-4 border-blue-500 animate-spin"></div>
+              <svg className="animate-spin h-full w-full" viewBox="0 0 100 100">
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="45"
+                  fill="none"
+                  stroke="#4F46E5"
+                  strokeWidth="3"
+                  strokeDasharray="283"
+                  strokeDashoffset="100"
+                  strokeLinecap="round"
+                />
+              </svg>
             </div>
           </div>
           
@@ -128,7 +171,7 @@ export default function QuestionTracker() {
             </h3>
             
             <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-              <div className="bg-blue-600 h-2 rounded-full animate-pulse" style={{ width: "70%" }}></div>
+              <div className="bg-indigo-600 h-2 rounded-full animate-pulse" style={{ width: "70%" }}></div>
             </div>
             
             <p className="text-gray-600">
@@ -139,13 +182,13 @@ export default function QuestionTracker() {
               <div className="mt-8 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 justify-center">
                 <a
                   href="/sign-in"
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1 font-medium text-center"
+                  className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-300 transform hover:-translate-y-1 font-medium text-center"
                 >
                   Sign In
                 </a>
                 <a
                   href="/sign-up"
-                  className="px-6 py-3 bg-white text-blue-600 border border-blue-600 rounded-lg shadow-md hover:bg-blue-50 transition-all duration-300 transform hover:-translate-y-1 font-medium text-center"
+                  className="px-6 py-3 bg-white text-indigo-600 border border-indigo-600 rounded-lg shadow-md hover:bg-indigo-50 transition-all duration-300 transform hover:-translate-y-1 font-medium text-center"
                 >
                   Create Account
                 </a>
@@ -159,202 +202,398 @@ export default function QuestionTracker() {
 
   return (
     <div className="container mx-auto p-4 max-w-7xl">
-      {stats && (
-        <div className="mb-8 bg-white rounded-lg shadow-md p-4 sm:p-6 border border-gray-100">
-          <h2 className="text-xl sm:text-2xl font-bold mb-4">Your Progress</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
-            <div className="bg-green-100 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <p className="text-xs sm:text-sm text-gray-600">Solved</p>
-              <p className="text-lg sm:text-2xl font-bold">{stats.solved}</p>
-            </div>
-            <div className="bg-yellow-100 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <p className="text-xs sm:text-sm text-gray-600">In Progress</p>
-              <p className="text-lg sm:text-2xl font-bold">{stats.inProgress}</p>
-            </div>
-            <div className="bg-blue-100 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <p className="text-xs sm:text-sm text-gray-600">Bookmarked</p>
-              <p className="text-lg sm:text-2xl font-bold">{stats.bookmarked}</p>
-            </div>
-            <div className="bg-gray-100 p-3 rounded-lg shadow-sm hover:shadow-md transition-shadow">
-              <p className="text-xs sm:text-sm text-gray-600">Not Started</p>
-              <p className="text-lg sm:text-2xl font-bold">{stats.notStarted}</p>
-            </div>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
-            <div
-              className="bg-green-500 h-4 rounded-full transition-all duration-500"
-              style={{ width: `${stats.progressPercentage}%` }}
-            ></div>
-          </div>
-          <p className="mt-2 text-gray-600 text-sm">{stats.progressPercentage.toFixed(1)}% Complete</p>
+      {/* Navigation Tabs */}
+      <div className="mb-6 flex justify-center">
+        <div className="inline-flex bg-gray-100 rounded-xl p-1 shadow-sm">
+          <button
+            onClick={() => setActiveTab("tracker")}
+            className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
+              activeTab === "tracker" ? "bg-white text-indigo-600 shadow-sm" : "text-gray-600 hover:text-gray-800"
+            }`}
+          >
+            <span className="flex items-center">
+              <BookOpen className="w-4 h-4 mr-2" />
+              Question Tracker
+            </span>
+          </button>
+          <button
+            onClick={() => setActiveTab("leaderboard")}
+            className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
+              activeTab === "leaderboard" ? "bg-white text-indigo-600 shadow-sm" : "text-gray-600 hover:text-gray-800"
+            }`}
+          >
+            <span className="flex items-center">
+              <Award className="w-4 h-4 mr-2" />
+              Leaderboard
+            </span>
+          </button>
         </div>
-      )}
-
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700">Filter by Status</label>
-        <select
-          className="mt-1 block w-full sm:max-w-xs border border-gray-300 rounded-md shadow-sm p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
-          value={activeFilter.status}
-          onChange={(e) => setActiveFilter({ ...activeFilter, status: e.target.value })}
-        >
-          <option value="">All Statuses</option>
-          <option value="not_started">Not Started</option>
-          <option value="in_progress">In Progress</option>
-          <option value="solved">Solved</option>
-          <option value="bookmarked">Bookmarked</option>
-        </select>
       </div>
 
-      {/* Responsive Topic Sections */}
-      {Object.keys(questionsByTopic).length > 0 ? (
-        Object.keys(questionsByTopic).sort().map((topic) => (
-          <div key={topic} className="mb-4 bg-white shadow-md rounded-lg overflow-hidden border border-gray-100">
-            <div
-              className="bg-gray-50 px-4 py-3 sm:px-6 sm:py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center cursor-pointer hover:bg-gray-100 transition-colors"
-              onClick={() => toggleTopic(topic)}
-            >
-              <h2 className="text-base sm:text-lg font-medium flex items-center">
-                {expandedTopics[topic] ? (
-                  <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500 mr-2" />
-                ) : (
-                  <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500 mr-2" />
+      {activeTab === "tracker" ? (
+        <>
+          {/* User Stats and Streak Section */}
+          {stats && (
+            <div className="mb-8">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Your Progress</h2>
+                <button 
+                  onClick={() => setShowStats(!showStats)}
+                  className="text-sm text-indigo-600 hover:text-indigo-800 flex items-center"
+                >
+                  {showStats ? "Hide Details" : "Show Details"}
+                  <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${showStats ? "transform rotate-180" : ""}`} />
+                </button>
+              </div>
+              
+              {showStats && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {/* Main stats card */}
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 lg:col-span-2">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                      <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div className="p-2 bg-green-200 rounded-full mb-2">
+                          <CheckCircle className="h-5 w-5 text-green-700" />
+                        </div>
+                        <p className="text-2xl sm:text-3xl font-bold text-green-700">{stats.solved}</p>
+                        <p className="text-xs sm:text-sm text-green-600 font-medium">Solved</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-4 rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div className="p-2 bg-yellow-200 rounded-full mb-2">
+                          <Clock className="h-5 w-5 text-yellow-700" />
+                        </div>
+                        <p className="text-2xl sm:text-3xl font-bold text-yellow-700">{stats.inProgress}</p>
+                        <p className="text-xs sm:text-sm text-yellow-600 font-medium">In Progress</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div className="p-2 bg-blue-200 rounded-full mb-2">
+                          <BookmarkIcon className="h-5 w-5 text-blue-700" />
+                        </div>
+                        <p className="text-2xl sm:text-3xl font-bold text-blue-700">{stats.bookmarked}</p>
+                        <p className="text-xs sm:text-sm text-blue-600 font-medium">Bookmarked</p>
+                      </div>
+                      <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div className="p-2 bg-gray-200 rounded-full mb-2">
+                          <AlertCircle className="h-5 w-5 text-gray-700" />
+                        </div>
+                        <p className="text-2xl sm:text-3xl font-bold text-gray-700">{stats.notStarted}</p>
+                        <p className="text-xs sm:text-sm text-gray-600 font-medium">Not Started</p>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium text-gray-500 mb-1">Overall Progress</h3>
+                      <div className="relative pt-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <div>
+                            <span className="text-xs font-semibold inline-block text-indigo-600">
+                              {stats.progressPercentage.toFixed(1)}% Complete
+                            </span>
+                          </div>
+                          <div className="text-right">
+                            <span className="text-xs font-semibold inline-block text-indigo-600">
+                              {stats.solved} / {stats.solved + stats.inProgress + stats.bookmarked + stats.notStarted}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="overflow-hidden h-2 text-xs flex rounded-full bg-gray-200">
+                          <div
+                            style={{ width: `${stats.progressPercentage}%` }}
+                            className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full transition-all duration-500"
+                          ></div>
+                        </div>
+                      </div>
+                      
+                      {/* Topic Breakdown */}
+                    
+                    </div>
+                  </div>
+                  
+                  {/* Streak & Recent Activity Card */}
+                  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500 mb-3">Recently Solved</h3>
+                      <div className="space-y-2">
+                        {filteredQuestions
+                          .filter(q => q.status === "solved")
+                          .slice(0, 3)
+                          .map(question => (
+                            <div key={question.id} className="flex items-center p-2 bg-gray-50 rounded-lg">
+                              <div className="w-8 h-8 flex-shrink-0 mr-3">
+                                <Image
+                                  src={sourceImgMap[question.source] || "/default-source.png"}
+                                  alt={question.source}
+                                  width={32}
+                                  height={32}
+                                  className="rounded-full"
+                                />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs font-medium text-gray-900 truncate">
+                                  {question.problem}
+                                </p>
+                                <p className="text-xs text-gray-500 truncate">
+                                  {question.topic || "Uncategorized"}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
+                        {filteredQuestions.filter(q => q.status === "solved").length === 0 && (
+                          <div className="text-center p-4 text-sm text-gray-500">
+                            No solved questions yet
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Search and Filter Section */}
+          <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 p-4">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
+              <div className={`relative flex-1 max-w-lg transition-all ${isSearchFocused ? "ring-2 ring-indigo-300" : ""}`}>
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="Search questions, topics..."
+                  value={activeFilter.search}
+                  onChange={(e) => setActiveFilter({ ...activeFilter, search: e.target.value })}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setIsSearchFocused(false)}
+                />
+                {activeFilter.search && (
+                  <button
+                    onClick={() => setActiveFilter({ ...activeFilter, search: "" })}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  >
+                    <span className="text-gray-400 hover:text-gray-600">×</span>
+                  </button>
                 )}
-                {topic}
-                <span className="ml-2 text-xs sm:text-sm font-normal text-gray-500">
-                  ({questionsByTopic[topic].length} questions)
-                </span>
-              </h2>
-              <div className="flex space-x-2 mt-2 sm:mt-0">
-                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
-                  {questionsByTopic[topic].filter((q) => q.status === "solved").length} solved
-                </span>
-                <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
-                  {questionsByTopic[topic].filter((q) => q.status === "in_progress").length} in progress
-                </span>
+              </div>
+              
+              <div className="flex flex-wrap gap-2 sm:gap-4">
+                <div className="flex items-center space-x-2">
+                  <select
+                    className="border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm bg-gray-50 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
+                    value={activeFilter.status}
+                    onChange={(e) => setActiveFilter({ ...activeFilter, status: e.target.value })}
+                    aria-label="Filter by status"
+                  >
+                    <option value="">All Statuses</option>
+                    <option value="not_started">Not Started</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="solved">Solved</option>
+                    <option value="bookmarked">Bookmarked</option>
+                  </select>
+                </div>
+                
+                
+                
+                <div className="flex items-center space-x-2">
+                  <select
+                    className="border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm bg-gray-50 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    aria-label="Sort by"
+                  >
+                    <option value="topic">Group by Topic</option>
+                  
+                    <option value="source">Group by Source</option>
+                  </select>
+                </div>
+                
+                {(activeFilter.status !== "" || activeFilter.search !== "" ) && (
+                  <button
+                    onClick={resetFilters}
+                    className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors flex items-center"
+                  >
+                    <span>Clear Filters</span>
+                  </button>
+                )}
               </div>
             </div>
-
-            {expandedTopics[topic] && (
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50 hidden sm:table-header-group">
-                    <tr>
-                      <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Problem
-                      </th>
-                      <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Source
-                      </th>
-                      <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                      </th>
-                      <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {questionsByTopic[topic].map((question) => (
-                      <tr key={question.id} className="flex flex-col sm:table-row mb-4 sm:mb-0 hover:bg-gray-50">
-                        <td className="px-4 py-2 sm:px-6 sm:py-4 block sm:table-cell">
-                          <span className="sm:hidden font-medium">Problem: </span>
-                          <a
-                            href="#"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleQuestionClick(question);
-                            }}
-                            className="text-blue-600 hover:text-blue-900 break-words hover:underline"
-                          >
-                            {question.problem}
-                          </a>
-                        </td>
-                        <td className="px-4 py-2 sm:px-6 sm:py-4 block sm:table-cell">
-                         
-
-                          <div className="flex items-center space-x-2">
-                            <Image
-                              src={sourceimgmap[question.source] || "/default-source.png"}
-                              alt={question.source}
-                              width={40}
-                              height={40}
-                              className="rounded-full border-2 border-gray-300 p-2"
-                            />
-                            <span className="text-sm text-gray-700">{question.source}</span>
-                          </div>
-                        </td>
-                        <td className="px-4 py-2 sm:px-6 sm:py-4 block sm:table-cell">
-                          <span className="sm:hidden font-medium">Status: </span>
-                          <span
-                            className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
-                              question.status === "solved" ? "bg-green-100 text-green-800" : ""
-                            } ${
-                              question.status === "in_progress" ? "bg-yellow-100 text-yellow-800" : ""
-                            } ${question.status === "bookmarked" ? "bg-blue-100 text-blue-800" : ""} ${
-                              question.status === "not_started" || !question.status
-                                ? "bg-gray-100 text-gray-800"
-                                : ""
-                            }`}
-                          >
-                            {question.status === "not_started" || !question.status
-                              ? "Not Started"
-                              : question.status.replace("_", " ")}
-                          </span>
-                        </td>
-                        <td className="px-4 py-2 sm:px-6 sm:py-4 block sm:table-cell">
-                     
-                          <div className="flex flex-wrap gap-2">
-                            <button
-                              onClick={() => handleStatusChange(question.id, "not_started")}
-                              className="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200 active:scale-95 transition-transform duration-100 shadow-sm"
-                            >
-                              Reset
-                            </button>
-                            <button
-                              onClick={() => handleStatusChange(question.id, "in_progress", question.url)}
-                              className="px-3 py-1.5 text-sm font-medium text-yellow-700 bg-yellow-100 border border-yellow-300 rounded-lg hover:bg-yellow-200 active:scale-95 transition-transform duration-100 shadow-sm"
-                            >
-                              Start
-                            </button>
-                            <button
-                              onClick={() => handleStatusChange(question.id, "solved")}
-                              className="px-3 py-1.5 text-sm font-medium text-green-700 bg-green-100 border border-green-300 rounded-lg hover:bg-green-200 active:scale-95 transition-transform duration-100 shadow-sm"
-                            >
-                              Solved
-                            </button>
-                            <button
-                              onClick={() => handleStatusChange(question.id, "bookmarked", question.url)}
-                              className="px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-100 border border-blue-300 rounded-lg hover:bg-blue-200 active:scale-95 transition-transform duration-100 shadow-sm"
-                            >
-                              Bookmark
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
           </div>
-        ))
+
+          {/* Question Groups */}
+          {Object.keys(groupedQuestions).length > 0 ? (
+            <div className="space-y-6">
+              {Object.keys(groupedQuestions).sort().map((groupKey) => (
+                <div 
+                  key={groupKey} 
+                  className="bg-white shadow-sm rounded-xl overflow-hidden border border-gray-100 transition-all hover:shadow-md"
+                >
+                  <div
+                    className="bg-white px-4 py-3 sm:px-6 flex flex-col sm:flex-row justify-between items-start sm:items-center cursor-pointer hover:bg-gray-50 transition-colors border-b border-gray-100"
+                    onClick={() => toggleTopic(groupKey)}
+                  >
+                    <h2 className="text-base sm:text-lg font-medium flex items-center text-gray-800">
+                      {expandedTopics[groupKey] ? (
+                        <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-500 mr-2" />
+                      ) : (
+                        <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-500 mr-2" />
+                      )}
+                      {groupKey}
+                      <span className="ml-2 text-xs sm:text-sm font-normal text-gray-500">
+                        ({groupedQuestions[groupKey].length} questions)
+                      </span>
+                    </h2>
+                    <div className="flex space-x-2 mt-2 sm:mt-0">
+                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                        {groupedQuestions[groupKey].filter((q) => q.status === "solved").length} solved
+                      </span>
+                      <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">
+                        {groupedQuestions[groupKey].filter((q) => q.status === "in_progress").length} in progress
+                      </span>
+                    </div>
+                  </div>
+
+                  {expandedTopics[groupKey] && (
+                    <div>
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-100">
+                          <thead className="bg-gray-50 hidden sm:table-header-group">
+                            <tr>
+                              <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Problem
+                              </th>
+                              <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Source
+                              </th>
+                              
+                              <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status
+                              </th>
+                              <th className="px-4 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-gray-100">
+                            {groupedQuestions[groupKey].map((question) => (
+                              <tr key={question.id} className="flex flex-col sm:table-row hover:bg-gray-50 transition-colors">
+                                <td className="px-4 py-2 sm:px-6 sm:py-4 block sm:table-cell">
+                                  <span className="sm:hidden font-medium text-gray-700">Problem: </span>
+                                  <a
+                                    href="#"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      handleQuestionClick(question);
+                                    }}
+                                    className="text-indigo-600 hover:text-indigo-900 break-words hover:underline font-medium"
+                                  >
+                                    {question.problem}
+                                  </a>
+                                </td>
+                                <td className="px-4 py-2 sm:px-6 sm:py-4 block sm:table-cell">
+                                  <div className="flex items-center space-x-2">
+                                    <Image
+                                      src={sourceImgMap[question.source] || "/default-source.png"}
+                                      alt={question.source}
+                                      width={28}
+                                      height={28}
+                                      className="rounded-full border border-gray-200"
+                                    />
+                                    <span className="text-sm text-gray-600">{question.source}</span>
+                                  </div>
+                                </td>
+                                
+                                <td className="px-4 py-2 sm:px-6 sm:py-4 block sm:table-cell">
+                                  <span className="sm:hidden font-medium text-gray-700">Status: </span>
+                                  <span
+                                    className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
+                                      question.status === "solved" ? "bg-green-100 text-green-800" : ""
+                                    } ${
+                                      question.status === "in_progress" ? "bg-yellow-100 text-yellow-800" : ""
+                                    } ${question.status === "bookmarked" ? "bg-blue-100 text-blue-800" : ""} ${
+                                      question.status === "not_started" || !question.status
+                                        ? "bg-gray-100 text-gray-800"
+                                        : ""
+                                    }`}
+                                    >
+                                    {question.status === "not_started" || !question.status
+                                      ? "Not Started"
+                                      : question.status === "in_progress"
+                                        ? "In Progress"
+                                        : question.status.charAt(0).toUpperCase() + question.status.slice(1)}
+                                  </span>
+                                </td>
+                                <td className="px-4 py-2 sm:px-6 sm:py-4 block sm:table-cell">
+                                  <div className="flex flex-wrap gap-2">
+                                    <button
+                                      onClick={() => handleStatusChange(question.id, "in_progress", question.url)}
+                                      className="flex items-center px-3 py-1.5 text-xs font-medium text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg hover:bg-indigo-100 transition-colors"
+                                    >
+                                      <Clock className="w-3 h-3 mr-1" />
+                                      Start
+                                    </button>
+                                    <button
+                                      onClick={() => handleStatusChange(question.id, "solved")}
+                                      className="flex items-center px-3 py-1.5 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors"
+                                    >
+                                      <CheckCircle className="w-3 h-3 mr-1" />
+                                      Solved
+                                    </button>
+                                    <button
+                                      onClick={() => handleStatusChange(question.id, "bookmarked", question.url)}
+                                      className="flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
+                                    >
+                                      <BookmarkIcon className="w-3 h-3 mr-1" />
+                                      Bookmark
+                                    </button>
+                                    <button
+                                      onClick={() => handleStatusChange(question.id, "not_started")}
+                                      className="flex items-center px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors"
+                                    >
+                                      Reset
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center p-10 bg-white rounded-xl shadow-sm border border-gray-100">
+              <div className="flex flex-col items-center justify-center space-y-4">
+                <div className="bg-indigo-50 p-4 rounded-full">
+                 {/*  */}
+                </div>
+                <p className="text-lg font-medium text-gray-700">No questions match your filter criteria</p>
+                <p className="text-sm text-gray-500">Try adjusting your filters or add new questions</p>
+                <button 
+                  onClick={resetFilters}
+                  className="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            </div>
+          )}
+          
+         
+          
+          {/* Quick Action Floating Button */}
+          <div className="fixed bottom-6 right-6 z-10">
+            <button className="flex items-center justify-center w-14 h-14 rounded-full bg-indigo-600 text-white shadow-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+              <Filter className="h-6 w-6" />
+            </button>
+          </div>
+        </>
       ) : (
-        <div className="text-center p-6 sm:p-10 bg-white rounded-lg shadow-md border border-gray-100">
-          <div className="flex flex-col items-center justify-center space-y-4">
-            <div className="bg-gray-100 p-4 rounded-full">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-500">
-                <path d="M9.5 2L12 5.5 14.5 2"></path>
-                <path d="M5 10l7-7 7 7"></path>
-                <path d="M21 10v12h-3"></path>
-                <path d="M3 10v12h3"></path>
-                <path d="M12 10v12"></path>
-                <path d="M12 17h-2"></path>
-                <path d="M12 14h-2"></path>
-              </svg>
-            </div>
-            <p className="text-lg font-medium text-gray-700">No questions match your filter criteria.</p>
-            <p className="text-sm text-gray-500">Try adjusting your filters or add new questions.</p>
-          </div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <Leaderboard limit={10} />
         </div>
       )}
     </div>
