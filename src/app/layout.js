@@ -22,7 +22,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
 export const metadata = {
   title: {
     default: "CoderSTAT – Track Your Coding Journey",
@@ -47,7 +46,7 @@ export const metadata = {
     siteName: "CoderSTAT",
     images: [
       {
-        url: "/og-image.png", // Add this image in your public folder
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "CoderSTAT Preview",
@@ -56,32 +55,24 @@ export const metadata = {
     locale: "en_US",
     type: "website",
   },
- 
   icons: {
     icon: "./mascot-head.png",
-   
   },
 };
-
 
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar />
-        <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-[calc(100vh-72px)]  pb-20 gap-16 sm:p-20">
-        <main className="w-full max-w-6xl mx-auto flex flex-col items-center gap-8 px-2 sm:px-6 md:px-8 py-6">
-  {children}
-  
-</main>
-
-        </div>
-  <Footer />
-      </body>
-    </html>
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <Navbar />
+          {/* Simple container that allows full-width content without diminishing component size */}
+          <div className="min-h-[calc(100vh-72px)]">
+            {children}
+          </div>
+          <Footer />
+        </body>
+      </html>
     </ClerkProvider>
   );
 }
