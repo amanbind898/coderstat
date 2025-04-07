@@ -10,6 +10,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/n
 const navLinks = [
   { href: "/question-tracker", label: "Question Tracker" },
   { href: "/profile-tracker", label: "Profile Tracker" },
+  {href:"/settings", label:"Settings"},
 ];
 
 export default function Navbar() {
@@ -59,10 +60,7 @@ export default function Navbar() {
             <NavLink key={link.href} href={link.href} label={link.label} />
           ))}
 
-          {/* Theme Toggle (placeholder) */}
-          <button className="text-gray-500 hover:text-gray-800">
-            <Sun className="w-5 h-5" />
-          </button>
+         
 
           {/* Auth Buttons */}
           <SignedOut>

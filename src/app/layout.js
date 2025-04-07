@@ -8,6 +8,7 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
+
 import Navbar from "./components/Navbar";
 import { FileArchiveIcon } from "lucide-react";
 import Footer from "./components/Footer";
@@ -66,11 +67,12 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <Navbar />
-          {/* Simple container that allows full-width content without diminishing component size */}
+        
           <div className="min-h-[calc(100vh-72px)]">
             {children}
           </div>
           <Footer />
+
         </body>
       </html>
     </ClerkProvider>
