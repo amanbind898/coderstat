@@ -582,14 +582,6 @@ export default function QuestionTracker() {
             </div>
           )}
           
-         
-          
-          {/* Quick Action Floating Button */}
-          <div className="fixed bottom-6 right-6 z-10">
-            <button className="flex items-center justify-center w-14 h-14 rounded-full bg-indigo-600 text-white shadow-lg hover:bg-indigo-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              <Filter className="h-6 w-6" />
-            </button>
-          </div>
         </>
       ) : (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
