@@ -75,7 +75,7 @@ const PlatformCard = ({ platform, stats, isLoading }) => {
 
   const platformConfig = useMemo(() => ({
     LeetCode: {
-      logo: "/images/leetcode.png",
+      logo: "/leetcode.png",
       bgGradient: "from-yellow-900 to-yellow-700",
       categories: {
         Easy: { color: "bg-emerald-500" },
@@ -85,19 +85,19 @@ const PlatformCard = ({ platform, stats, isLoading }) => {
       rankLabel: "Global Rank"
     },
     Codeforces: {
-      logo: "/images/codeforces.jpg",
+      logo: "/codeforces.jpg",
       bgGradient: "from-blue-900 to-blue-700",
       totalOnly: true,
       rankLabel: "Rank"
     },
     CodeChef: {
-      logo: "/images/codechef.jpg",
+      logo: "/codechef.jpg",
       bgGradient: "from-purple-900 to-purple-700",
       totalOnly: true,
       rankLabel: "Rank"
     },
     GeeksforGeeks: {
-      logo: "/images/gfg.png",
+      logo: "/gfg.png",
       bgGradient: "from-green-900 to-green-700",
       categories: {
         Easy: { color: "bg-emerald-500" },

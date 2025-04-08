@@ -1,29 +1,25 @@
-// pages/api/profile.js
 import { db } from "../../../db/index";
 import { CodingPlatformStats } from "../../../db/schema";
 import { eq } from "drizzle-orm";
+import { NextResponse } from "next/server";
 
-export default async function handler(req, res) {
-  if (req.method === "POST") {
-    const { clerkId } = req.body;
+export async function POST(request) {
+  try {
+    const { clerkId } = await request.json();
+    
+    // Fetch all platform stats for the user
+    const userStats = await db
+      .select()
+      .from(CodingPlatformStats)
+      .where(eq(CodingPlatformStats.clerkId, clerkId));
 
-    try {
-      // Fetch all platform stats for the user
-      const userStats = await db
-        .select()
-        .from(CodingPlatformStats)
-        .where(eq(CodingPlatformStats.clerkId, clerkId));
-
-      if (userStats.length > 0) {
-        res.status(200).json({ userStats });
-      } else {
-        res.status(404).json({ error: "No stats found for the user" });
-      }
-    } catch (error) {
-      console.error("Error fetching userStats data:", error);
-      res.status(500).json({ error: "Failed to fetch userStats data" });
+    if (userStats.length > 0) {
+      return NextResponse.json({ userStats }, { status: 200 });
+    } else {
+      return NextResponse.json({ error: "No stats found for the user" }, { status: 404 });
     }
-  } else {
-    res.status(405).json({ error: "Method not allowed" });
+  } catch (error) {
+    console.error("Error fetching userStats data:", error);
+    return NextResponse.json({ error: "Failed to fetch userStats data" }, { status: 500 });
   }
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
-import { toast, ToastContainer } from "react-toastify"; // ✅ FIXED
+import { toast, ToastContainer } from "react-toastify"; 
 import "react-toastify/dist/ReactToastify.css";
 
 import UserProfile from "../components/UserProfile";
@@ -84,17 +84,34 @@ export default function Dashboard() {
 
   const fetchStatsData = async (profile) => {
     try {
+      console.log("Sending request to /api/stats with:", { clerkId: clerkUserId });
+      
       const response = await fetch("/api/stats", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ clerkId: clerkUserId }),
       });
-      const data = await response.json();
-
+      
+      console.log("Stats API response status:", response.status);
+      
+      // Get response as text first
+      const responseText = await response.text();
+      console.log("Response text:", responseText);
+      
+      // Try to parse JSON if possible
+      let data = {};
+      try {
+        data = responseText ? JSON.parse(responseText) : {};
+      } catch (jsonError) {
+        console.error("Failed to parse response as JSON:", jsonError);
+        throw new Error("Server returned invalid JSON");
+      }
+      
       if (response.status === 200) {
+        console.log("Parsed stats data:", data);
         setUserData(data.userStats || []);
       } else {
-        throw new Error(data.error || "Failed to fetch stats data");
+        throw new Error(data.error || `API error: ${response.status}`);
       }
     } catch (error) {
       console.error("Error fetching stats data:", error);
@@ -104,7 +121,17 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (clerkUserId) {
-      Promise.all([fetchProfileData(), fetchStatsData()]);
+      const loadData = async () => {
+        setIsLoading(true);
+        try {
+          const profile = await fetchProfileData();
+          await fetchStatsData(profile);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      
+      loadData();
     }
   }, [clerkUserId]);
 
@@ -185,12 +212,23 @@ export default function Dashboard() {
             <Card className="shadow-md hover:shadow-lg transition-all duration-300">
               <CardContent className="p-4 sm:p-6">
                 {userData ? (
-                  <PlatfromCards stats={userData} />
+                  <PlatformCards stats={userData} />
                 ) : (
                   <NoDataCard message="No platform stats available" />
                 )}
               </CardContent>
             </Card>
+            <ToastContainer
+              position="top-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover  />
+
           </div>
         </div>
       </div>
