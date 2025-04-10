@@ -48,10 +48,9 @@ Local Setup
 
 Future Enhancements
 -------------------
-- Add Codeforces, CodeChef, and GFG scraping/API support
 - Daily and weekly coding goal trackers
 - Personalized topic-wise recommendations
-- Social sharing and leaderboard system
+- Social sharing
 
 Contributors
 ------------
