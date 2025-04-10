@@ -52,9 +52,6 @@ Future Enhancements
 - Personalized topic-wise recommendations
 - Social sharing
 
-Contributors
-------------
-- Aman Kumar Bind – https://github.com/amankumarbind | IIIT Bhagalpur (CSE '26)
 
 License
 -------
