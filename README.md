@@ -35,7 +35,7 @@ Tech Stack
 Local Setup
 -----------
 1. Clone the repository
-   git clone https://github.com/your-username/coderstat.git
+   git clone https://github.com/amanbind898/coderstat.git
    cd coderstat
 
 2. Install dependencies
