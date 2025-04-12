@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+CoderSTAT
+=========
 
-First, run the development server:
+CoderSTAT is a powerful and elegant coding journey tracker built with Next.js and Tailwind CSS.
+It helps developers and students monitor their progress on various competitive programming platforms
+like LeetCode and GeeksforGeeks.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+"Helps you navigate and track your coding journey to success!"
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Preview
+-------
+![image](https://github.com/user-attachments/assets/7ad86f38-17ee-4bfb-ac3e-f43c7e80df62)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Features
+--------
+- Profile Tracker: View total DSA problems solved with easy, medium, hard, and fundamentals breakdown.
+- DSA Matrix: Aggregated data from LeetCode and GeeksforGeeks.
+- Question Tracker: Track your coding questions across platforms.
+- User Profile: Personalized dashboard showing user data, photo, and institution.
+- Responsive UI: Built with modern Tailwind CSS components.
+- Authentication & Settings page included for a personalized experience.
 
-## Learn More
+Tech Stack
+----------
+- Frontend: Next.js, React, Tailwind CSS
+- Icons: Lucide Icons / Heroicons
+- Authentication: Clerk / Firebase Auth
+- Styling: Tailwind CSS + Custom Components
+- Data Integration: LeetCode, GeeksforGeeks
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Local Setup
+-----------
+1. Clone the repository
+   git clone https://github.com/amanbind898/coderstat.git
+   cd coderstat
 
-## Deploy on Vercel
+2. Install dependencies
+   npm install
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Start the development server
+   npm run dev
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Visit http://localhost:3000
+
+Future Enhancements
+-------------------
+- Daily and weekly coding goal trackers
+- Personalized topic-wise recommendations
+- Social sharing
+
+
+License
+-------
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+Built with ❤️ to help you ace your coding journey!
