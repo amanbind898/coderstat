@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { toast, ToastContainer } from "react-toastify"; 
@@ -15,6 +15,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+
 export default function Dashboard() {
   const { user } = useUser();
   const clerkUserId = user?.id;
@@ -84,21 +85,13 @@ export default function Dashboard() {
 
   const fetchStatsData = async (profile) => {
     try {
-      console.log("Sending request to /api/stats with:", { clerkId: clerkUserId });
-      
       const response = await fetch("/api/stats", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ clerkId: clerkUserId }),
       });
-      
-      console.log("Stats API response status:", response.status);
-      
-      // Get response as text first
+
       const responseText = await response.text();
-      console.log("Response text:", responseText);
-      
-      // Try to parse JSON if possible
       let data = {};
       try {
         data = responseText ? JSON.parse(responseText) : {};
@@ -106,9 +99,8 @@ export default function Dashboard() {
         console.error("Failed to parse response as JSON:", jsonError);
         throw new Error("Server returned invalid JSON");
       }
-      
+
       if (response.status === 200) {
-        console.log("Parsed stats data:", data);
         setUserData(data.userStats || []);
       } else {
         throw new Error(data.error || `API error: ${response.status}`);
@@ -130,7 +122,6 @@ export default function Dashboard() {
           setIsLoading(false);
         }
       };
-      
       loadData();
     }
   }, [clerkUserId]);
@@ -142,6 +133,61 @@ export default function Dashboard() {
       </CardContent>
     </Card>
   );
+
+  
+  if (!user) {
+    return (
+      <div className="relative w-full h-screen overflow-hidden">
+      <div className="absolute inset-0 backdrop-blur-sm bg-black/30 z-10 flex items-center justify-center">
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-md w-full justify-center">
+          <div className="relative w-full flex justify-center items-center mb-6">
+            <div className="relative w-40 h-40">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Image
+                  src="/mascot.png"
+                  alt="Waving Mascot"
+                  width={120}
+                  height={120}
+                  className="animate-bounce"
+                />
+              </div>
+              <div className="absolute inset-0">
+                <svg className="animate-spin h-full w-full" viewBox="0 0 100 100">
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="45"
+                    fill="none"
+                    stroke="#4F46E5"
+                    strokeWidth="3"
+                    strokeDasharray="283"
+                    strokeDashoffset="100"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <h2 className="text-xl font-bold text-red-600 mb-2">You are not logged in!</h2>
+          <p className="text-gray-700 mb-4">Please sign in to view your profile.</p>
+          <a
+            href="/sign-in"
+            className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+          >
+            Go to Sign In
+          </a>
+        </div>
+      </div>
+      <div className="blur-sm pointer-events-none">
+        {/* Optionally render placeholder blurred content */}
+        <div className="h-full flex items-center justify-center text-white">
+          <h1 className="text-3xl">Loading Profile Page...</h1>
+        </div>
+      </div>
+    </div>
+    
+    );
+  }
 
   if (isLoading) {
     return (
@@ -200,7 +246,6 @@ export default function Dashboard() {
               <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-6">
                 {userData ? (
                   <>
-                 
                     <DsaStatsCard stats={userData} />
                     <CPStatsCard stats={userData} />
                   </>
@@ -228,8 +273,8 @@ export default function Dashboard() {
               rtl={false}
               pauseOnFocusLoss
               draggable
-              pauseOnHover  />
-
+              pauseOnHover
+            />
           </div>
         </div>
       </div>

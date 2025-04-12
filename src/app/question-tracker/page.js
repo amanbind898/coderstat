@@ -45,11 +45,6 @@ export default function QuestionTracker() {
     }
   }, [user?.id, isLoaded]);
 
-  const calculateStreak = () => {
-    // Mock implementation - in production this would call an API
-    setStreakDays(7);
-  };
-
   async function fetchQuestions() {
     setLoading(true);
     try {
