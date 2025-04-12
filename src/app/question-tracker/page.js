@@ -39,7 +39,7 @@ export default function QuestionTracker() {
     if (isLoaded && user?.id) {
       fetchQuestions();
       fetchStats();
-      calculateStreak();
+   
     } else if (isLoaded) {
       setLoading(false);
     }

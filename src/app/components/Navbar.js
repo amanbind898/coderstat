@@ -10,6 +10,7 @@ import { SignedIn, SignedOut, SignInButton, UserButton, useUser } from "@clerk/n
 const navLinks = [
   { href: "/question-tracker", label: "Question Tracker" },
   { href: "/profile-tracker", label: "Profile Tracker" },
+  {href:"/event-tracker", label:"Event Tracker"},
   {href:"/settings", label:"Settings"},
 ];
 
