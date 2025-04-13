@@ -76,7 +76,7 @@ export default function CodingContestTracker() {
         setIsLoading(false);
       } else {
        
-        const apiUrl = process.env.CLIST_API;
+        const apiUrl = process.env.NEXT_PUBLIC_CLIST_API;
         
         const response = await fetch(apiUrl);
         
@@ -250,7 +250,7 @@ export default function CodingContestTracker() {
           <div className="text-center text-red-500 p-4">{error}</div>
         ) : filteredContests.length === 0 ? (
           <div className="text-center p-8">
-            <p className="text-2xl mb-2">(⌣̩̩́_⌣̩̩̀)</p>
+            <p className="text-2xl mb-2"></p>
             <p className="text-lg">"First In First Out" says Queue,</p>
             <p className="text-lg">We have nothing to show you!</p>
           </div>
