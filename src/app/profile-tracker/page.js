@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { toast, ToastContainer } from "react-toastify"; 
 import "react-toastify/dist/ReactToastify.css";
-
+import { Share2, Globe, Lock } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import UserProfile from "../components/UserProfile";
 import PlatformCards from "../components/PlatfromCards";
 import DsaStatsCard from "../components/DsaStatsCard";
@@ -17,6 +18,7 @@ import { RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Dashboard() {
+  
   const { user } = useUser();
   const clerkUserId = user?.id;
   const [profileData, setProfileData] = useState(null);
@@ -133,7 +135,46 @@ export default function Dashboard() {
       </CardContent>
     </Card>
   );
-
+  const toggleProfileVisibility = async () => {
+    try {
+      const response = await fetch("/api/toggle-profile-visibility", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          clerkId: clerkUserId,
+          isPublic: !profileData.isPublic 
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error("Failed to update profile visibility");
+      }
+  
+      // Update the local state
+      setProfileData(prev => ({
+        ...prev,
+        isPublic: !prev.isPublic
+      }));
+      
+      toast.success(`Profile is now ${!profileData.isPublic ? 'public' : 'private'}`);
+    } catch (error) {
+      console.error("Error toggling profile visibility:", error);
+      toast.error("Failed to update profile visibility");
+    }
+  };
+  
+  const shareProfile = () => {
+    if (!profileData.isPublic) {
+      toast.warning("Make your profile public to share it");
+      return;
+    }
+    
+    // Create a sharable link
+    const url = `${window.location.origin}/profile/${profileData.clerkId}`;
+    console.log("Profile URL:", url);
+    navigator.clipboard.writeText(url);
+    toast.success("Profile link copied to clipboard!");
+  };
   
   if (!user) {
     return (
@@ -238,6 +279,39 @@ export default function Dashboard() {
                   {isRefreshing ? 'Refreshing...' : 'Refresh Coding Stats'}
                 </Button>
               )}
+              {profileData && (
+  <Card className="shadow-md p-4">
+    <CardContent className="p-0">
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center">
+            {profileData.isPublic ? <Globe size={18} className="text-green-500 mr-2" /> : <Lock size={18} className="text-gray-500 mr-2" />}
+            <span className="text-sm font-medium">Profile Visibility</span>
+          </div>
+          <Switch 
+            checked={profileData.isPublic} 
+            onCheckedChange={toggleProfileVisibility} 
+          />
+        </div>
+        <p className="text-xs text-gray-500">
+          {profileData.isPublic 
+            ? "Your profile is public and can be shared with anyone." 
+            : "Your profile is private and only visible to you."}
+        </p>
+        <Button 
+          variant={profileData.isPublic ? "default" : "outline"}
+          className="w-full text-sm py-2" 
+          onClick={shareProfile}
+          disabled={!profileData.isPublic}
+        >
+          <Share2 className="mr-2 h-4 w-4" />
+          {profileData.isPublic ? "Share Profile" : "Make Public to Share"}
+        </Button>
+      </div>
+    </CardContent>
+  </Card>
+)}
+
             </div>
           </div>
 

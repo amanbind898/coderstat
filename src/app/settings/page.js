@@ -1,18 +1,18 @@
 "use client";
-
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useUser } from "@clerk/clerk-react";
 import { db } from "../../db/index";
 import { eq } from "drizzle-orm";
-import { ProfileData, CodingPlatformStats } from "../../db/schema";
-import Image from "next/image";
+import { ProfileData } from "../../db/schema";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  User, Mail, MapPin, Github, Linkedin, Twitter, Instagram,
+import { 
+  Edit3, RefreshCw, User, Mail, Key, Save, X, MapPin, Calendar,
+  Github, Linkedin, Twitter, Instagram, Globe, Code
 } from "lucide-react";
+import Image from "next/image";
 
 function ProfilePage() {
   const { user } = useUser();
@@ -21,14 +21,15 @@ function ProfilePage() {
   const [isEditing, setIsEditing] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
-  const [statsLastUpdated, setStatsLastUpdated] = useState(null);
-
-  const fetchProfileData = useCallback(async () => {
+  const [activeTab, setActiveTab] = useState('personal');
+  
+  useEffect(() => {
     if (!clerkUserId) return;
-
+    fetchProfileData();
+  }, [clerkUserId]);
+  
+  const fetchProfileData = async () => {
     try {
-      setIsLoading(true);
       const userProfile = await db
         .select()
         .from(ProfileData)
@@ -37,49 +38,15 @@ function ProfilePage() {
 
       if (!userProfile) {
         await db.insert(ProfileData).values({
-          primaryEmail: user?.primaryEmailAddress?.emailAddress || "",
-          name: user?.fullName || "",
+          primaryEmail: user.primaryEmailAddress?.emailAddress || "",
+          name: user.fullName || "",
           clerkId: clerkUserId,
           createdAt: new Date().toISOString(),
-          dateOfBirth: null,
-          location: "",
-          bio: "",
-          instagram: "",
-          linkedin: "",
-          twitter: "",
-          github: "",
-          portfolio: "",
-          leetCode: "",
-          codeforces: "",
-          codechef: "",
-          geeksforgeeks: "",
         });
         setIsNew(true);
-
-        const newProfile = await db
-          .select()
-          .from(ProfileData)
-          .where(eq(ProfileData.clerkId, clerkUserId))
-          .then(([result]) => result);
-
-        setProfileData(newProfile);
         toast.success("Welcome! Please complete your profile.");
       } else {
         setProfileData(userProfile);
-
-        try {
-          const stats = await db
-            .select()
-            .from(CodingPlatformStats)
-            .where(eq(CodingPlatformStats.clerkId, clerkUserId))
-            .limit(1);
-
-          if (stats.length > 0 && stats[0].lastUpdated) {
-            setStatsLastUpdated(stats[0].lastUpdated);
-          }
-        } catch (error) {
-          console.error("Error fetching stats last updated:", error);
-        }
       }
     } catch (error) {
       console.error("Error fetching profile data:", error);
@@ -87,18 +54,26 @@ function ProfilePage() {
     } finally {
       setIsLoading(false);
     }
-  }, [clerkUserId, user]);
+  };
 
   useEffect(() => {
-    fetchProfileData();
-  }, [fetchProfileData]);
+    if (clerkUserId) fetchProfileData();
+  }, [clerkUserId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProfileData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const updatePlatformStats = async () => {
+  const updateCodingStats = async () => {
+    // Check if any coding platform username is provided
+    const hasCodingProfiles = profileData.leetCode || 
+                             profileData.geeksforgeeks || 
+                             profileData.codeforces || 
+                             profileData.codechef;
+    
+    if (!hasCodingProfiles) return;
+    
     toast.info("Updating coding stats...");
     try {
       const response = await fetch("/api/updatePlatformStats", {
@@ -109,129 +84,366 @@ function ProfilePage() {
           leetCode: profileData.leetCode,
           geeksforgeeks: profileData.geeksforgeeks,
           codeforces: profileData.codeforces,
-          codechef: profileData.codechef,
+          codechef: profileData.codechef
         }),
       });
-
+  
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.message || "Failed to update stats");
       }
-
-      const now = new Date().toISOString();
-      setStatsLastUpdated(now);
-
-      await db
-        .update(CodingPlatformStats)
-        .set({ lastUpdated: now })
-        .where(eq(CodingPlatformStats.clerkId, clerkUserId));
-
-      toast.success("Coding stats updated successfully!");
+      
+      toast.success("Stats updated successfully!");
     } catch (error) {
-      console.error("Error updating coding stats:", error);
-      toast.error("Failed to update coding stats");
+      console.error("Error refreshing coding stats:", error);
+      toast.error("Failed to update stats");
     }
   };
 
   const handleSave = async () => {
-    setIsSaving(true);
     toast.info("Saving changes...");
-
     try {
       await db
         .update(ProfileData)
-        .set(profileData)
+        .set({
+          dateOfBirth: profileData.dateOfBirth,
+          location: profileData.location,
+          bio: profileData.bio,
+          instagram: profileData.instagram,
+          institute: profileData.institute,
+          profilePic: profileData.profilePic,
+          linkedin: profileData.linkedin,
+          twitter: profileData.twitter,
+          github: profileData.github,
+          portfolio: profileData.portfolio,
+          leetCode: profileData.leetCode,
+          codeforces: profileData.codeforces,
+          codechef: profileData.codechef,
+          geeksforgeeks: profileData.geeksforgeeks,
+        })
         .where(eq(ProfileData.clerkId, clerkUserId));
-
-      await updatePlatformStats();
 
       setIsEditing(false);
       setIsNew(false);
       toast.success("Profile updated successfully!");
-      await fetchProfileData();
+      
+      // Automatically update coding stats if we were on the coding tab
+      // or if any coding platform usernames were changed
+      if (activeTab === 'coding' || 
+          profileData.leetCode || 
+          profileData.codeforces || 
+          profileData.codechef || 
+          profileData.geeksforgeeks) {
+        await updateCodingStats();
+      }
     } catch (error) {
       console.error("Error saving profile data:", error);
       toast.error("Failed to save changes");
-    } finally {
-      setIsSaving(false);
     }
   };
 
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <Image src="/mascot.png" alt="Mascot" width={120} height={120} />
-          <h2 className="text-xl font-bold text-red-600 mt-4">You are not logged in!</h2>
-          <p className="text-gray-700 mt-2">Please sign in to modify settings.</p>
-          <a
-            href="/sign-in"
-            className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
-            Go to Sign In
-          </a>
-        </div>
-      </div>
-    );
-  }
+  const handleRefreshCodingStats = async () => {
+    await updateCodingStats();
+  };
 
-  return (
-    <div className="container mx-auto px-4 py-6">
-      <ToastContainer />
-      <div className="relative">
-        <div className="h-40 bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-600 rounded-t-lg" />
-        <div className="absolute left-1/2 -translate-x-1/2 -bottom-16">
+  const renderProfileHeader = () => (
+    <div className="relative mb-8">
+      <div className="h-32 bg-gradient-to-r from-blue-500 to-purple-600 rounded-t-lg" />
+      <div className="absolute left-1/2 -translate-x-1/2 -bottom-16">
+        <div className="relative">
           {isLoading ? (
-            <Skeleton circle height={128} width={128} />
+            <Skeleton circle={true} height={128} width={128} />
           ) : (
             <img
-              src={user.imageUrl}
+              src={profileData?.profilePic || "mascot-head.png"}
               alt="Profile"
               className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
             />
           )}
+          {!isLoading && (
+            <div className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md">
+              <User className="w-4 h-4 text-gray-600" />
+            </div>
+          )}
         </div>
       </div>
-      <div className="mt-24 text-center">
-        <h1 className="text-2xl font-bold text-gray-800">
-          {isLoading ? <Skeleton width={200} /> : user.fullName}
-        </h1>
+    </div>
+  );
+
+  const renderUserInfo = () => (
+    <div className="mt-20 text-center space-y-2">
+      <h1 className="text-2xl font-bold text-gray-800">
+        {isLoading ? <Skeleton width={200} /> : user?.fullName}
+      </h1>
+      <div className="flex items-center justify-center gap-2 text-gray-600">
+        <Mail className="w-4 h-4" />
+        <span>{isLoading ? <Skeleton width={200} /> : user?.primaryEmailAddress?.emailAddress}</span>
+      </div>
+      {!isLoading && profileData?.location && (
         <div className="flex items-center justify-center gap-2 text-gray-600">
-          <Mail className="w-4 h-4" />
-          <span>{isLoading ? <Skeleton width={200} /> : user.primaryEmailAddress?.emailAddress}</span>
+          <MapPin className="w-4 h-4" />
+          <span>{profileData.location}</span>
         </div>
-        {profileData?.location && (
-          <div className="flex items-center justify-center gap-2 text-gray-600">
-            <MapPin className="w-4 h-4" />
-            <span>{profileData.location}</span>
+      )}
+      {!isLoading && profileData?.bio && (
+        <p className="text-gray-600 mt-4 max-w-md mx-auto">{profileData.bio}</p>
+      )}
+    </div>
+  );
+
+  const renderTabs = () => (
+    <div className="border-b border-gray-200 mt-8">
+      <nav className="flex justify-center space-x-8">
+        {[
+          { id: 'personal', label: 'Personal Info', icon: User },
+          { id: 'social', label: 'Social Links', icon: Globe },
+          { id: 'coding', label: 'Coding Profiles', icon: Code }
+        ].map(({ id, label, icon: Icon }) => (
+          <button
+            key={id}
+            onClick={() => setActiveTab(id)}
+            className={`pb-4 px-4 flex items-center gap-2 border-b-2 transition-colors ${
+              activeTab === id
+                ? 'border-blue-500 text-blue-600'
+                : 'border-transparent text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            <Icon className="w-4 h-4" />
+            {label}
+          </button>
+        ))}
+      </nav>
+    </div>
+  );
+
+  const renderPersonalInfo = () => (
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Profile pic </label>
+          <input
+            type="url"
+            name="profilePic"
+            value={profileData?.profilePic || ""}
+            onChange={handleInputChange}
+            placeholder="Profile picture URL"
+            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            disabled={!isEditing}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
+          <input
+            type="date"
+            name="dateOfBirth"
+            value={profileData?.dateOfBirth || ""}
+            onChange={handleInputChange}
+            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            disabled={!isEditing}
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Location</label>
+          <input
+            type="text"
+            name="location"
+            value={profileData?.location || ""}
+            onChange={handleInputChange}
+            placeholder="Your location"
+            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            disabled={!isEditing}
+          />
+        </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Institute</label>
+          <input
+            type="text"
+            name="institute"
+            value={profileData?.institute || ""}
+            onChange={handleInputChange}
+            placeholder="Your institute"
+            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            disabled={!isEditing}
+          />
+
           </div>
-        )}
-        {profileData?.bio && (
-          <p className="text-gray-600 mt-4 max-w-md mx-auto">{profileData.bio}</p>
-        )}
-        <div className="flex justify-center mt-4 space-x-3">
-          {profileData?.github && (
-            <a href={profileData.github} target="_blank" rel="noopener noreferrer">
-              <Github className="w-5 h-5 text-gray-700" />
-            </a>
-          )}
-          {profileData?.linkedin && (
-            <a href={profileData.linkedin} target="_blank" rel="noopener noreferrer">
-              <Linkedin className="w-5 h-5 text-gray-700" />
-            </a>
-          )}
-          {profileData?.twitter && (
-            <a href={profileData.twitter} target="_blank" rel="noopener noreferrer">
-              <Twitter className="w-5 h-5 text-gray-700" />
-            </a>
-          )}
-          {profileData?.instagram && (
-            <a href={profileData.instagram} target="_blank" rel="noopener noreferrer">
-              <Instagram className="w-5 h-5 text-gray-700" />
-            </a>
-          )}
+        
+      </div>
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">Bio</label>
+        <textarea
+          name="bio"
+          value={profileData?.bio || ""}
+          onChange={handleInputChange}
+          placeholder="Tell us about yourself"
+          rows={4}
+          className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          disabled={!isEditing}
+        />
+      </div>
+    </div>
+  );
+
+  const socialLinks = [
+    { name: 'github', icon: Github, label: 'GitHub' },
+    { name: 'linkedin', icon: Linkedin, label: 'LinkedIn' },
+    { name: 'twitter', icon: Twitter, label: 'Twitter' },
+    { name: 'instagram', icon: Instagram, label: 'Instagram' },
+    { name: 'portfolio', icon: Globe, label: 'Portfolio' },
+  ];
+
+  const renderSocialLinks = () => (
+    <div className="space-y-4">
+      {socialLinks.map(({ name, icon: Icon, label }) => (
+        <div key={name} className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+            <Icon className="w-4 h-4" />
+            {label}
+          </label>
+          <input
+            type="url"
+            name={name}
+            value={profileData?.[name] || ""}
+            onChange={handleInputChange}
+            placeholder={`Your ${label} URL`}
+            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            disabled={!isEditing}
+          />
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderCodingProfiles = () => (
+    <div className="space-y-4">
+      {['leetCode', 'codeforces', 'codechef','geeksforgeeks'].map((platform) => (
+        <div key={platform} className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700 capitalize">
+            {platform} Username
+          </label>
+          <input
+            name={platform}
+            value={profileData?.[platform] || ""}
+            onChange={handleInputChange}
+            placeholder={`Enter your ${platform} username`}
+            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            disabled={!isEditing}
+          />
+        </div>
+      ))}
+      {!isEditing && (
+        <button
+          onClick={handleRefreshCodingStats}
+          className="w-full flex items-center justify-center gap-2 bg-gray-50 text-gray-700 py-2.5 px-4 rounded-lg hover:bg-gray-100 transition-colors"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Refresh Stats
+        </button>
+      )}
+    </div>
+  );
+  
+  if (!user) {
+    return (
+      <div className="relative w-full h-screen overflow-hidden">
+         <div className="absolute inset-0 backdrop-blur-sm bg-black/30 z-10 flex items-center justify-center">
+           <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-md w-full justify-center">
+             <div className="relative w-full flex justify-center items-center mb-6">
+               <div className="relative w-40 h-40">
+                 <div className="absolute inset-0 flex items-center justify-center">
+                   <Image
+                     src="/mascot.png"
+                     alt="Waving Mascot"
+                     width={120}
+                     height={120}
+                     className="animate-bounce"
+                   />
+                 </div>
+                 <div className="absolute inset-0">
+                   <svg className="animate-spin h-full w-full" viewBox="0 0 100 100">
+                     <circle
+                       cx="50"
+                       cy="50"
+                       r="45"
+                       fill="none"
+                       stroke="#4F46E5"
+                       strokeWidth="3"
+                       strokeDasharray="283"
+                       strokeDashoffset="100"
+                       strokeLinecap="round"
+                     />
+                   </svg>
+                 </div>
+               </div>
+             </div>
+             <h2 className="text-xl font-bold text-red-600 mb-2">You are not logged in!</h2>
+             <p className="text-gray-700 mb-4">Please sign in to modify setting.</p>
+             <a
+               href="/sign-in"
+               className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+             >
+               Go to Sign In
+             </a>
+           </div>
+         </div>
+         <div className="blur-sm pointer-events-none">
+         
+           <div className="h-full flex items-center justify-center text-white">
+             <h1 className="text-3xl">Loading setting Page...</h1>
+           </div>
+         </div>
+       </div>
+    );
+  }
+  
+  return (
+    <div className="min-h-screen bg-gray-50 py-8 mt-6">
+      <div className="container mx-auto px-4 max-w-2xl">
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          {renderProfileHeader()}
+          {renderUserInfo()}
+          {renderTabs()}
+          
+          <div className="p-6">
+            {/* Edit/Save Buttons */}
+            <div className="flex justify-end mb-6">
+              {isEditing ? (
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleSave}
+                    className="flex items-center gap-2 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                  >
+                    <Save className="w-4 h-4" />
+                    Save Changes
+                  </button>
+                  <button
+                    onClick={() => setIsEditing(false)}
+                    className="flex items-center gap-2 border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors"
+                  >
+                    <X className="w-4 h-4" />
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setIsEditing(true)}
+                  className="flex items-center gap-2 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
+                >
+                  <Edit3 className="w-4 h-4" />
+                  {isNew ? "Complete Profile" : "Edit Profile"}
+                </button>
+              )}
+            </div>
+
+            {/* Tab Content */}
+            {activeTab === 'personal' && renderPersonalInfo()}
+            {activeTab === 'social' && renderSocialLinks()}
+            {activeTab === 'coding' && renderCodingProfiles()}
+          </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

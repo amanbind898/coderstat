@@ -5,7 +5,12 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'img.clerk.com',
-        pathname: '**', // allow all images from this domain
+        pathname: '**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.postimg.cc',
+        pathname: '**',
       },
     ],
   },

@@ -1,5 +1,5 @@
 import { pgTable, serial, varchar, text, boolean, timestamp, integer, date, json } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+import { is, relations } from "drizzle-orm";
 
 // ProfileData table - core user information as specified
 export const ProfileData = pgTable('ProfileData', {
@@ -10,6 +10,8 @@ export const ProfileData = pgTable('ProfileData', {
   dateOfBirth: date('dateOfBirth'),
   location: varchar('location'),
   bio: varchar('bio'),
+  institute: varchar('institute'),
+  profilePic: varchar('profilePic'),
   instagram: varchar('instagram'),
   linkedin: varchar('linkedin'),
   twitter: varchar('twitter'),
@@ -20,6 +22,7 @@ export const ProfileData = pgTable('ProfileData', {
   codeforces: varchar('codeforces'),
   codechef: varchar('codechef'),
   createdAt: varchar('createdAt'),
+  isPublic: boolean('isPublic').default(true),
 });
 
 // CodingPlatformStats table - as specified
@@ -110,43 +113,8 @@ export const platformVisibilityRelations = relations(PlatformVisibility, ({ one 
   }),
 }));
 
-// Events table - for tracking important user activities
-export const Events = pgTable('Events', {
-  id: serial('id').primaryKey(),
-  clerkId: varchar('clerkId').notNull(),
-  eventType: varchar('eventType').notNull(), // problem_solved, contest_completed, rating_change, etc.
-  platform: varchar('platform').notNull(),
-  details: json('details'), // Store event-specific details
-  timestamp: timestamp('timestamp').defaultNow(),
-});
 
-export const eventsRelations = relations(Events, ({ one }) => ({
-  profile: one(ProfileData, {
-    fields: [Events.clerkId],
-    references: [ProfileData.clerkId],
-  }),
-}));
 
-// Progress table - for tracking progress over time
-export const ProgressTracker = pgTable('ProgressTracker', {
-  id: serial('id').primaryKey(),
-  clerkId: varchar('clerkId').notNull(),
-  platform: varchar('platform').notNull(),
-  date: date('date').notNull(),
-  solvedCount: integer('solvedCount').default(0),
-  rating: integer('rating'),
-  rank: integer('rank'),
-  easyCount: integer('easyCount').default(0),
-  mediumCount: integer('mediumCount').default(0),
-  hardCount: integer('hardCount').default(0),
-});
-
-export const progressTrackerRelations = relations(ProgressTracker, ({ one }) => ({
-  profile: one(ProfileData, {
-    fields: [ProgressTracker.clerkId],
-    references: [ProfileData.clerkId],
-  }),
-}));
 
 // Profile analytics tracking
 export const ProfileAnalytics = pgTable('ProfileAnalytics', {
