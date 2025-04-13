@@ -79,7 +79,7 @@ export default function Page() {
                   formButtonPrimary: 'bg-[var(--graph-blue)] hover:bg-[var(--logo-blue)]',
                 },
               }}
-              redirectUrl="/profile-tracker"
+              redirectUrl="/settings"
             />
 
             <p className="text-center text-sm text-gray-500">
