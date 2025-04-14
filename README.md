@@ -4,7 +4,7 @@ CoderSTAT
 
 CoderSTAT is a powerful and elegant coding journey tracker built with Next.js and Tailwind CSS.
 It helps developers and students monitor their progress on various competitive programming platforms
-like LeetCode and GeeksforGeeks.
+like LeetCode GeeksforGeeks, codechef and codeforces,With 450 DSA sheet (A to Z DSA sheet of striver), Also You can track the coding events and contests in the event-tracker section.
 
 "Helps you navigate and track your coding journey to success!"
 
@@ -15,22 +15,20 @@ Preview
 
 Features
 --------
-- Profile Tracker: View total DSA problems solved with easy, medium, hard, and fundamentals breakdown.
-- DSA Matrix: Aggregated data from LeetCode and GeeksforGeeks.
-- Question Tracker: Track your coding questions across platforms.
-- User Profile: Personalized dashboard showing user data, photo, and institution.
+- Profile Tracker: View total problems solved with easy, medium, hard, and fundamentals breakdown, ratings of the various platforms, you can share your profile also.
+- Question Tracker: 450 questions of Strivers AtoZ DSA sheet.
+- Event Tackekr: Track coding contests and setreminders with just one click.
 - Responsive UI: Built with modern Tailwind CSS components.
 - Authentication & Settings page included for a personalized experience.
 
 Tech Stack
 ----------
-- Frontend: Next.js, React, Tailwind CSS
+- Frontend+backend: Next.js, React, Tailwind CSS
 - Icons: Lucide Icons / Heroicons
-- Authentication: Clerk / Firebase Auth
+- Authentication: Clerk 
 - Styling: Tailwind CSS + Custom Components
-- Data Integration: LeetCode, GeeksforGeeks
-
-
+- Data Integration: LeetCode, GeeksforGeeks, Codechef, Codeforces , CList API for events
+  
 
 Local Setup
 -----------
@@ -46,11 +44,22 @@ Local Setup
 
 4. Visit http://localhost:3000
 
+
+example of .env file: 
+
+NEXT_PUBLIC_DRIZZLE_DB_URL= <br>
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY= <br>
+CLERK_SECRET_KEY= <br>
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in <br>
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up <br>
+NEXT_PUBLIC_CLIST_API= <br>
+
+
 Future Enhancements
 -------------------
-- Daily and weekly coding goal trackers
-- Personalized topic-wise recommendations
-- Social sharing
+- More Sheets in question tracker like CP,OS,DBMS etc.
+- Study planner
+
 
 
 License
