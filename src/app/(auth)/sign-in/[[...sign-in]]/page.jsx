@@ -1,13 +1,12 @@
 import { SignUp } from '@clerk/nextjs'
-import { Shield, Mail } from 'lucide-react'
-
+import { Shield, Mail, Code, ChartBar, Calendar } from 'lucide-react'
 
 export default function Page() {
   return (
-    <section className=" border-4 bg-gradient-to-br from-blue-50 to-white">
-      <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
-        {/* Left Panel (hidden on small screens) */}
-        <section className="relative hidden lg:flex items-center bg-[var(--graph-blue)] lg:col-span-5 xl:col-span-6">
+    <section className="border-4 bg-gradient-to-br from-blue-50 to-white">
+      <div className="lg:grid lg:min-h-screen lg:grid-cols-10">
+        {/* Left Panel (60% on large screens) */}
+        <section className="relative hidden lg:flex items-center bg-[var(--graph-blue)] lg:col-span-6">
           <div className="absolute inset-0 bg-gradient-to-t from-white to-gray-900 opacity-80" />
           <div className="relative w-full p-12">
             {/* Logo */}
@@ -22,32 +21,53 @@ export default function Page() {
             </div>
 
             <h2 className="mt-12 text-4xl font-bold text-white md:text-5xl">
-              Join CoderSTAT Community
+              Level Up Your Coding Journey
             </h2>
 
             <p className="mt-4 text-lg leading-relaxed text-white/90">
-              Track, analyze, and share your coding progress with CoderSTAT — the platform
-              that helps you navigate your journey to success.
+              Join CoderSTAT to track your progress, analyze your performance, and connect with 
+              a community of dedicated developers.
             </p>
 
-            <div className="mt-12">
+            <div className="mt-10 space-y-6">
               <div className="rounded-lg bg-zinc-950 p-6">
                 <h3 className="flex items-center gap-2 text-xl font-semibold text-white">
-                  <Mail className="h-6 w-6" />
-                  Registration Benefits
+                  <ChartBar className="h-6 w-6" />
+                  Profile Tracker
                 </h3>
-                <ul className="mt-4 space-y-3 text-white/90">
-                  <li>• Track your progress across coding platforms</li>
-                  <li>• Analyze your performance and identify improvement areas</li>
-                  <li>• Join a community of like-minded developers</li>
-                </ul>
+                <p className="mt-2 text-white/90">
+                  View total problems solved with easy, medium, hard, and fundamentals breakdown. 
+                  Track your ratings across various platforms and share your profile with others.
+                </p>
+              </div>
+              
+              <div className="rounded-lg bg-zinc-950 p-6">
+                <h3 className="flex items-center gap-2 text-xl font-semibold text-white">
+                  <Code className="h-6 w-6" />
+                  Question Tracker
+                </h3>
+                <p className="mt-2 text-white/90">
+                  Track your progress through 450 questions of Strivers AtoZ DSA sheet. 
+                  Stay organized and consistent in your DSA preparation.
+                </p>
+              </div>
+              
+              <div className="rounded-lg bg-zinc-950 p-6">
+                <h3 className="flex items-center gap-2 text-xl font-semibold text-white">
+                  <Calendar className="h-6 w-6" />
+                  Event Tracker
+                </h3>
+                <p className="mt-2 text-white/90">
+                  Never miss a coding contest again. Track upcoming events and set reminders 
+                  with just one click.
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Right Panel */}
-        <main className="flex items-center justify-center px-6 py-12 sm:px-8 lg:col-span-7 xl:col-span-6">
+        {/* Right Panel (40% on large screens) */}
+        <main className="flex items-center justify-center px-6 py-12 sm:px-8 lg:col-span-4">
           <div className="w-full max-w-xl space-y-6">
             {/* Mobile Header */}
             <div className="lg:hidden">
@@ -65,8 +85,6 @@ export default function Page() {
                 Join the CoderSTAT community to level up your coding skills
               </p>
             </div>
-
-            
 
             {/* SignUp Form */}
             <SignUp

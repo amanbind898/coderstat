@@ -247,7 +247,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100/50 pt-16 sm:pt-20 pb-8 sm:pb-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100/50  ">
       <div className="container mx-auto px-4 max-w-[100vw] sm:max-w-7xl">
         {isNew && (
           <Alert className="mb-6 sm:mb-8 bg-blue-50/80 backdrop-blur-sm text-blue-700 border-blue-200">
