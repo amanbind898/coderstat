@@ -24,6 +24,8 @@ export default function Footer() {
           <Link href="/question-tracker" className="hover:text-orange-500">Question Tracker</Link>
           <Link href="/event-tracker" className="hover:text-orange-500">Event Tracker</Link>
           <Link href="/profile-tracker" className="hover:text-orange-500">Profile Tracker</Link>
+          <Link href="/settings" className="hover:text-orange-500">Settings</Link>
+          <Link href="/upload" className="hover:text-orange-500">Upload</Link>
         </div>
 
         {/* Socials */}
