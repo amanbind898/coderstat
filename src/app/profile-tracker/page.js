@@ -10,6 +10,7 @@ import UserProfile from "../components/UserProfile";
 import PlatformCards from "../components/PlatfromCards";
 import DsaStatsCard from "../components/DsaStatsCard";
 import CPStatsCard from "../components/CPStatsCard";
+import Loader from "../components/Loader";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent } from "@/components/ui/card";
@@ -178,54 +179,7 @@ export default function Dashboard() {
   
   if (!user) {
     return (
-      <div className="relative w-full h-screen overflow-hidden">
-      <div className="absolute inset-0 backdrop-blur-sm bg-black/30 z-10 flex items-center justify-center">
-        <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-md w-full justify-center">
-          <div className="relative w-full flex justify-center items-center mb-6">
-            <div className="relative w-40 h-40">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Image
-                  src="/mascot.png"
-                  alt="Waving Mascot"
-                  width={120}
-                  height={120}
-                  className="animate-bounce"
-                />
-              </div>
-              <div className="absolute inset-0">
-                <svg className="animate-spin h-full w-full" viewBox="0 0 100 100">
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="45"
-                    fill="none"
-                    stroke="#4F46E5"
-                    strokeWidth="3"
-                    strokeDasharray="283"
-                    strokeDashoffset="100"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-          <h2 className="text-xl font-bold text-red-600 mb-2">You are not logged in!</h2>
-          <p className="text-gray-700 mb-4">Please sign in to view your profile.</p>
-          <a
-            href="/sign-in"
-            className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-          >
-            Go to Sign In
-          </a>
-        </div>
-      </div>
-      <div className="blur-sm pointer-events-none">
-        {/* Optionally render placeholder blurred content */}
-        <div className="h-full flex items-center justify-center text-white">
-          <h1 className="text-3xl">Loading Profile Page...</h1>
-        </div>
-      </div>
-    </div>
+      <Loader dash={"Profile Tracker"} />
     
     );
   }

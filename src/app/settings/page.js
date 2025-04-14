@@ -6,6 +6,7 @@ import { useUser } from "@clerk/clerk-react";
 import { db } from "../../db/index";
 import { eq } from "drizzle-orm";
 import { ProfileData } from "../../db/schema";
+import Loader from "../components/Loader"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { 
@@ -127,8 +128,7 @@ function ProfilePage() {
       setIsNew(false);
       toast.success("Profile updated successfully!");
       
-      // Automatically update coding stats if we were on the coding tab
-      // or if any coding platform usernames were changed
+      
       if (activeTab === 'coding' || 
           profileData.leetCode || 
           profileData.codeforces || 
@@ -346,54 +346,7 @@ function ProfilePage() {
   
   if (!user) {
     return (
-      <div className="relative w-full h-screen overflow-hidden">
-         <div className="absolute inset-0 backdrop-blur-sm bg-black/30 z-10 flex items-center justify-center">
-           <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-md w-full justify-center">
-             <div className="relative w-full flex justify-center items-center mb-6">
-               <div className="relative w-40 h-40">
-                 <div className="absolute inset-0 flex items-center justify-center">
-                   <Image
-                     src="/mascot.png"
-                     alt="Waving Mascot"
-                     width={120}
-                     height={120}
-                     className="animate-bounce"
-                   />
-                 </div>
-                 <div className="absolute inset-0">
-                   <svg className="animate-spin h-full w-full" viewBox="0 0 100 100">
-                     <circle
-                       cx="50"
-                       cy="50"
-                       r="45"
-                       fill="none"
-                       stroke="#4F46E5"
-                       strokeWidth="3"
-                       strokeDasharray="283"
-                       strokeDashoffset="100"
-                       strokeLinecap="round"
-                     />
-                   </svg>
-                 </div>
-               </div>
-             </div>
-             <h2 className="text-xl font-bold text-red-600 mb-2">You are not logged in!</h2>
-             <p className="text-gray-700 mb-4">Please sign in to modify setting.</p>
-             <a
-               href="/sign-in"
-               className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-             >
-               Go to Sign In
-             </a>
-           </div>
-         </div>
-         <div className="blur-sm pointer-events-none">
-         
-           <div className="h-full flex items-center justify-center text-white">
-             <h1 className="text-3xl">Loading setting Page...</h1>
-           </div>
-         </div>
-       </div>
+     <Loader dash="Settings" />
     );
   }
   

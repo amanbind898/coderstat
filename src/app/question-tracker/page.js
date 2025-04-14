@@ -170,7 +170,7 @@ export default function QuestionTracker() {
             </div>
             
             <p className="text-gray-600">
-              {!isLoaded || loading ? "Getting everything ready for you..." : "Please log in to continue"}
+             Getting everything ready for you...
             </p>
             
             {isLoaded && !user && (
