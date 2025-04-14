@@ -32,13 +32,13 @@ export default function Footer() {
         <div className="flex flex-col space-y-3">
           <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">Follow Us</h3>
           <div className="flex space-x-4">
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500">
+            <a href="https://github.com/amanbind898" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500">
               <Github />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500">
+            <a href="https://twitter.com/akb_898" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500">
               <Twitter />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500">
+            <a href="https://linkedin.com/amankumarbind" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500">
               <Linkedin />
             </a>
           </div>
