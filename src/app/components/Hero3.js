@@ -25,7 +25,7 @@ function Hero3() {
       </div>
 
       {/* Event Tracker Preview Image */}
-      <div className="w-full shadow-xl rounded-lg overflow-hidden">
+      <div className="w-full shadow-xl rounded-lg overflow-hidden border border-[var(--primary-gray)">
         <Image
           src="/landing_light3.png"
           alt="CoderSTAT Event Tracker Preview"

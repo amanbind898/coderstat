@@ -38,7 +38,7 @@ export default function Footer() {
             <a href="https://twitter.com/akb_898" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500">
               <Twitter />
             </a>
-            <a href="https://linkedin.com/amankumarbind" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500">
+            <a href="https://www.linkedin.com/in/amankumarbind" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500">
               <Linkedin />
             </a>
           </div>

@@ -25,7 +25,7 @@ function Hero2() {
       </div>
 
       {/* Dashboard Preview Image */}
-      <div className="w-full shadow-xl rounded-lg overflow-hidden">
+      <div className="w-full shadow-xl rounded-lg overflow-hidden border border-[var(--primary-gray)">
         <Image
           src="/landing_light2.png"
           alt="CoderSTAT Dashboard Preview"

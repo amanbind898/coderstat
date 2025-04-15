@@ -45,7 +45,7 @@ function Hero1() {
         </div>
 
         {/* Dashboard Image */}
-        <div className="relative z-12 w-full shadow-xl rounded-lg overflow-hidden">
+        <div className="relative z-12 w-full shadow-xl rounded-lg overflow-hidden border border-[var(--primary-gray)]">
           <Image
             src="/landing_light.png"
             alt="CoderSTAT Dashboard Preview"
