@@ -32,6 +32,11 @@ export default function CodingContestTracker() {
     "topcoder.com": "TopCoder"
   };
   
+  // Convert UTC date to IST (UTC+5:30)
+  function convertToIST(date) {
+    return new Date(date.getTime() + (5 * 60 + 30) * 60 * 1000);
+  }
+  
   useEffect(() => {
     try {
       const savedPlatforms = localStorage.getItem('selectedPlatforms');
@@ -47,7 +52,11 @@ export default function CodingContestTracker() {
   
   useEffect(() => {
     filterContests();
-    localStorage.setItem('selectedPlatforms', JSON.stringify(selectedPlatforms));
+    const debounceTimeout = setTimeout(() => {
+      localStorage.setItem('selectedPlatforms', JSON.stringify(selectedPlatforms));
+    }, 300); // Adjust the debounce delay as needed
+
+    return () => clearTimeout(debounceTimeout);
   }, [contests, selectedPlatforms, showTodayOnly]);
   
   async function fetchContests() {
@@ -56,12 +65,6 @@ export default function CodingContestTracker() {
     setIsRefreshing(true);
     
     try {
-      const now = new Date();
-      
-      const todayStart = new Date();
-      todayStart.setDate(todayStart.getDate() - 32);
-      todayStart.setHours(0, 0, 0);
-      
       const cachedData = localStorage.getItem('contests');
       const timeStamp = localStorage.getItem('timeStamp');
       
@@ -72,6 +75,9 @@ export default function CodingContestTracker() {
         setContests(JSON.parse(cachedData));
       } else {
         const apiUrl = process.env.NEXT_PUBLIC_CLIST_API;
+        if (!apiUrl) {
+          throw new Error("API URL is not defined. Please check the environment variable 'NEXT_PUBLIC_CLIST_API'.");
+        }
         
         const response = await fetch(apiUrl);
         
@@ -102,17 +108,21 @@ export default function CodingContestTracker() {
     tomorrow.setHours(0, 0, 0);
     
     const filtered = contests.filter(contest => {
-      const contestStart = new Date(contest.start);
-      const contestEnd = new Date(contest.end);
+      // Convert contest times to IST for comparison
+      const utcContestStart = new Date(contest.start);
+      const istContestStart = convertToIST(utcContestStart);
+      
+      const utcContestEnd = new Date(contest.end);
+      const istContestEnd = convertToIST(utcContestEnd);
       
       if (!selectedPlatforms.includes(contest.resource)) {
         return false;
       }
       
       if (showTodayOnly) {
-        return contestEnd > now && contestStart < tomorrow;
+        return istContestEnd > now && istContestStart < tomorrow;
       } else {
-        return contestStart > now;
+        return istContestStart > now;
       }
     });
     
@@ -136,22 +146,30 @@ export default function CodingContestTracker() {
   }
   
   function formatDateTime(dateTimeString) {
-    const date = new Date(dateTimeString);
-    return date.toLocaleString('en-US', { 
+    // Create a date object from the input string
+    const utcDate = new Date(dateTimeString);
+    
+    // Add 5 hours and 30 minutes to convert to IST
+    const istDate = convertToIST(utcDate);
+    
+    // Format the date in IST
+    return istDate.toLocaleString('en-US', { 
       month: '2-digit',
       day: '2-digit',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
       hour12: true
-    });
+    }) + ' IST'; // Add IST indicator
   }
   
   function getRelativeTimeString(dateTimeString) {
-    const contestStart = new Date(dateTimeString);
+    const utcContestStart = new Date(dateTimeString);
+    // Add 5:30 hours to match IST
+    const istContestStart = convertToIST(utcContestStart);
     const now = new Date();
     
-    const diffMs = contestStart - now;
+    const diffMs = istContestStart - now;
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
@@ -314,10 +332,12 @@ export default function CodingContestTracker() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredContests.map((contest, index) => {
-                const [date, time] = formatDateTime(contest.start).split(', ');
+                const [date, time, timeZone] = formatDateTime(contest.start).split(', ');
                 const relativeTime = getRelativeTimeString(contest.start);
-                const startDate = new Date(contest.start);
-                const isStartingSoon = startDate - new Date() < 43200000; // 12 hours in ms
+                const utcStartDate = new Date(contest.start);
+                // Use IST time for "starting soon" check
+                const istStartDate = convertToIST(utcStartDate);
+                const isStartingSoon = istStartDate - new Date() < 43200000; // 12 hours in ms
                 
                 return (
                   <div 
@@ -364,7 +384,7 @@ export default function CodingContestTracker() {
                           <Calendar className="h-4 w-4 mr-2 mt-0.5 text-gray-500" />
                           <div>
                             <div className="text-gray-700">{date}</div>
-                            <div className="text-gray-500">{time}</div>
+                            <div className="text-gray-500">{time} IST</div>
                           </div>
                         </div>
                         
