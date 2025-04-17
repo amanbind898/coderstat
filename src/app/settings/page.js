@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useUser } from "@clerk/clerk-react";
@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 
-function ProfilePage() {
+function Settings() {
   const { user } = useUser();
   const clerkUserId = user?.id;
   const [profileData, setProfileData] = useState(null);
@@ -24,6 +24,9 @@ function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('personal');
   
+  // Use this ref to prevent duplicate profile creation
+  const profileCreationAttempted = useRef(false);
+  
   useEffect(() => {
     if (!clerkUserId) return;
     fetchProfileData();
@@ -31,22 +34,41 @@ function ProfilePage() {
   
   const fetchProfileData = async () => {
     try {
+      // First check if we already have a profile
       const userProfile = await db
         .select()
         .from(ProfileData)
         .where(eq(ProfileData.clerkId, clerkUserId))
-        .then(([result]) => result);
+        .then((results) => results[0] || null);
 
       if (!userProfile) {
-        await db.insert(ProfileData).values({
-          primaryEmail: user.primaryEmailAddress?.emailAddress || "",
-          name: user.fullName || "",
-          clerkId: clerkUserId,
-          createdAt: new Date().toISOString(),
-        });
-        setIsNew(true);
-        toast.success("Welcome! Please complete your profile.");
+        // Only try to create a profile if we haven't tried before
+        if (!profileCreationAttempted.current) {
+          profileCreationAttempted.current = true;
+          
+          // Create a new profile
+          await db.insert(ProfileData).values({
+            primaryEmail: user.primaryEmailAddress?.emailAddress || "",
+            name: user.fullName || "",
+            clerkId: clerkUserId,
+            createdAt: new Date().toISOString(),
+          });
+          
+          // Fetch the newly created profile
+          const newProfile = await db
+            .select()
+            .from(ProfileData)
+            .where(eq(ProfileData.clerkId, clerkUserId))
+            .then((results) => results[0] || null);
+            
+          if (newProfile) {
+            setProfileData(newProfile);
+            setIsNew(true);
+            toast.success("Welcome! Please complete your profile.");
+          }
+        }
       } else {
+        // We found an existing profile
         setProfileData(userProfile);
       }
     } catch (error) {
@@ -56,10 +78,6 @@ function ProfilePage() {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (clerkUserId) fetchProfileData();
-  }, [clerkUserId]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -401,4 +419,4 @@ function ProfilePage() {
   );
 }
 
-export default ProfilePage;
+export default Settings;
