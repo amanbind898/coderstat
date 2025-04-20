@@ -1,7 +1,7 @@
 import { pgTable, serial, varchar, text, boolean, timestamp, integer, date, json } from "drizzle-orm/pg-core";
 import { is, relations } from "drizzle-orm";
 
-// ProfileData table - core user information as specified
+// ProfileData table 
 export const ProfileData = pgTable('ProfileData', {
   id: serial('id').primaryKey(),
   primaryEmail: varchar('primaryEmail').notNull(),
@@ -25,7 +25,7 @@ export const ProfileData = pgTable('ProfileData', {
   isPublic: boolean('isPublic').default(true),
 });
 
-// CodingPlatformStats table - as specified
+// CodingPlatformStats table 
 export const CodingPlatformStats = pgTable('CodingPlatformStats', {
   id: serial('id').primaryKey(),
   clerkId: varchar('clerkId').notNull(),
@@ -43,12 +43,7 @@ export const CodingPlatformStats = pgTable('CodingPlatformStats', {
   totalcontest: varchar('totalcontest').default('0'),
 });
 
-// Added relations for the existing tables
-export const profileDataRelations = relations(ProfileData, ({ many }) => ({
-  platformStats: many(CodingPlatformStats),
-  questionTracker: many(QuestionTracker),
-  platformVisibility: many(PlatformVisibility),
-}));
+
 
 export const codingPlatformStatsRelations = relations(CodingPlatformStats, ({ one, many }) => ({
   profile: one(ProfileData, {
@@ -58,84 +53,7 @@ export const codingPlatformStatsRelations = relations(CodingPlatformStats, ({ on
   questions: many(QuestionTracker),
 }));
 
-// QuestionTracker table - added for question tracking feature
-export const QuestionTracker = pgTable('QuestionTracker', {
-  id: serial('id').primaryKey(),
-  clerkId: varchar('clerkId').notNull(),
-  platform: varchar('platform').notNull(), // leetcode, codeforces, etc.
-  questionId: varchar('questionId').notNull(), // Platform-specific question ID
-  title: varchar('title').notNull(),
-  url: varchar('url'),
-  difficulty: varchar('difficulty'), // easy, medium, hard
-  tags: json('tags'), // Store tags/topics as JSON array
-  status: varchar('status').notNull().default('unsolved'), // unsolved, solved, attempted, bookmarked
-  submissionCount: integer('submissionCount').default(0),
-  lastAttemptDate: timestamp('lastAttemptDate'),
-  solvedDate: timestamp('solvedDate'),
-  timeSpent: integer('timeSpent'), // In minutes
-  notes: text('notes'),
-  code: text('code'), // Store the solution code
-  language: varchar('language'), // Programming language used
-  timeComplexity: varchar('timeComplexity'),
-  spaceComplexity: varchar('spaceComplexity'),
-  createdAt: timestamp('createdAt').defaultNow(),
-  updatedAt: timestamp('updatedAt').defaultNow(),
-});
-
-// PlatformVisibility table - for controlling what's shown on profile
-export const PlatformVisibility = pgTable('PlatformVisibility', {
-  id: serial('id').primaryKey(),
-  clerkId: varchar('clerkId').notNull(),
-  platformName: varchar('platformName').notNull(), // Can be a coding platform or social media
-  isVisible: boolean('isVisible').default(true),
-  showRating: boolean('showRating').default(true),
-  showRank: boolean('showRank').default(true),
-  showSolvedCount: boolean('showSolvedCount').default(true),
-  showContestParticipation: boolean('showContestParticipation').default(true),
-  showQuestions: boolean('showQuestions').default(true),
-  createdAt: timestamp('createdAt').defaultNow(),
-  updatedAt: timestamp('updatedAt').defaultNow(),
-});
-
-// Question relations
-export const questionTrackerRelations = relations(QuestionTracker, ({ one }) => ({
-  profile: one(ProfileData, {
-    fields: [QuestionTracker.clerkId],
-    references: [ProfileData.clerkId],
-  }),
-}));
-
-// Platform visibility relations
-export const platformVisibilityRelations = relations(PlatformVisibility, ({ one }) => ({
-  profile: one(ProfileData, {
-    fields: [PlatformVisibility.clerkId],
-    references: [ProfileData.clerkId],
-  }),
-}));
-
-
-
-
-// Profile analytics tracking
-export const ProfileAnalytics = pgTable('ProfileAnalytics', {
-  id: serial('id').primaryKey(),
-  clerkId: varchar('clerkId').notNull(),
-  visitorId: varchar('visitorId'),
-  visitorClerkId: varchar('visitorClerkId'), // If visitor is a logged-in user
-  visitDate: timestamp('visitDate').defaultNow(),
-  referrer: varchar('referrer'),
-  userAgent: varchar('userAgent'),
-  ipAddress: varchar('ipAddress'),
-  countryCode: varchar('countryCode'),
-  city: varchar('city'),
-});
-
-export const profileAnalyticsRelations = relations(ProfileAnalytics, ({ one }) => ({
-  profile: one(ProfileData, {
-    fields: [ProfileAnalytics.clerkId],
-    references: [ProfileData.clerkId],
-  }),
-}));
+//MasterQuestions table - for storing questions
 export const MasterQuestions = pgTable('MasterQuestions', {
     id: serial('id').primaryKey(),
     topic: varchar('topic').notNull(),
