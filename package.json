@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "test:profile-tracker": "jest __tests__/profile-tracker.test.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.15.0",
