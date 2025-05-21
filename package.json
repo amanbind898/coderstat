@@ -2,11 +2,13 @@
   "name": "coderstat",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "start": "next start",
-    "lint": "next lint"
-  },
+"scripts": {
+  "dev": "next dev",
+  "start": "next start",
+  "lint": "next lint",
+  "build": "next build"
+},
+
   "dependencies": {
     "@clerk/nextjs": "^6.15.0",
     "@neondatabase/serverless": "^1.0.0",
