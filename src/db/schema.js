@@ -1,5 +1,5 @@
 import { pgTable, serial, varchar, text, boolean, timestamp, integer, date, json } from "drizzle-orm/pg-core";
-import { is, relations } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 
 // ProfileData table 
 export const ProfileData = pgTable('ProfileData', {
@@ -43,54 +43,54 @@ export const CodingPlatformStats = pgTable('CodingPlatformStats', {
   totalcontest: varchar('totalcontest').default('0'),
 });
 
+// MasterQuestions table - for storing questions
+export const MasterQuestions = pgTable('MasterQuestions', {
+  id: serial('id').primaryKey(),
+  topic: varchar('topic').notNull(),
+  problem: varchar('problem').notNull(),
+  url: varchar('url'),
+  difficulty: varchar('difficulty'), // easy, medium, hard
+  source: varchar('source').notNull(), // e.g., "geeksforgeeks", "leetcode"
+  sourceId: varchar('sourceId'), // Original ID from the source platform
+  tags: json('tags'), // Additional tags/topics as JSON array
+  addedAt: timestamp('addedAt').defaultNow(),
+});
 
+// User's question progress table - tracks individual progress
+export const UserQuestionProgress = pgTable('UserQuestionProgress', {
+  id: serial('id').primaryKey(),
+  clerkId: varchar('clerkId').notNull(),
+  questionId: integer('questionId').notNull().references(() => MasterQuestions.id),
+  status: varchar('status').notNull().default('not_started'), // not_started, in_progress, solved, bookmarked
+  timesAttempted: integer('timesAttempted').default(0),
+  lastAttemptDate: timestamp('lastAttemptDate'),
+  solvedDate: timestamp('solvedDate'),
+  timeSpent: integer('timeSpent'), // In minutes
+  solution: text('solution'), // User's solution code
+  language: varchar('language'), // Programming language used
+  notes: text('notes'), // User's notes about the question
+  confidence: integer('confidence').default(0), // 0-5 rating of user's confidence
+  updatedAt: timestamp('updatedAt').defaultNow(),
+});
 
-export const codingPlatformStatsRelations = relations(CodingPlatformStats, ({ one, many }) => ({
+// RELATIONS
+
+export const codingPlatformStatsRelations = relations(CodingPlatformStats, ({ one }) => ({
   profile: one(ProfileData, {
     fields: [CodingPlatformStats.clerkId],
     references: [ProfileData.clerkId],
   }),
-  questions: many(QuestionTracker),
+ 
 }));
 
-//MasterQuestions table - for storing questions
-export const MasterQuestions = pgTable('MasterQuestions', {
-    id: serial('id').primaryKey(),
-    topic: varchar('topic').notNull(),
-    problem: varchar('problem').notNull(),
-    url: varchar('url'),
-    difficulty: varchar('difficulty'), // easy, medium, hard
-    source: varchar('source').notNull(), // e.g., "geeksforgeeks", "leetcode"
-    sourceId: varchar('sourceId'), // Original ID from the source platform
-    tags: json('tags'), // Additional tags/topics as JSON array
-    addedAt: timestamp('addedAt').defaultNow(),
-  });
-  
-  // User's question progress table - tracks individual progress
-  export const UserQuestionProgress = pgTable('UserQuestionProgress', {
-    id: serial('id').primaryKey(),
-    clerkId: varchar('clerkId').notNull(),
-    questionId: integer('questionId').notNull().references(() => MasterQuestions.id),
-    status: varchar('status').notNull().default('not_started'), // not_started, in_progress, solved, bookmarked
-    timesAttempted: integer('timesAttempted').default(0),
-    lastAttemptDate: timestamp('lastAttemptDate'),
-    solvedDate: timestamp('solvedDate'),
-    timeSpent: integer('timeSpent'), // In minutes
-    solution: text('solution'), // User's solution code
-    language: varchar('language'), // Programming language used
-    notes: text('notes'), // User's notes about the question
-    confidence: integer('confidence').default(0), // 0-5 rating of user's confidence
-    updatedAt: timestamp('updatedAt').defaultNow(),
-  });
-  
-  // Relations
-  export const masterQuestionsRelations = relations(MasterQuestions, ({ many }) => ({
-    userProgress: many(UserQuestionProgress),
-  }));
-  
-  export const userQuestionProgressRelations = relations(UserQuestionProgress, ({ one }) => ({
-    question: one(MasterQuestions, {
-      fields: [UserQuestionProgress.questionId],
-      references: [MasterQuestions.id],
-    }),
-  }));
+export const masterQuestionsRelations = relations(MasterQuestions, ({ many }) => ({
+  userProgress: many(UserQuestionProgress),
+}));
+
+export const userQuestionProgressRelations = relations(UserQuestionProgress, ({ one }) => ({
+  question: one(MasterQuestions, {
+    fields: [UserQuestionProgress.questionId],
+    references: [MasterQuestions.id],
+  }),
+}));
+
