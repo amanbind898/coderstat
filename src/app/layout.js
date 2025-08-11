@@ -39,6 +39,7 @@ export const metadata = {
     "coding progress",
     "software developer tools"
   ],
+  
   metadataBase: new URL("https://coderstat.vercel.app"),
   openGraph: {
     title: "CoderSTAT – Track Your Coding Journey",
@@ -65,6 +66,9 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
+        <head>
+          <meta name="google-adsense-account" content="ca-pub-8096601763375595"></meta>
+        </head>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <Navbar />
         
