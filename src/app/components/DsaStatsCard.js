@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useMemo } from "react";
 import { Trophy, Circle, AlertTriangle, Target, Info, ChevronDown, ChevronUp } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
