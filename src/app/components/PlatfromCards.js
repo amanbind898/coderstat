@@ -22,13 +22,13 @@ const ProblemDistributionChart = ({ categories, stats, totalSolved }) => {
       const rawColor = color.replace('bg-', '');
       let actualColor;
       
-      // Map Tailwind color classes to hex values
+      // Map Tailwind color classes to hex values - Updated Theme
       switch(rawColor) {
-        case 'emerald-400': actualColor = '#34d399'; break;
-        case 'amber-400': actualColor = '#fbbf24'; break;
-        case 'rose-400': actualColor = '#fb7185'; break;
-        case 'blue-400': actualColor = '#60a5fa'; break;
-        default: actualColor = '#9ca3af'; // gray-400 as fallback
+        case 'emerald-400': actualColor = '#22c55e'; break; // green-500
+        case 'amber-400': actualColor = '#fb923c'; break;   // orange-400
+        case 'rose-400': actualColor = '#ef4444'; break;    // red-500
+        case 'blue-400': actualColor = '#1d4ed8'; break;    // blue-700
+        default: actualColor = '#374151'; // gray-700 as fallback
       }
       
       const count = level === "Fundamental" 
@@ -66,7 +66,7 @@ const ProblemDistributionChart = ({ categories, stats, totalSolved }) => {
   return (
     <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
       <h3 className="text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Problems Distribution</h3>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Pie Chart */}
         <div className="flex justify-center items-center h-48">
@@ -89,9 +89,9 @@ const ProblemDistributionChart = ({ categories, stats, totalSolved }) => {
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                layout="horizontal" 
-                verticalAlign="bottom" 
+              <Legend
+                layout="horizontal"
+                verticalAlign="bottom"
                 align="center"
                 iconSize={10}
                 iconType="circle"
@@ -102,11 +102,11 @@ const ProblemDistributionChart = ({ categories, stats, totalSolved }) => {
             </PieChart>
           </ResponsiveContainer>
         </div>
-        
+
         {/* Bar Progress */}
         <div className="flex flex-col justify-center space-y-3">
           {Object.entries(categories).map(([level, { color }]) => {
-            const count = level === "Fundamental" 
+            const count = level === "Fundamental"
               ? parseInt(stats.fundamentalCount || 0)
               : parseInt(stats[`${level.toLowerCase()}Count`] || 0);
             const percentage = totalSolved > 0 ? (count / totalSolved) * 100 : 0;
@@ -138,7 +138,7 @@ const ProblemDistributionChart = ({ categories, stats, totalSolved }) => {
 
 const SkeletonCard = () => (
   <div className="rounded-xl sm:rounded-2xl overflow-hidden bg-white border border-gray-200">
-    <div className="p-3 sm:p-4 bg-gradient-to-br from-gray-100 to-gray-200">
+    <div className="p-3 sm:p-4 bg-gray-100 border-b border-gray-200">
       <div className="flex items-center gap-3">
         <Skeleton className="h-8 w-8 rounded-lg" />
         <div className="flex-1">
@@ -170,7 +170,7 @@ const PlatformCard = ({ platform, stats, isLoading }) => {
   const platformConfig = useMemo(() => ({
     LeetCode: {
       logo: "/leetcode.png",
-      bgGradient: "from-yellow-100 to-yellow-300",
+      bgColor: "bg-yellow-50",
       categories: {
         Easy: { color: "bg-emerald-400" },
         Medium: { color: "bg-amber-400" },
@@ -180,19 +180,19 @@ const PlatformCard = ({ platform, stats, isLoading }) => {
     },
     Codeforces: {
       logo: "/codeforces.jpg",
-      bgGradient: "from-blue-100 to-blue-300",
+      bgColor: "bg-blue-50",
       totalOnly: true,
       rankLabel: "Rank"
     },
     CodeChef: {
       logo: "/codechef.jpg",
-      bgGradient: "from-purple-100 to-purple-300",
+      bgColor: "bg-gray-100",
       totalOnly: true,
       rankLabel: "Rank"
     },
     GeeksforGeeks: {
       logo: "/gfg.png",
-      bgGradient: "from-green-100 to-green-300",
+      bgColor: "bg-green-50",
       categories: {
         Easy: { color: "bg-emerald-400" },
         Medium: { color: "bg-amber-400" },
@@ -204,11 +204,11 @@ const PlatformCard = ({ platform, stats, isLoading }) => {
   }), []);
 
   const details = platformConfig[platform] || {
-    bgGradient: "from-gray-100 to-gray-300",
+    bgColor: "bg-gray-100",
     rankLabel: "Rank"
   };
 
-  const { logo, bgGradient, categories, totalOnly, rankLabel } = details;
+  const { logo, bgColor, categories, totalOnly, rankLabel } = details;
 
   const totalSolved = useMemo(() => {
     if (totalOnly) return parseInt(stats.solvedCount) || 0;
@@ -229,7 +229,7 @@ const PlatformCard = ({ platform, stats, isLoading }) => {
       role="article"
       aria-label={`${platform} statistics`}
     >
-      <div className={`p-3 sm:p-4 bg-gradient-to-br ${bgGradient}`}>
+      <div className={`p-3 sm:p-4 ${bgColor} border-b border-gray-200`}>
         <div className="flex items-center gap-3">
           <div className="p-1.5 sm:p-2 bg-white/50 rounded-lg border border-gray-300">
             <img 

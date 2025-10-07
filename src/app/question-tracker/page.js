@@ -17,7 +17,7 @@ export default function QuestionTracker() {
   const [showStats, setShowStats] = useState(true);
   const [activeTab, setActiveTab] = useState("tracker");
   const [sortBy, setSortBy] = useState("topic");
-  const [streakDays, setStreakDays] = useState(0);
+  
 
   const sourceImgMap = {
     leetcode: "/leetcode.png",
@@ -131,7 +131,7 @@ export default function QuestionTracker() {
 
   if (!isLoaded || loading || !user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-b from-blue-50 to-indigo-50">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-50">
         <div className="flex flex-col items-center justify-center p-8 bg-white rounded-2xl shadow-lg max-w-md w-full">
           <div className="relative w-40 h-40 mb-6">
             <div className="absolute inset-0 flex items-center justify-center">
@@ -150,7 +150,7 @@ export default function QuestionTracker() {
                   cy="50"
                   r="45"
                   fill="none"
-                  stroke="#4F46E5"
+                  stroke="#1d4ed8"
                   strokeWidth="3"
                   strokeDasharray="283"
                   strokeDashoffset="100"
@@ -166,7 +166,7 @@ export default function QuestionTracker() {
             </h3>
             
             <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-              <div className="bg-indigo-600 h-2 rounded-full animate-pulse" style={{ width: "70%" }}></div>
+              <div className="bg-blue-700 h-2 rounded-full animate-pulse" style={{ width: "70%" }}></div>
             </div>
             
             <p className="text-gray-600">
@@ -177,13 +177,13 @@ export default function QuestionTracker() {
               <div className="mt-8 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 justify-center">
                 <a
                   href="/sign-in"
-                  className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition-all duration-300 transform hover:-translate-y-1 font-medium text-center"
+                  className="px-6 py-3 bg-blue-700 text-white rounded-lg shadow-md hover:bg-gray-900 transition-all duration-300 transform hover:-translate-y-1 font-medium text-center"
                 >
                   Sign In
                 </a>
                 <a
                   href="/sign-up"
-                  className="px-6 py-3 bg-white text-indigo-600 border border-indigo-600 rounded-lg shadow-md hover:bg-indigo-50 transition-all duration-300 transform hover:-translate-y-1 font-medium text-center"
+                  className="px-6 py-3 bg-white text-blue-700 border border-blue-700 rounded-lg shadow-md hover:bg-blue-50 transition-all duration-300 transform hover:-translate-y-1 font-medium text-center"
                 >
                   Create Account
                 </a>
@@ -203,7 +203,7 @@ export default function QuestionTracker() {
           <button
             onClick={() => setActiveTab("tracker")}
             className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
-              activeTab === "tracker" ? "bg-white text-indigo-600 shadow-sm" : "text-gray-600 hover:text-gray-800"
+              activeTab === "tracker" ? "bg-white text-blue-700 shadow-sm" : "text-gray-600 hover:text-gray-800"
             }`}
           >
             <span className="flex items-center">
@@ -214,7 +214,7 @@ export default function QuestionTracker() {
           <button
             onClick={() => setActiveTab("leaderboard")}
             className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
-              activeTab === "leaderboard" ? "bg-white text-indigo-600 shadow-sm" : "text-gray-600 hover:text-gray-800"
+              activeTab === "leaderboard" ? "bg-white text-blue-700 shadow-sm" : "text-gray-600 hover:text-gray-800"
             }`}
           >
             <span className="flex items-center">
@@ -234,7 +234,7 @@ export default function QuestionTracker() {
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Your Progress</h2>
                 <button 
                   onClick={() => setShowStats(!showStats)}
-                  className="text-sm text-indigo-600 hover:text-indigo-800 flex items-center"
+                  className="text-sm text-blue-700 hover:text-gray-900 flex items-center"
                 >
                   {showStats ? "Hide Details" : "Show Details"}
                   <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${showStats ? "transform rotate-180" : ""}`} />
@@ -281,12 +281,12 @@ export default function QuestionTracker() {
                       <div className="relative pt-1">
                         <div className="flex items-center justify-between mb-2">
                           <div>
-                            <span className="text-xs font-semibold inline-block text-indigo-600">
+                            <span className="text-xs font-semibold inline-block text-blue-700">
                               {stats.progressPercentage.toFixed(1)}% Complete
                             </span>
                           </div>
                           <div className="text-right">
-                            <span className="text-xs font-semibold inline-block text-indigo-600">
+                            <span className="text-xs font-semibold inline-block text-blue-700">
                               {stats.solved} / {stats.solved + stats.inProgress + stats.bookmarked + stats.notStarted}
                             </span>
                           </div>
@@ -294,7 +294,7 @@ export default function QuestionTracker() {
                         <div className="overflow-hidden h-2 text-xs flex rounded-full bg-gray-200">
                           <div
                             style={{ width: `${stats.progressPercentage}%` }}
-                            className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full transition-all duration-500"
+                            className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-700 rounded-full transition-all duration-500"
                           ></div>
                         </div>
                       </div>
@@ -349,13 +349,13 @@ export default function QuestionTracker() {
           {/* Search and Filter Section */}
           <div className="mb-6 bg-white rounded-xl shadow-sm border border-gray-100 p-4">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
-              <div className={`relative flex-1 max-w-lg transition-all ${isSearchFocused ? "ring-2 ring-indigo-300" : ""}`}>
+              <div className={`relative flex-1 max-w-lg transition-all ${isSearchFocused ? "ring-2 ring-blue-200" : ""}`}>
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Search className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type="text"
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900 focus:ring-blue-700 focus:border-blue-700"
                   placeholder="Search questions, topics..."
                   value={activeFilter.search}
                   onChange={(e) => setActiveFilter({ ...activeFilter, search: e.target.value })}
@@ -375,7 +375,7 @@ export default function QuestionTracker() {
               <div className="flex flex-wrap gap-2 sm:gap-4">
                 <div className="flex items-center space-x-2">
                   <select
-                    className="border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm bg-gray-50 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm bg-gray-50 text-gray-900 focus:ring-blue-700 focus:border-blue-700"
                     value={activeFilter.status}
                     onChange={(e) => setActiveFilter({ ...activeFilter, status: e.target.value })}
                     aria-label="Filter by status"
@@ -392,7 +392,7 @@ export default function QuestionTracker() {
                 
                 <div className="flex items-center space-x-2">
                   <select
-                    className="border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm bg-gray-50 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm bg-gray-50 text-gray-900 focus:ring-blue-700 focus:border-blue-700"
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                     aria-label="Sort by"
@@ -429,9 +429,9 @@ export default function QuestionTracker() {
                   >
                     <h2 className="text-base sm:text-lg font-medium flex items-center text-gray-800">
                       {expandedTopics[groupKey] ? (
-                        <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-500 mr-2" />
+                        <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-blue-700 mr-2" />
                       ) : (
-                        <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-indigo-500 mr-2" />
+                        <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-blue-700 mr-2" />
                       )}
                       {groupKey}
                       <span className="ml-2 text-xs sm:text-sm font-normal text-gray-500">
@@ -480,7 +480,7 @@ export default function QuestionTracker() {
                                       e.preventDefault();
                                       handleQuestionClick(question);
                                     }}
-                                    className="text-indigo-600 hover:text-indigo-900 break-words hover:underline font-medium"
+                                    className="text-blue-700 hover:text-gray-900 break-words hover:underline font-medium"
                                   >
                                     {question.problem}
                                   </a>
@@ -522,7 +522,7 @@ export default function QuestionTracker() {
                                   <div className="flex flex-wrap gap-2">
                                     <button
                                       onClick={() => handleStatusChange(question.id, "in_progress", question.url)}
-                                      className="flex items-center px-3 py-1.5 text-xs font-medium text-indigo-700 bg-indigo-50 border border-indigo-200 rounded-lg hover:bg-indigo-100 transition-colors"
+                                      className="flex items-center px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
                                     >
                                       <Clock className="w-3 h-3 mr-1" />
                                       Start
@@ -562,14 +562,14 @@ export default function QuestionTracker() {
           ) : (
             <div className="text-center p-10 bg-white rounded-xl shadow-sm border border-gray-100">
               <div className="flex flex-col items-center justify-center space-y-4">
-                <div className="bg-indigo-50 p-4 rounded-full">
+                <div className="bg-blue-50 p-4 rounded-full">
                  {/*  */}
                 </div>
                 <p className="text-lg font-medium text-gray-700">No questions match your filter criteria</p>
                 <p className="text-sm text-gray-500">Try adjusting your filters or add new questions</p>
                 <button 
                   onClick={resetFilters}
-                  className="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                  className="mt-2 px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-gray-900 transition-colors"
                 >
                   Clear All Filters
                 </button>

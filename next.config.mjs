@@ -12,6 +12,11 @@ const nextConfig = {
         hostname: 'i.postimg.cc',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.freepik.com',
+        pathname: '**',
+      },
     ],
   },
 };

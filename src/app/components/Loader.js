@@ -24,7 +24,7 @@ import Image from 'next/image';
                        cy="50"
                        r="45"
                        fill="none"
-                       stroke="#4F46E5"
+                       stroke="#1d4ed8"
                        strokeWidth="3"
                        strokeDasharray="283"
                        strokeDashoffset="100"

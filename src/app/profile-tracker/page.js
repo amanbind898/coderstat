@@ -1,7 +1,7 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
+import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify"; 
 import "react-toastify/dist/ReactToastify.css";
 import { Share2, Globe, Lock } from "lucide-react";
@@ -201,19 +201,63 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100/50  ">
-      <div className="container mx-auto px-4 max-w-[100vw] sm:max-w-7xl">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/20 to-gray-50 py-8">
+      <div className="container mx-auto px-4 max-w-7xl">
         {isNew && (
-          <Alert className="mb-6 sm:mb-8 bg-blue-50/80 backdrop-blur-sm text-blue-700 border-blue-200">
-            <AlertDescription className="text-sm sm:text-base">
-              Welcome! Please complete your profile to get started.
+          <Alert className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 text-blue-900 border-blue-300 shadow-md">
+            <AlertDescription className="text-sm sm:text-base font-medium">
+              🎉 Welcome! Please complete your profile in settings to get started.
             </AlertDescription>
           </Alert>
         )}
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 lg:gap-8">
+        {/* Hero Section */}
+        <div className="mb-8">
+          <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-gray-900 rounded-2xl shadow-2xl">
+            <div className="absolute inset-0 bg-black/10"></div>
+            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE0YzMuMzEgMCA2IDIuNjkgNiA2cy0yLjY5IDYtNiA2LTYtMi42OS02LTYgMi42OS02IDYtNnpNNiAxNGMzLjMxIDAgNiAyLjY5IDYgNnMtMi42OSA2LTYgNi02LTIuNjktNi02IDIuNjktNiA2LTZ6TTM2IDQ0YzMuMzEgMCA2IDIuNjkgNiA2cy0yLjY5IDYtNiA2LTYtMi42OS02LTYgMi42OS02IDYtNnpNNiA0NGMzLjMxIDAgNiAyLjY5IDYgNnMtMi42OSA2LTYgNi02LTIuNjktNi02IDIuNjktNiA2LTZ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
+            
+            <div className="relative px-6 py-12 sm:px-12 sm:py-16">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-center gap-6">
+                  {profileData?.profilePic && (
+                    <div className="hidden sm:block w-24 h-24 rounded-2xl border-4 border-white/30 shadow-2xl overflow-hidden bg-white ring-4 ring-white/20">
+                      <Image
+                        src={profileData.profilePic}
+                        alt="Profile"
+                        width={96}
+                        height={96}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
+                  )}
+                  <div className="text-center md:text-left">
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 tracking-tight">
+                      Welcome Back, {user?.firstName || 'User'}! 👋
+                    </h1>
+                    <p className="text-blue-100 text-sm sm:text-base">Track your coding journey and achievements across platforms</p>
+                  </div>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/20">
+                    <div className="text-white/80 text-xs font-medium mb-1">Total Solved</div>
+                    <div className="text-2xl font-bold text-white">
+                      {userData && Array.isArray(userData) 
+                        ? (parseInt(userData.find(s => s.platform === 'LeetCode')?.solvedCount || 0) + 
+                           parseInt(userData.find(s => s.platform === 'GeeksforGeeks')?.solvedCount || 0))
+                        : 0}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           <div className="lg:col-span-4">
-            <div className="lg:sticky lg:top-8 space-y-4">
+            <div className="lg:sticky lg:top-8 space-y-6">
               <Card className="shadow-md hover:shadow-lg transition-all duration-300">
                 <CardContent className="p-0">
                   {profileData ? (
@@ -225,36 +269,53 @@ export default function Dashboard() {
               </Card>
               {profileData && (
                 <Button 
-                  className="w-full text-sm sm:text-base py-2 sm:py-3"
+                  className="w-full text-sm sm:text-base py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-gray-900 shadow-md hover:shadow-lg transform transition-all"
                   onClick={handleRefreshCodingStats}
                   disabled={isRefreshing}
                 >
-                  <RefreshCw className={`mr-2 h-3 w-3 sm:h-4 sm:w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`mr-2 h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                   {isRefreshing ? 'Refreshing...' : 'Refresh Coding Stats'}
                 </Button>
               )}
               {profileData && (
-  <Card className="shadow-md p-4">
-    <CardContent className="p-0">
-      <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            {profileData.isPublic ? <Globe size={18} className="text-green-500 mr-2" /> : <Lock size={18} className="text-gray-500 mr-2" />}
-            <span className="text-sm font-medium">Profile Visibility</span>
+  <Card className="shadow-lg border-2 border-gray-200 hover:border-blue-300 transition-all">
+    <CardContent className="p-6">
+      <div className="space-y-5">
+        <div className="flex items-center justify-between pb-4 border-b border-gray-200">
+          <div className="flex items-center gap-3">
+            {profileData.isPublic ? (
+              <div className="p-2 bg-green-100 rounded-lg">
+                <Globe size={20} className="text-green-600" />
+              </div>
+            ) : (
+              <div className="p-2 bg-gray-100 rounded-lg">
+                <Lock size={20} className="text-gray-600" />
+              </div>
+            )}
+            <div>
+              <span className="text-sm font-bold text-gray-900 block">Profile Visibility</span>
+              <span className="text-xs text-gray-500">
+                {profileData.isPublic ? "Public" : "Private"}
+              </span>
+            </div>
           </div>
           <Switch 
             checked={profileData.isPublic} 
             onCheckedChange={toggleProfileVisibility} 
           />
         </div>
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-gray-600 leading-relaxed">
           {profileData.isPublic 
-            ? "Your profile is public and can be shared with anyone." 
-            : "Your profile is private and only visible to you."}
+            ? "✅ Your profile is public and can be shared with anyone." 
+            : "🔒 Your profile is private and only visible to you."}
         </p>
         <Button 
           variant={profileData.isPublic ? "default" : "outline"}
-          className="w-full text-sm py-2" 
+          className={`w-full text-sm py-3 font-medium ${
+            profileData.isPublic 
+              ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-md' 
+              : 'border-2'
+          }`}
           onClick={shareProfile}
           disabled={!profileData.isPublic}
         >
@@ -269,29 +330,49 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="lg:col-span-8 space-y-4 sm:space-y-6 lg:space-y-8">
-            <Card className="shadow-md hover:shadow-lg transition-all duration-300">
-              <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-6">
-                {userData ? (
-                  <>
-                    <DsaStatsCard stats={userData} />
-                    <CPStatsCard stats={userData} />
-                  </>
-                ) : (
-                  <NoDataCard message="No platform stats available" />
-                )}
-              </CardContent>
-            </Card>
+          <div className="lg:col-span-8 space-y-6">
+            {/* Statistics Section */}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-gray-900">Your Statistics</h2>
+                  <p className="text-sm text-gray-500 mt-1">Overview of your coding achievements</p>
+                </div>
+              </div>
+              
+              <Card className="shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300">
+                <CardContent className="p-6 space-y-8">
+                  {userData ? (
+                    <>
+                      <DsaStatsCard stats={userData} />
+                      <div className="border-t border-gray-200 pt-6">
+                        <CPStatsCard stats={userData} />
+                      </div>
+                    </>
+                  ) : (
+                    <NoDataCard message="No platform stats available" />
+                  )}
+                </CardContent>
+              </Card>
+            </div>
 
-            <Card className="shadow-md hover:shadow-lg transition-all duration-300">
-              <CardContent className="p-4 sm:p-6">
-                {userData ? (
-                  <PlatformCards stats={userData} />
-                ) : (
-                  <NoDataCard message="No platform stats available" />
-                )}
-              </CardContent>
-            </Card>
+            {/* Platform Cards Section */}
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Platform Progress</h2>
+                <p className="text-sm text-gray-500 mt-1">Detailed breakdown by coding platform</p>
+              </div>
+              
+              <Card className="shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-300">
+                <CardContent className="p-6">
+                  {userData ? (
+                    <PlatformCards stats={userData} />
+                  ) : (
+                    <NoDataCard message="No platform stats available" />
+                  )}
+                </CardContent>
+              </Card>
+            </div>
             <ToastContainer
               position="top-right"
               autoClose={5000}

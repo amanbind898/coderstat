@@ -127,13 +127,13 @@ export default function Navbar() {
       href={href}
       className={`flex items-center w-full px-6 py-4 text-base transition-all duration-300 ${
         pathname === href
-          ? "bg-gradient-to-r from-blue-50 to-transparent border-l-4 border-blue-500 text-blue-600 font-medium"
-          : "text-gray-700 hover:bg-blue-50 hover:pl-8"
+          ? "bg-blue-50 border-l-4 border-blue-700 text-blue-700 font-medium"
+          : "text-gray-700 hover:bg-gray-50 hover:pl-8"
       }`}
     >
       <span className="mr-3 text-xl">{icon}</span>
       {label}
-      {pathname === href && <ChevronRight className="ml-auto w-5 h-5 text-blue-500" />}
+      {pathname === href && <ChevronRight className="ml-auto w-5 h-5 text-blue-700" />}
     </Link>
   );
 
@@ -142,8 +142,8 @@ export default function Navbar() {
       href={href}
       className={`relative px-4 py-2 group transition-all duration-200 ${
         pathname === href
-          ? "text-blue-600 font-medium"
-          : "text-gray-600 hover:text-blue-500"
+          ? "text-blue-700 font-medium"
+          : "text-gray-600 hover:text-blue-700"
       }`}
     >
       <div className="flex items-center gap-2">
@@ -151,9 +151,9 @@ export default function Navbar() {
         <span className="hidden lg:inline">{label}</span>
       </div>
       {pathname === href ? (
-        <span className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-purple-500 rounded-t-md"></span>
+        <span className="absolute bottom-0 left-0 w-full h-1 bg-blue-700 rounded-t-md"></span>
       ) : (
-        <span className="absolute bottom-0 left-0 w-0 h-1 bg-gradient-to-r from-blue-400 to-purple-500 rounded-t-md group-hover:w-full transition-all duration-300"></span>
+        <span className="absolute bottom-0 left-0 w-0 h-1 bg-blue-700 rounded-t-md group-hover:w-full transition-all duration-300"></span>
       )}
     </Link>
   );
@@ -317,14 +317,14 @@ export default function Navbar() {
           width: 6px;
         }
         ::-webkit-scrollbar-track {
-          background: #f1f1f1;
+          background: #f9fafb;
         }
         ::-webkit-scrollbar-thumb {
-          background: #c1c1c1;
+          background: #374151;
           border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-          background: #a8a8a8;
+          background: #111827;
         }
       `}</style>
     </>

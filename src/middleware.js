@@ -3,6 +3,7 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 const isProtectedRoute = createRouteMatcher([
   '/profile-tracker(.*)',
   '/question-tracker(.*)',
+  '/event-tracker(.*)',
   '/settings(.*)',
   '/upload'
 ])
@@ -11,9 +12,12 @@ export default clerkMiddleware(async (auth, req) => {
   const { userId, sessionClaims, redirectToSignIn } = await auth()
   const url = req.nextUrl
 
- 
+  // Redirect unauthenticated users trying to access protected routes
   if (!userId && isProtectedRoute(req)) {
-    return redirectToSignIn({ redirectUrl: '/sign-in' }) 
+    // Store the original URL they were trying to access
+    return redirectToSignIn({ 
+      returnBackUrl: url.pathname 
+    }) 
   }
 
   if (url.pathname.startsWith('/upload')) {
