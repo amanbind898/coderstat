@@ -53,60 +53,71 @@
 ## ✨ Key Features
 
 ### 🏆 **Multi-Platform Stats Tracker**
-- **Real-time synchronization** with LeetCode, Codeforces, CodeChef, and GeeksforGeeks
-- Automatic stats refresh with caching
-- Difficulty-wise problem breakdown (Easy, Medium, Hard)
-- Rating history and rank tracking
-- Contest participation statistics
+- **Real-time synchronization** with LeetCode (GraphQL), Codeforces (REST API), CodeChef (Web Scraping), and GeeksforGeeks (Web Scraping)
+- Automatic stats refresh with server-side caching and timestamp tracking
+- Difficulty-wise problem breakdown (Easy, Medium, Hard, Fundamental)
+- Rating history, rank tracking (Global/Country), and contest participation statistics
+- Visual analytics with pie charts and progress indicators using Recharts
+- Upsert mechanism for efficient database updates
 
 ### 📚 **Question Tracker & DSA Sheet**
 - Track progress through Striver's 450 DSA Sheet and custom problem sets
-- Mark questions as: Not Started, In Progress, Solved, or Bookmarked
-- Filter by difficulty, topic, status, and source
+- Mark questions as: **Not Started**, **In Progress**, **Solved**, or **Bookmarked**
+- Advanced filtering by difficulty, topic, status, and source platform
 - Direct links to problems on various platforms
-- Personal notes and solution tracking
-- Progress statistics with visual indicators
+- Personal notes, solution code storage, and confidence ratings (0-5 scale)
+- Time tracking per problem (in minutes)
+- Progress statistics with visual indicators and completion percentages
+- Bulk import functionality for admin users
 
 ### 📅 **Contest Calendar & Event Tracker**
-- Live contest updates from 7+ platforms via CList API
-- IST timezone conversion
-- Filter contests by platform (Codeforces, CodeChef, LeetCode, AtCoder, etc.)
-- Calendar view with event details
-- Local storage caching for offline access
-- Today's contests quick filter
+- Live contest updates from **7+ platforms** via CList API v4
+- **IST timezone conversion** from UTC for all contest times
+- Filter contests by platform: Codeforces, CodeChef, LeetCode, AtCoder, GeeksforGeeks, Naukri Code360, TopCoder
+- **Interactive calendar view** using React Big Calendar with event cards
+- **Google Calendar export** - Add contests directly to your calendar
+- **Local storage caching** for offline access with daily refresh
+- **Today vs All Upcoming** filter for quick contest discovery
+- "Starting Soon" badges for contests within 12 hours
 
 ### 👤 **User Profile & Settings**
-- Customizable profile with bio, location, institute, and profile picture
-- Social media links integration (GitHub, LinkedIn, Twitter, Instagram, Portfolio)
-- Coding platform username management
-- Public/Private profile visibility toggle
-- Embeddable profile widget for sharing
-- Real-time profile updates
+- Customizable profile with bio (500 char limit), location, institute, date of birth, and profile picture URL
+- Social media links integration: GitHub, LinkedIn, Twitter, Instagram, Portfolio
+- Coding platform username management (LeetCode, Codeforces, CodeChef, GeeksforGeeks)
+- **Public/Private profile visibility toggle** with real-time updates
+- **Embeddable profile widget** at `/embed/[userId]` for sharing on personal websites
+- **Shareable profile links** at `/profile/[userId]`
+- Collapsible settings sections for better UX
+- Real-time profile updates with toast notifications
 
 ### 🎯 **Leaderboard & Competition**
-- Global and friend leaderboards
-- Compare progress with peers
-- Platform-wise rankings
-- Total problems solved tracking
+- Global and friend leaderboards with aggregated stats
+- Compare progress with peers across platforms
+- Platform-wise rankings and total problems solved tracking
+- Sortable by total solved, rating, or platform-specific metrics
 
 ### 🔐 **Secure Authentication**
-- Clerk-powered authentication system
-- OAuth integration
-- Protected routes with middleware
-- Session management
+- **Clerk-powered authentication** with OAuth (Google, GitHub) and email/password
+- **Protected routes with middleware** - automatic redirects to sign-in
+- **Role-based access control** - admin features require `org:admin` role
+- Session management with secure token handling
+- Return URL preservation for seamless navigation
 
 ### 🎨 **Modern UI/UX**
-- Fully responsive design (mobile, tablet, desktop)
-- Dark/Light theme support
-- Smooth animations and transitions
-- Loading skeletons and states
-- Toast notifications for user feedback
-- Accessible components
+- **Fully responsive design** - optimized for mobile, tablet, and desktop
+- **Dark/Light theme support** with next-themes
+- Gradient backgrounds and premium aesthetic design
+- Smooth animations and transitions with tw-animate-css
+- **Loading skeletons** for better perceived performance
+- **Toast notifications** (React Toastify) for real-time user feedback
+- **Accessible components** with proper ARIA labels and keyboard navigation
+- shadcn/ui components with Radix UI primitives
 
 ### 👨‍💼 **Admin Features**
-- Upload new question sheets
+- Upload new question sheets via `/upload` route (requires `org:admin` role)
+- Bulk import DSA questions with CSV/JSON support
 - Manage master questions database
-- Platform content management
+- Platform content management and question categorization
 
 ---
 
@@ -127,29 +138,34 @@
 - **Framework:** Next.js 15.2.4 (App Router)
 - **UI Library:** React 19.0.0
 - **Styling:** Tailwind CSS 4.0
-- **Icons:** Lucide React, React Icons
-- **Components:** Radix UI, shadcn/ui
-- **Animations:** tw-animate-css
-- **Charts:** Recharts
-- **Calendar:** React Big Calendar
+- **Icons:** Lucide React 0.487.0, React Icons 5.5.0
+- **Components:** Radix UI (@radix-ui/react-slot, @radix-ui/react-switch), shadcn/ui
+- **Animations:** tw-animate-css 1.2.5
+- **Charts:** Recharts 2.15.2
+- **Calendar:** React Big Calendar 1.18.0
 - **State Management:** React Hooks
-- **Toast Notifications:** React Toastify
-- **Loading States:** React Loading Skeleton
+- **Toast Notifications:** React Toastify 11.0.5
+- **Loading States:** React Loading Skeleton 3.5.0
+- **Utilities:** clsx 2.1.1, tailwind-merge 3.1.0, class-variance-authority 0.7.1
 
 ### **Backend**
-- **API Routes:** Next.js API Routes
-- **ORM:** Drizzle ORM
-- **Database:** PostgreSQL (Neon serverless)
-- **Authentication:** Clerk
-- **HTTP Client:** Axios
-- **Web Scraping:** Cheerio
+- **API Routes:** Next.js API Routes (Serverless)
+- **ORM:** Drizzle ORM 0.41.0
+- **Database:** PostgreSQL (Neon Serverless @neondatabase/serverless 1.0.0)
+- **Authentication:** Clerk 6.15.0 (OAuth, Session Management, Role-based Access)
+- **HTTP Client:** Axios 1.8.4
+- **Web Scraping:** Cheerio 1.0.0
+- **Theme Management:** next-themes 0.4.6
+- **Secondary Auth:** NextAuth 4.24.11 (for platform integrations)
 
 ### **Development Tools**
 - **Package Manager:** npm
 - **Version Control:** Git
-- **Database Management:** Drizzle Kit
+- **Database Management:** Drizzle Kit 0.30.6
 - **Runtime:** Node.js
-- **TypeScript Support:** @types/node
+- **TypeScript Support:** @types/node 22.14.1, @types/supertest 6.0.3
+- **Environment Variables:** dotenv 16.4.7
+- **Build Tool:** tsx 4.19.3
 
 ---
 
@@ -218,49 +234,88 @@ Before you begin, ensure you have the following installed:
 ```
 coderstat/
 ├── public/                    # Static assets
-│   ├── logo.png
-│   ├── mascot.png
-│   └── [platform logos]       # LeetCode, Codeforces, CodeChef, etc.
+│   ├── logo.png              # Main logo
+│   ├── mascot.png            # Mascot image
+│   ├── mascot-head.png       # Mascot head icon
+│   ├── leetcode.png          # LeetCode logo
+│   ├── codeforces.jpg        # Codeforces logo
+│   ├── codechef.jpg          # CodeChef logo
+│   ├── gfg.png              # GeeksforGeeks logo
+│   └── [other platform logos]
 ├── src/
 │   ├── app/                   # Next.js App Router
 │   │   ├── (auth)/            # Authentication routes
+│   │   │   ├── sign-in/
+│   │   │   └── sign-up/
 │   │   ├── api/               # API routes
-│   │   │   ├── leaderboard/
-│   │   │   ├── profile/
-│   │   │   ├── questions/
-│   │   │   ├── stats/
-│   │   │   └── updatePlatformStats/
+│   │   │   ├── auth/          # Clerk webhook endpoints
+│   │   │   ├── leaderboard/   # Leaderboard data
+│   │   │   ├── profile/       # User profile CRUD
+│   │   │   ├── public-profile/# Public profile data
+│   │   │   ├── questions/     # Question tracker API
+│   │   │   │   └── import/    # Bulk question import
+│   │   │   ├── stats/         # Platform stats fetcher
+│   │   │   ├── toggle-profile-visibility/  # Profile privacy
+│   │   │   └── updatePlatformStats/  # Stats refresh
 │   │   ├── components/        # Reusable components
 │   │   │   ├── Navbar.js
+│   │   │   ├── Footer.js
 │   │   │   ├── UserProfile.js
 │   │   │   ├── PlatformCards.js
+│   │   │   ├── DsaStatsCard.js
+│   │   │   ├── CPStatsCard.js
+│   │   │   ├── TotalProblemsSolved.js
 │   │   │   ├── ContestCalendar.js
 │   │   │   ├── Leaderboard.js
+│   │   │   ├── Hero1.js       # Landing page hero sections
+│   │   │   ├── Hero2.js
+│   │   │   ├── Hero3.js
 │   │   │   └── Loader.js
 │   │   ├── event-tracker/     # Contest calendar page
+│   │   │   └── page.js
 │   │   ├── profile/           # Public profile pages
+│   │   │   └── [userId]/
 │   │   ├── profile-tracker/   # User dashboard
+│   │   │   └── page.js
 │   │   ├── question-tracker/  # DSA sheet tracker
+│   │   │   └── page.js
 │   │   ├── settings/          # User settings
+│   │   │   └── page.js
 │   │   ├── upload/            # Admin upload page
+│   │   │   └── page.js
 │   │   ├── embed/             # Embeddable widgets
-│   │   ├── layout.js          # Root layout
+│   │   │   └── [userId]/
+│   │   ├── unauthorized/      # Access denied page
+│   │   ├── globals.css        # Global styles
+│   │   ├── layout.js          # Root layout with Clerk
 │   │   └── page.js            # Landing page
+│   ├── components/            # shadcn/ui components
+│   │   └── ui/                # Reusable UI primitives
+│   │       ├── alert.jsx
+│   │       ├── button.jsx
+│   │       ├── card.jsx
+│   │       ├── skeleton.jsx
+│   │       └── switch.jsx
 │   ├── db/                    # Database configuration
-│   │   ├── schema.js          # Database schema
-│   │   └── index.js           # Database connection
+│   │   ├── schema.js          # Drizzle schema (4 tables)
+│   │   └── index.js           # Neon DB connection
 │   ├── lib/                   # Utility functions
-│   │   └── questionTrackerApi.js
-│   ├── middleware.js          # Auth middleware
-│   └── components/            # UI components
-│       └── ui/                # shadcn/ui components
+│   │   ├── platformAPI.js     # API fetchers for coding platforms
+│   │   ├── questionTrackerApi.js  # Question CRUD operations
+│   │   ├── utils.js           # Helper utilities
+│   │   └── auth/              # Auth utilities
+│   └── middleware.js          # Clerk auth middleware
 ├── docs/                      # Documentation
 │   └── Testing Approach for CoderSTAT Platform.docx
 ├── drizzle/                   # Drizzle migrations
-├── drizzle.config.js          # Drizzle configuration
-├── tailwind.config.js         # Tailwind configuration
+│   └── meta/                  # Migration metadata
+├── .env.local                 # Environment variables (gitignored)
+├── drizzle.config.js          # Drizzle ORM configuration
+├── tailwind.config.js         # Tailwind CSS configuration
 ├── next.config.mjs            # Next.js configuration
 ├── components.json            # shadcn/ui config
+├── jsconfig.json              # JavaScript path aliases
+├── postcss.config.mjs         # PostCSS configuration
 └── package.json               # Dependencies
 ```
 
@@ -270,28 +325,123 @@ coderstat/
 
 ### **Supported Platforms**
 
-| Platform | Features | Data Points |
-|----------|----------|-------------|
-| **LeetCode** | Problems solved, difficulty breakdown | Easy, Medium, Hard counts, Rating |
-| **Codeforces** | Contest rating, ranks | Current Rating, Max Rating, Global/Country Rank |
-| **CodeChef** | Problems solved, rating | Star rating, Highest rating |
-| **GeeksforGeeks** | Solved problems count | Total solved, Profile data |
-| **CList** | Contest calendar | Upcoming contests across platforms |
+| Platform | Integration Method | Features | Data Points |
+|----------|-------------------|----------|-------------|
+| **LeetCode** | GraphQL API | Problems solved, Contest stats | Easy/Medium/Hard counts, Rating, Global Rank, Attended Contests |
+| **Codeforces** | REST API | User info, Submissions | Current/Max Rating, Problems Solved, Contest Participation |
+| **CodeChef** | Web Scraping (Cheerio) | Profile stats, Rankings | Current/Highest Rating, Global/Country Rank, Problems Solved, Contest Count |
+| **GeeksforGeeks** | Web Scraping (Cheerio) | Profile stats, Problem breakdown | Total Solved, Easy/Medium/Hard, Fundamental, Coding Score, Institute Rank |
+| **CList** | REST API | Contest Calendar | Upcoming contests across 7+ platforms with IST conversion |
+
+### **Implementation Details**
+
+#### **LeetCode Integration**
+- GraphQL endpoint: `https://leetcode.com/graphql`
+- Query: `userProfilePublicProfile` + `userContestRanking`
+- Data: Submission stats by difficulty, contest rating, global ranking
+- Error handling: Graceful fallback for missing contest data
+
+#### **Codeforces Integration**
+- API endpoints:
+  - `/api/user.info` - User profile and rating
+  - `/api/user.status` - Submission history
+- Logic: Filters submissions by `verdict: "OK"` to count unique problems solved
+- Data: Current rating, max rating, total problems solved
+
+#### **CodeChef Integration**
+- URL: `https://www.codechef.com/users/{username}`
+- Scraping: Cheerio selectors for rating cards, ranks, problem counts
+- Extracts: Current/highest rating, global/country rank, contest count
+
+#### **GeeksforGeeks Integration**
+- URL: `https://auth.geeksforgeeks.org/user/{username}`
+- Scraping: CSS class-based selectors
+- Parses: Problem counts by difficulty (School, Basic, Easy, Medium, Hard)
+- Calculates: Fundamental count (School + Basic)
+
+#### **Contest Calendar (CList API)**
+- Endpoint: CList API v4 with authentication
+- Features: Platform filtering, IST timezone conversion, Google Calendar export
+- Caching: Local storage with daily refresh
+- Platforms: Codeforces, CodeChef, LeetCode, AtCoder, GeeksforGeeks, Naukri Code360, TopCoder
 
 ### **API Endpoints**
 
-- `POST /api/updatePlatformStats` - Refresh platform statistics
-- `GET /api/profile/[userId]` - Fetch user profile data
-- `GET /api/stats/[clerkId]` - Get coding statistics
-- `GET /api/leaderboard` - Fetch leaderboard data
-- `GET /api/questions` - Get question tracker data
-- `POST /api/questions` - Update question status
+#### **Profile Management**
+- `POST /api/profile` - Fetch or create user profile
 - `GET /api/public-profile/[userId]` - Public profile data
-- `POST /api/toggle-profile-visibility` - Toggle profile visibility
+- `POST /api/toggle-profile-visibility` - Toggle public/private status
+
+#### **Platform Stats**
+- `POST /api/stats` - Get all platform stats for user
+- `POST /api/updatePlatformStats` - Refresh stats from all platforms
+  - Parameters: `clerkId`, `leetCode`, `geeksforgeeks`, `codeforces`, `codechef`
+  - Returns: Updated stats with timestamps
+  - Implements: Upsert logic (update existing or insert new)
+
+#### **Question Tracker**
+- `GET /api/questions` - Fetch user's question progress
+- `POST /api/questions` - Update question status
+- `POST /api/questions/import` - Bulk import DSA questions (admin only)
+
+#### **Leaderboard**
+- `GET /api/leaderboard` - Fetch global/friend rankings
+  - Aggregates: Total problems solved across platforms
+  - Sorting: By total solved, rating, or platform-specific metrics
 
 ---
 
-## 🗃️ Database Schema
+## � Authentication & Middleware
+
+### **Clerk Authentication**
+CoderSTAT uses [Clerk](https://clerk.com) for comprehensive authentication and user management:
+
+- **OAuth Integration:** Sign up/Sign in with Google, GitHub, or email
+- **Session Management:** Secure session handling with automatic token refresh
+- **User Management:** Profile data, email verification, password management
+- **Protected Routes:** Middleware-based route protection
+
+### **Middleware Implementation**
+
+The `middleware.js` file implements route protection and role-based access control:
+
+```javascript
+// Protected routes requiring authentication
+- /profile-tracker     # User dashboard
+- /question-tracker    # DSA progress tracker
+- /event-tracker       # Contest calendar
+- /settings            # User settings
+- /upload              # Admin-only question upload
+```
+
+**Key Features:**
+- Automatic redirect to `/sign-in` for unauthenticated users
+- Return URL preservation for seamless post-login navigation
+- Role-based access control for admin features
+- Checks `publicMetadata.role` for `org:admin` role
+
+### **Role-Based Access**
+
+**Admin Role (`org:admin`):**
+- Access to `/upload` route for bulk question imports
+- Manage master questions database
+- Platform content management
+
+**Regular Users:**
+- Access to all tracker features
+- Profile customization
+- Public/private profile toggle
+
+### **Profile Privacy**
+
+Users can control their profile visibility:
+- **Public:** Profile accessible at `/profile/[userId]`, embeddable widgets enabled
+- **Private:** Profile only visible to the user, sharing disabled
+- Toggle via Settings or Profile Tracker dashboard
+
+---
+
+## �🗃️ Database Schema
 
 ### **Tables**
 
@@ -394,160 +544,7 @@ Tracks individual user's question progress
 
 ---
 
-## 🧪 Testing
 
-### **Testing Approach**
-
-The project follows a comprehensive testing strategy documented in `docs/Testing Approach for CoderSTAT Platform.docx`.
-
-### **Test Coverage**
-
-- ✅ **Unit Tests** - Component and utility functions
-- ✅ **Integration Tests** - API routes and database operations
-- ✅ **End-to-End Tests** - User flows and journeys
-- ✅ **Performance Tests** - Load testing with k6
-- ✅ **User Acceptance Testing** - 12 real users, 100% success rate
-
-### **Available Test Commands**
-
-```bash
-# Run all tests
-npm test
-
-# Backend API tests
-npm run test:api
-
-# Frontend component tests
-npm run test:components
-
-# End-to-end tests
-npm run test:e2e
-
-# Performance/Load tests
-k6 run tests/load-test.js
-```
-
-### **Test Results**
-
-- **12 real users** tested core flows
-- **100% success rate** on primary features
-- Flows tested: sign up, profile setup, stats refresh, DSA tracking, contest viewing, profile sharing
-
----
-
-## 🌐 Deployment
-
-### **Vercel (Recommended)**
-
-1. Push code to GitHub
-2. Import project to Vercel
-3. Add environment variables
-4. Deploy
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-```
-
-### **Other Platforms**
-
-Compatible with:
-- Netlify
-- Railway
-- Render
-- AWS Amplify
-
-### **Database Setup**
-
-For production, use:
-- [Neon](https://neon.tech) - Serverless PostgreSQL
-- [Supabase](https://supabase.com)
-- [Railway](https://railway.app)
-- Any PostgreSQL provider
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/AmazingFeature
-   ```
-3. **Commit your changes**
-   ```bash
-   git commit -m 'Add some AmazingFeature'
-   ```
-4. **Push to the branch**
-   ```bash
-   git push origin feature/AmazingFeature
-   ```
-5. **Open a Pull Request**
-
-### **Contribution Guidelines**
-
-- Follow existing code style
-- Write meaningful commit messages
-- Add tests for new features
-- Update documentation
-- Ensure all tests pass
-
----
-
-## 🎯 Roadmap
-
-### **Upcoming Features**
-
-- [ ] Additional question sheets (OS, DBMS, System Design)
-- [ ] Study planner with scheduling
-- [ ] Friend system and team leaderboards
-- [ ] Progress charts and analytics
-- [ ] Mobile app (React Native)
-- [ ] Browser extension
-- [ ] Email/Push notifications for contests
-- [ ] AI-powered question recommendations
-- [ ] Code snippet storage
-- [ ] Discussion forum
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](./LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- **CList API** for contest data
-- **Clerk** for authentication
-- **Neon** for database hosting
-- **Vercel** for deployment
-- **shadcn/ui** for UI components
-- All coding platforms for public APIs
-
----
-
-## 👨‍💻 Author
-
-**Aman Bind**
-
-- GitHub: [@amanbind898](https://github.com/amanbind898)
-- Project: [CoderSTAT](https://github.com/amanbind898/coderstat)
-
----
-
-## 📞 Support
-
-- **Issues:** [GitHub Issues](https://github.com/amanbind898/coderstat/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/amanbind898/coderstat/discussions)
-
----
 
 <div align="center">
 
