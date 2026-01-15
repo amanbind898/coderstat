@@ -21,20 +21,20 @@ const ProblemDistributionChart = ({ categories, stats, totalSolved }) => {
     return Object.entries(categories).map(([level, { color }]) => {
       const rawColor = color.replace('bg-', '');
       let actualColor;
-      
+
       // Map Tailwind color classes to hex values - Updated Theme
-      switch(rawColor) {
+      switch (rawColor) {
         case 'emerald-400': actualColor = '#22c55e'; break; // green-500
         case 'amber-400': actualColor = '#fb923c'; break;   // orange-400
         case 'rose-400': actualColor = '#ef4444'; break;    // red-500
         case 'blue-400': actualColor = '#1d4ed8'; break;    // blue-700
         default: actualColor = '#374151'; // gray-700 as fallback
       }
-      
-      const count = level === "Fundamental" 
+
+      const count = level === "Fundamental"
         ? parseInt(stats.fundamentalCount || 0)
         : parseInt(stats[`${level.toLowerCase()}Count`] || 0);
-        
+
       return {
         name: level,
         value: count,
@@ -47,7 +47,7 @@ const ProblemDistributionChart = ({ categories, stats, totalSolved }) => {
     if (active && payload && payload.length) {
       const { name, value } = payload[0].payload;
       const percentage = totalSolved > 0 ? ((value / totalSolved) * 100).toFixed(1) : 0;
-      
+
       return (
         <div className="bg-white p-2 shadow-md rounded border border-gray-200 text-xs">
           <p className="font-medium">{name}</p>
@@ -136,6 +136,68 @@ const ProblemDistributionChart = ({ categories, stats, totalSolved }) => {
   );
 };
 
+// Language Distribution Chart for GFG
+const LanguageDistributionChart = ({ languageStats }) => {
+  const langData = useMemo(() => {
+    if (!languageStats || typeof languageStats !== 'object') return [];
+
+    const langColors = {
+      cpp: '#00599C',
+      'c++': '#00599C',
+      python3: '#3776AB',
+      python: '#3776AB',
+      java: '#ED8B00',
+      javascript: '#F7DF1E',
+      c: '#A8B9CC',
+      csharp: '#239120',
+      go: '#00ADD8',
+      rust: '#DEA584',
+      kotlin: '#7F52FF',
+      swift: '#FA7343',
+    };
+
+    return Object.entries(languageStats)
+      .map(([lang, count]) => ({
+        name: lang.toUpperCase(),
+        value: count,
+        color: langColors[lang.toLowerCase()] || '#6B7280'
+      }))
+      .sort((a, b) => b.value - a.value);
+  }, [languageStats]);
+
+  const totalProblems = useMemo(() =>
+    langData.reduce((sum, item) => sum + item.value, 0),
+    [langData]
+  );
+
+  if (langData.length === 0) return null;
+
+  return (
+    <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
+      <h3 className="text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Languages Used</h3>
+      <div className="space-y-2">
+        {langData.map(({ name, value, color }) => {
+          const percentage = totalProblems > 0 ? (value / totalProblems) * 100 : 0;
+          return (
+            <div key={name} className="flex items-center gap-2">
+              <span className="text-xs text-gray-600 w-16 font-medium">{name}</span>
+              <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full transition-all duration-500 rounded-full"
+                  style={{ width: `${percentage}%`, backgroundColor: color }}
+                />
+              </div>
+              <span className="text-xs font-medium text-gray-800 min-w-[3.5rem] text-right">
+                {value} ({percentage.toFixed(0)}%)
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 const SkeletonCard = () => (
   <div className="rounded-xl sm:rounded-2xl overflow-hidden bg-white border border-gray-200">
     <div className="p-3 sm:p-4 bg-gray-100 border-b border-gray-200">
@@ -213,18 +275,18 @@ const PlatformCard = ({ platform, stats, isLoading }) => {
   const totalSolved = useMemo(() => {
     if (totalOnly) return parseInt(stats.solvedCount) || 0;
     if (platform === "GeeksforGeeks") {
-      return parseInt(stats.easyCount || 0) + 
-             parseInt(stats.mediumCount || 0) + 
-             parseInt(stats.hardCount || 0) +
-             parseInt(stats.fundamentalCount || 0);
+      return parseInt(stats.easyCount || 0) +
+        parseInt(stats.mediumCount || 0) +
+        parseInt(stats.hardCount || 0) +
+        parseInt(stats.fundamentalCount || 0);
     }
-    return parseInt(stats.easyCount || 0) + 
-           parseInt(stats.mediumCount || 0) + 
-           parseInt(stats.hardCount || 0);
+    return parseInt(stats.easyCount || 0) +
+      parseInt(stats.mediumCount || 0) +
+      parseInt(stats.hardCount || 0);
   }, [stats, totalOnly, platform]);
 
   return (
-    <div 
+    <div
       className="rounded-xl sm:rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-300 hover:border-gray-400 hover:shadow-md"
       role="article"
       aria-label={`${platform} statistics`}
@@ -232,9 +294,9 @@ const PlatformCard = ({ platform, stats, isLoading }) => {
       <div className={`p-3 sm:p-4 ${bgColor} border-b border-gray-200`}>
         <div className="flex items-center gap-3">
           <div className="p-1.5 sm:p-2 bg-white/50 rounded-lg border border-gray-300">
-            <img 
-              src={logo} 
-              alt={`${platform} Logo`} 
+            <img
+              src={logo}
+              alt={`${platform} Logo`}
               className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg"
               loading="lazy"
             />
@@ -261,11 +323,16 @@ const PlatformCard = ({ platform, stats, isLoading }) => {
         </div>
 
         {!totalOnly && categories && totalSolved > 0 && (
-          <ProblemDistributionChart 
-            categories={categories} 
-            stats={stats} 
-            totalSolved={totalSolved} 
+          <ProblemDistributionChart
+            categories={categories}
+            stats={stats}
+            totalSolved={totalSolved}
           />
+        )}
+
+        {/* Language Distribution for GFG */}
+        {platform === "GeeksforGeeks" && stats.languageStats && (
+          <LanguageDistributionChart languageStats={stats.languageStats} />
         )}
       </div>
     </div>

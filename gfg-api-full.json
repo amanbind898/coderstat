@@ -1,0 +1,1650 @@
+{
+  "status": "success",
+  "message": "",
+  "result": {
+    "Medium": {
+      "700023": {
+        "slug": "rotate-a-linked-list",
+        "pname": "Rotate a Linked List",
+        "lang": "cpp"
+      },
+      "700043": {
+        "slug": "add-two-numbers-represented-by-linked-lists",
+        "pname": "Add Number Linked Lists",
+        "lang": "cpp"
+      },
+      "700053": {
+        "slug": "add-1-to-a-number-represented-as-linked-list",
+        "pname": "Add 1 to a Linked List Number",
+        "lang": "cpp"
+      },
+      "700099": {
+        "slug": "detect-loop-in-linked-list",
+        "pname": "Detect Loop in linked list",
+        "lang": "cpp"
+      },
+      "700124": {
+        "slug": "quick-sort-on-linked-list",
+        "pname": "Quick Sort on Linked List",
+        "lang": "cpp"
+      },
+      "700149": {
+        "slug": "check-for-bst",
+        "pname": "Check for BST",
+        "lang": "cpp"
+      },
+      "700160": {
+        "slug": "bottom-view-of-binary-tree",
+        "pname": "Bottom View of Binary Tree",
+        "lang": "cpp"
+      },
+      "700163": {
+        "slug": "intersection-point-in-y-shapped-linked-lists",
+        "pname": "Intersection in Y Shaped Lists",
+        "lang": "cpp"
+      },
+      "700165": {
+        "slug": "diameter-of-binary-tree",
+        "pname": "Diameter of a Binary Tree",
+        "lang": "cpp"
+      },
+      "700176": {
+        "slug": "merge-two-sorted-linked-lists",
+        "pname": "Merge two sorted linked lists",
+        "lang": "cpp"
+      },
+      "700192": {
+        "slug": "flattening-a-linked-list",
+        "pname": "Flattening a Linked List",
+        "lang": "cpp"
+      },
+      "700204": {
+        "slug": "boundary-traversal-of-binary-tree",
+        "pname": "Tree Boundary Traversal",
+        "lang": "cpp"
+      },
+      "700208": {
+        "slug": "implement-stack-using-array",
+        "pname": "Implement stack using array",
+        "lang": "cpp"
+      },
+      "700219": {
+        "slug": "detect-cycle-in-an-undirected-graph",
+        "pname": "Undirected Graph Cycle",
+        "lang": "cpp"
+      },
+      "700253": {
+        "slug": "the-celebrity-problem",
+        "pname": "The Celebrity Problem",
+        "lang": "cpp"
+      },
+      "700273": {
+        "slug": "find-the-number-of-islands",
+        "pname": "Find the number of islands",
+        "lang": "cpp"
+      },
+      "700285": {
+        "slug": "circular-tour-1587115620",
+        "pname": "Gas Station",
+        "lang": "cpp"
+      },
+      "700309": {
+        "slug": "kth-element-in-matrix",
+        "pname": "Kth smallest element in a Matrix",
+        "lang": "cpp"
+      },
+      "700332": {
+        "slug": "remove-loop-in-linked-list",
+        "pname": "Remove loop in Linked List",
+        "lang": "cpp"
+      },
+      "700386": {
+        "slug": "implement-atoi",
+        "pname": "Implement Atoi",
+        "lang": "cpp"
+      },
+      "700391": {
+        "slug": "check-if-linked-list-is-pallindrome",
+        "pname": "Palindrome Linked List",
+        "lang": "cpp"
+      },
+      "700408": {
+        "slug": "rat-in-a-maze-problem",
+        "pname": "Rat in a Maze",
+        "lang": "cpp"
+      },
+      "700440": {
+        "slug": "merge-two-bst-s",
+        "pname": "Merge two BST 's",
+        "lang": "cpp"
+      },
+      "700444": {
+        "slug": "count-distinct-elements-in-every-window",
+        "pname": "Count distinct elements in every window",
+        "lang": "cpp"
+      },
+      "700454": {
+        "slug": "root-to-leaf-paths-sum",
+        "pname": "Root to leaf paths sum",
+        "lang": "cpp"
+      },
+      "700469": {
+        "slug": "sort-a-stack",
+        "pname": "Sort a stack",
+        "lang": "cpp"
+      },
+      "700490": {
+        "slug": "top-view-of-binary-tree",
+        "pname": "Top View of Binary Tree",
+        "lang": "cpp"
+      },
+      "700511": {
+        "slug": "level-order-traversal",
+        "pname": "Level order traversal",
+        "lang": "cpp"
+      },
+      "700512": {
+        "slug": "peak-element",
+        "pname": "Peak element",
+        "lang": "cpp"
+      },
+      "700523": {
+        "slug": "sort-a-linked-list",
+        "pname": "Merge Sort for Linked List",
+        "lang": "cpp"
+      },
+      "700550": {
+        "slug": "find-a-pair-with-given-target-in-bst",
+        "pname": "Pair Sum in BST",
+        "lang": "cpp"
+      },
+      "700562": {
+        "slug": "xor-linked-list",
+        "pname": "XOR Linked List",
+        "lang": "cpp"
+      },
+      "700575": {
+        "slug": "k-sum-paths",
+        "pname": "K Sum Paths",
+        "lang": "cpp"
+      },
+      "700586": {
+        "slug": "construct-tree-1",
+        "pname": "Construct Tree from Inorder & Preorder",
+        "lang": "cpp"
+      },
+      "700608": {
+        "slug": "insert-in-sorted-way-in-a-sorted-dll",
+        "pname": "Insert in Sorted way in a Sorted DLL",
+        "lang": "cpp"
+      },
+      "700611": {
+        "slug": "maximum-path-sum-from-any-node",
+        "pname": "Maximum path sum",
+        "lang": "cpp"
+      },
+      "700614": {
+        "slug": "predecessor-and-successor",
+        "pname": "Predecessor and Successor",
+        "lang": "cpp"
+      },
+      "700620": {
+        "slug": "find-length-of-loop",
+        "pname": "Find length of Loop",
+        "lang": "cpp"
+      },
+      "700622": {
+        "slug": "deletion-and-reverse-in-linked-list",
+        "pname": "Deletion in Circular Linked List",
+        "lang": "cpp"
+      },
+      "700950": {
+        "slug": "cat-and-hat-python",
+        "pname": "Cat and Hat",
+        "lang": "python3"
+      },
+      "700974": {
+        "slug": "nearest-power-1587115620",
+        "pname": "Nearest Power",
+        "lang": "python3"
+      },
+      "700983": {
+        "slug": "doge",
+        "pname": "Doge",
+        "lang": "python3"
+      },
+      "701116": {
+        "slug": "mother-vertex",
+        "pname": "Mother Vertex",
+        "lang": "cpp"
+      },
+      "701135": {
+        "slug": "implementing-ceil-in-bst",
+        "pname": "Ceil in BST",
+        "lang": "cpp"
+      },
+      "701190": {
+        "slug": "tower-of-hanoi-1587115621",
+        "pname": "Tower Of Hanoi",
+        "lang": "cpp"
+      },
+      "701192": {
+        "slug": "smallest-positive-missing-number-1587115621",
+        "pname": "Smallest Positive Missing",
+        "lang": "cpp"
+      },
+      "701195": {
+        "slug": "power-of-numbers-1587115620",
+        "pname": "Power Of Numbers",
+        "lang": "cpp"
+      },
+      "701204": {
+        "slug": "rotate-and-delete-1587115621",
+        "pname": "Rotate and delete",
+        "lang": "cpp"
+      },
+      "701213": {
+        "slug": "rotate-array-by-n-elements-1587115621",
+        "pname": "Rotate Array",
+        "lang": "cpp"
+      },
+      "701215": {
+        "slug": "kadanes-algorithm-1587115620",
+        "pname": "Kadane's Algorithm",
+        "lang": "cpp"
+      },
+      "701220": {
+        "slug": "majority-element-1587115620",
+        "pname": "Majority Element",
+        "lang": "c"
+      },
+      "701226": {
+        "slug": "inversion-of-array-1587115620",
+        "pname": "Count Inversions",
+        "lang": "cpp"
+      },
+      "701236": {
+        "slug": "subarray-with-given-sum-1587115621",
+        "pname": "Indexes of Subarray Sum",
+        "lang": "cpp"
+      },
+      "701238": {
+        "slug": "count-possible-triangles-1587115620",
+        "pname": "Count the number of possible triangles",
+        "lang": "cpp"
+      },
+      "701243": {
+        "slug": "merge-two-sorted-arrays-1587115620",
+        "pname": "Merge Without Extra Space",
+        "lang": "cpp"
+      },
+      "701264": {
+        "slug": "spirally-traversing-a-matrix-1587115621",
+        "pname": "Spirally traversing a matrix",
+        "lang": "cpp"
+      },
+      "701266": {
+        "slug": "search-in-a-matrix-1587115621",
+        "pname": "Search in a sorted Matrix",
+        "lang": "cpp"
+      },
+      "701267": {
+        "slug": "rotate-by-90-degree-1587115621",
+        "pname": "Rotate by 90 degree",
+        "lang": "cpp"
+      },
+      "701292": {
+        "slug": "subarray-range-with-given-sum0128",
+        "pname": "Subarray range with given sum",
+        "lang": "cpp"
+      },
+      "701295": {
+        "slug": "longest-consecutive-subsequence2449",
+        "pname": "Longest Consecutive Subsequence",
+        "lang": "cpp"
+      },
+      "701297": {
+        "slug": "check-if-strings-are-rotations-of-each-other-or-not-1587115620",
+        "pname": "Strings Rotations of Each Other",
+        "lang": "cpp"
+      },
+      "701339": {
+        "slug": "evaluation-of-postfix-expression1735",
+        "pname": "Postfix Evaluation",
+        "lang": "cpp"
+      },
+      "701342": {
+        "slug": "stock-span-problem-1587115621",
+        "pname": "Stock span problem",
+        "lang": "cpp"
+      },
+      "701343": {
+        "slug": "next-larger-element-1587115620",
+        "pname": "Next Greater Element",
+        "lang": "cpp"
+      },
+      "701345": {
+        "slug": "infix-to-postfix-1587115620",
+        "pname": "Infix to Postfix",
+        "lang": "cpp"
+      },
+      "701349": {
+        "slug": "maximum-of-all-subarrays-of-size-k3101",
+        "pname": "K Sized Subarray Maximum",
+        "lang": "cpp"
+      },
+      "701357": {
+        "slug": "minimum-cost-of-ropes-1587115620",
+        "pname": "Minimum Cost of ropes",
+        "lang": "cpp"
+      },
+      "701358": {
+        "slug": "nearly-sorted-1587115620",
+        "pname": "Nearly sorted",
+        "lang": "cpp"
+      },
+      "701360": {
+        "slug": "find-median-in-a-stream-1587115620",
+        "pname": "Find median in a stream",
+        "lang": "cpp"
+      },
+      "701362": {
+        "slug": "activity-selection-1587115620",
+        "pname": "Activity Selection",
+        "lang": "cpp"
+      },
+      "701367": {
+        "slug": "job-sequencing-problem-1587115620",
+        "pname": "Job Sequencing Problem",
+        "lang": "cpp"
+      },
+      "701368": {
+        "slug": "minimum-platforms-1587115620",
+        "pname": "Minimum Platforms",
+        "lang": "cpp"
+      },
+      "701393": {
+        "slug": "minimum-number-of-jumps-1587115620",
+        "pname": "Minimum Jumps",
+        "lang": "cpp"
+      },
+      "701427": {
+        "slug": "sum-of-all-substrings-of-a-number-1587115621",
+        "pname": "Sum of all substrings of a number",
+        "lang": "cpp"
+      },
+      "701431": {
+        "slug": "0-1-knapsack-problem0945",
+        "pname": "0 - 1 Knapsack Problem",
+        "lang": "cpp"
+      },
+      "701723": {
+        "slug": "allocate-minimum-number-of-pages0937",
+        "pname": "Allocate Minimum Pages",
+        "lang": "cpp"
+      },
+      "701747": {
+        "slug": "kth-smallest-element5635",
+        "pname": "Kth Smallest",
+        "lang": "cpp"
+      },
+      "701754": {
+        "slug": "rotten-oranges2536",
+        "pname": "Rotten Oranges",
+        "lang": "cpp"
+      },
+      "701939": {
+        "slug": "container-with-most-water0535",
+        "pname": "Container With Most Water",
+        "lang": "cpp"
+      },
+      "701966": {
+        "slug": "print-anagrams-together",
+        "pname": "Print Anagrams Together",
+        "lang": "cpp"
+      },
+      "701989": {
+        "slug": "rotate-by-90-degree0356",
+        "pname": "Rotate by 90 degree",
+        "lang": "cpp"
+      },
+      "702074": {
+        "slug": "stock-buy-and-sell2615",
+        "pname": "Stock Buy and Sell – Multiple Transaction Allowed",
+        "lang": "cpp"
+      },
+      "702088": {
+        "slug": "word-search",
+        "pname": "Word Search",
+        "lang": "cpp"
+      },
+      "702382": {
+        "slug": "sort-an-array-of-0s-1s-and-2s4231",
+        "pname": "Sort 0s, 1s and 2s",
+        "lang": "cpp"
+      },
+      "702728": {
+        "slug": "maximize-number-of-1s0905",
+        "pname": "Maximize Number of 1's",
+        "lang": "cpp"
+      },
+      "702760": {
+        "slug": "sum-of-middle-elements-of-two-sorted-arrays2305",
+        "pname": "Sum of Middle elements of two sorted arrays",
+        "lang": "cpp"
+      },
+      "702805": {
+        "slug": "pythagorean-triplet3018",
+        "pname": "Pythagorean Triplet",
+        "lang": "cpp"
+      },
+      "702828": {
+        "slug": "search-in-a-rotated-array4618",
+        "pname": "Search in Rotated Sorted Array",
+        "lang": "cpp"
+      },
+      "702835": {
+        "slug": "count-pairs-sum-in-matrices4332",
+        "pname": "Count pairs Sum in matrices",
+        "lang": "cpp"
+      },
+      "702877": {
+        "slug": "max-sum-in-sub-arrays0824",
+        "pname": "Max Score from Subarray Mins",
+        "lang": "cpp"
+      },
+      "702886": {
+        "slug": "largest-number-formed-from-an-array1117",
+        "pname": "Form the Largest Number",
+        "lang": "cpp"
+      },
+      "702912": {
+        "slug": "add-binary-strings3805",
+        "pname": "Add Binary Strings",
+        "lang": "cpp"
+      },
+      "702919": {
+        "slug": "maximum-product-subarray3604",
+        "pname": "Maximum Product Subarray",
+        "lang": "cpp"
+      },
+      "702939": {
+        "slug": "sort-the-given-array-after-applying-the-given-equation0304",
+        "pname": "Sort the given array after applying the given equation",
+        "lang": "cpp"
+      },
+      "702992": {
+        "slug": "count-number-of-substrings4528",
+        "pname": "Substrings with K Distinct",
+        "lang": "cpp"
+      },
+      "703043": {
+        "slug": "longest-sub-array-with-sum-k0809",
+        "pname": "Longest Subarray with Sum K",
+        "lang": "cpp"
+      },
+      "703205": {
+        "slug": "longest-distinct-characters-in-string5848",
+        "pname": "Longest substring with distinct characters",
+        "lang": "cpp"
+      },
+      "703224": {
+        "slug": "decode-the-pattern1138",
+        "pname": "Look and Say Pattern",
+        "lang": "cpp"
+      },
+      "703253": {
+        "slug": "k-th-element-of-two-sorted-array1317",
+        "pname": "K-th element of two  Arrays",
+        "lang": "cpp"
+      },
+      "703363": {
+        "slug": "largest-sum-subarray-of-size-at-least-k3121",
+        "pname": "Largest Sum Subarray of Size at least K",
+        "lang": "cpp"
+      },
+      "703419": {
+        "slug": "minimum-sum4058",
+        "pname": "Minimum sum",
+        "lang": "cpp"
+      },
+      "703420": {
+        "slug": "smallest-number-subset1220",
+        "pname": "Not a subset sum",
+        "lang": "cpp"
+      },
+      "703444": {
+        "slug": "minimize-the-heights3351",
+        "pname": "Minimize the Heights II",
+        "lang": "java"
+      },
+      "703459": {
+        "slug": "first-and-last-occurrences-of-x3116",
+        "pname": "First and Last Occurrences",
+        "lang": "cpp"
+      },
+      "703569": {
+        "slug": "permutations-of-a-given-string2041",
+        "pname": "Permutations of a String",
+        "lang": "cpp"
+      },
+      "703909": {
+        "slug": "modular-exponentiation-for-large-numbers5537",
+        "pname": "Modular Exponentiation",
+        "lang": "cpp"
+      },
+      "704100": {
+        "slug": "coin-change2448",
+        "pname": "Coin Change (Count Ways)",
+        "lang": "cpp"
+      },
+      "704146": {
+        "slug": "sieve-of-eratosthenes5242",
+        "pname": "Sieve of Eratosthenes",
+        "lang": "cpp"
+      },
+      "704185": {
+        "slug": "dice-throw5349",
+        "pname": "Dice throw",
+        "lang": "cpp"
+      },
+      "704431": {
+        "slug": "count-ways-to-nth-stairorder-does-not-matter5639",
+        "pname": "Count ways to N'th Stair(Order does not matter)",
+        "lang": "cpp"
+      },
+      "704542": {
+        "slug": "ncr1019",
+        "pname": "nCr",
+        "lang": "cpp"
+      },
+      "704573": {
+        "slug": "subset-sum-problem2014",
+        "pname": "Partition Equal Subset Sum",
+        "lang": "cpp"
+      },
+      "704691": {
+        "slug": "array-pair-sum-divisibility-problem3257",
+        "pname": "Array Pair Sum Divisibility Problem",
+        "lang": "cpp"
+      },
+      "704822": {
+        "slug": "nth-natural-number",
+        "pname": "Nth Natural Number",
+        "lang": "cpp"
+      },
+      "705001": {
+        "slug": "find-nth-root-of-m5843",
+        "pname": "Find nth root of m",
+        "lang": "cpp"
+      },
+      "705146": {
+        "slug": "next-permutation5226",
+        "pname": "Next Permutation",
+        "lang": "cpp"
+      },
+      "705287": {
+        "slug": "decode-the-string2444",
+        "pname": "Decode the string",
+        "lang": "cpp"
+      },
+      "705589": {
+        "slug": "two-numbers-with-odd-occurrences5846",
+        "pname": "Two odd Occuring",
+        "lang": "cpp"
+      },
+      "705720": {
+        "slug": "flood-fill-algorithm1856",
+        "pname": "Flood fill Algorithm",
+        "lang": "cpp"
+      },
+      "705822": {
+        "slug": "police-and-thieves--141631",
+        "pname": "Police and Thieves",
+        "lang": "cpp"
+      },
+      "706123": {
+        "slug": "subset-sum-problem-1611555638",
+        "pname": "Subset Sum Problem",
+        "lang": "cpp"
+      },
+      "706226": {
+        "slug": "subarrays-with-sum-k",
+        "pname": "Subarrays with sum K",
+        "lang": "cpp"
+      },
+      "706421": {
+        "slug": "minimize-the-heights-i",
+        "pname": "Minimize the Heights I",
+        "lang": "cpp"
+      },
+      "707278": {
+        "slug": "find-element-occuring-once-when-all-other-are-present-thrice",
+        "pname": "Unique Number III",
+        "lang": "cpp"
+      },
+      "707348": {
+        "slug": "all-unique-permutations-of-an-array",
+        "pname": "All Unique Permutations of an array",
+        "lang": "cpp"
+      },
+      "708874": {
+        "slug": "overlapping-intervals--170633",
+        "pname": "Overlapping Intervals",
+        "lang": "cpp"
+      },
+      "709919": {
+        "slug": "reverse-a-stack",
+        "pname": "Reverse a Stack",
+        "lang": "cpp"
+      },
+      "709984": {
+        "slug": "k-th-largest-sum-contiguous-subarray",
+        "pname": "K-th Largest Sum Contiguous Subarray",
+        "lang": "cpp"
+      },
+      "710020": {
+        "slug": "exactly-one-swap--170637",
+        "pname": "Exactly one swap",
+        "lang": "cpp"
+      },
+      "710293": {
+        "slug": "sort-a-k-sorted-doubly-linked-list",
+        "pname": "Sort a k sorted doubly linked list",
+        "lang": "cpp"
+      },
+      "712100": {
+        "slug": "majority-vote",
+        "pname": "Majority Element - More Than n/3",
+        "lang": "cpp"
+      },
+      "712107": {
+        "slug": "koko-eating-bananas",
+        "pname": "Koko Eating Bananas",
+        "lang": "cpp"
+      },
+      "712148": {
+        "slug": "count-subarray-with-k-odds",
+        "pname": "Count Subarray with k odds",
+        "lang": "cpp"
+      },
+      "712181": {
+        "slug": "minimal-cost",
+        "pname": "Minimal Cost",
+        "lang": "cpp"
+      },
+      "712207": {
+        "slug": "aggressive-cows",
+        "pname": "Aggressive Cows",
+        "lang": "cpp"
+      },
+      "712208": {
+        "slug": "smallest-divisor",
+        "pname": "Smallest Divisor",
+        "lang": "cpp"
+      },
+      "712213": {
+        "slug": "number-of-nges-to-the-right",
+        "pname": "Number of greater elements to the right",
+        "lang": "cpp"
+      },
+      "712234": {
+        "slug": "prefix-to-infix-conversion",
+        "pname": "Prefix to Infix Conversion",
+        "lang": "cpp"
+      },
+      "712246": {
+        "slug": "prefix-to-postfix-conversion",
+        "pname": "Prefix to Postfix Conversion",
+        "lang": "cpp"
+      },
+      "712262": {
+        "slug": "minimum-days-to-make-m-bouquets",
+        "pname": "Minimum days to make M bouquets",
+        "lang": "cpp"
+      },
+      "712266": {
+        "slug": "generate-all-binary-strings",
+        "pname": "Generate all binary strings",
+        "lang": "cpp"
+      },
+      "712304": {
+        "slug": "delete-all-occurrences-of-a-given-key-in-a-doubly-linked-list",
+        "pname": "Delete all occurrences of a given key in a doubly linked list",
+        "lang": "cpp"
+      },
+      "712305": {
+        "slug": "postfix-to-prefix-conversion",
+        "pname": "Postfix to Prefix Conversion",
+        "lang": "cpp"
+      },
+      "712306": {
+        "slug": "postfix-to-infix-conversion",
+        "pname": "Postfix to Infix Conversion",
+        "lang": "cpp"
+      },
+      "712431": {
+        "slug": "non-overlapping-intervals",
+        "pname": "Non-overlapping Intervals",
+        "lang": "cpp"
+      },
+      "712461": {
+        "slug": "minimum-window-subsequence",
+        "pname": "Minimum Window Subsequence",
+        "lang": "cpp"
+      },
+      "712536": {
+        "slug": "insert-interval-1666733333",
+        "pname": "Insert Interval",
+        "lang": "cpp"
+      },
+      "712573": {
+        "slug": "longest-string-chain",
+        "pname": "Longest String Chain",
+        "lang": "cpp"
+      },
+      "713145": {
+        "slug": "make-array-elements-unique--170645",
+        "pname": "Make array elements unique",
+        "lang": "cpp"
+      },
+      "713150": {
+        "slug": "find-the-first-node-of-loop-in-linked-list--170645",
+        "pname": "Find the first node of loop in linked list",
+        "lang": "cpp"
+      },
+      "713539": {
+        "slug": "minimum-times-a-has-to-be-repeated-such-that-b-is-a-substring-of-it--170645",
+        "pname": "Minimum repeat to make substring",
+        "lang": "cpp"
+      },
+      "713969": {
+        "slug": "unique-paths-in-a-grid--170647",
+        "pname": "Unique Paths in a Grid",
+        "lang": "cpp"
+      },
+      "874780": {
+        "slug": "kth-missing-positive-number-in-a-sorted-array",
+        "pname": "Kth Missing Positive Number in a Sorted Array",
+        "lang": "cpp"
+      },
+      "874827": {
+        "slug": "count-subarray-with-given-xor",
+        "pname": "Count Subarrays with given XOR",
+        "lang": "cpp"
+      },
+      "874880": {
+        "slug": "set-matrix-zeroes",
+        "pname": "Set Matrix Zeros",
+        "lang": "cpp"
+      },
+      "875937": {
+        "slug": "count-pairs-with-given-sum--150253",
+        "pname": "Count pairs with given sum",
+        "lang": "cpp"
+      },
+      "876614": {
+        "slug": "possible-split",
+        "pname": "Possible Split",
+        "lang": "cpp"
+      },
+      "876825": {
+        "slug": "find-all-triplets-with-zero-sum",
+        "pname": "Find All Triplets with Zero Sum",
+        "lang": "cpp"
+      },
+      "878150": {
+        "slug": "split-array-in-three-equal-sum-subarrays",
+        "pname": "Split array in three equal sum subarrays",
+        "lang": "cpp"
+      },
+      "878151": {
+        "slug": "last-moment-before-all-ants-fall-out-of-a-plank",
+        "pname": "Last Moment Before All Ants Fall Out",
+        "lang": "cpp"
+      },
+      "878654": {
+        "slug": "find-h-index--165609",
+        "pname": "Find H-Index",
+        "lang": "cpp"
+      },
+      "882014": {
+        "slug": "mana-mastery",
+        "pname": "Mana Mastery",
+        "lang": "python3"
+      },
+      "882859": {
+        "slug": "count-all-triplets-with-given-sum-in-sorted-array",
+        "pname": "Count all triplets with given sum in sorted array",
+        "lang": "cpp"
+      },
+      "884385": {
+        "slug": "powx-n",
+        "pname": "Implement Pow",
+        "lang": "cpp"
+      },
+      "884386": {
+        "slug": "subarrays-with-at-most-k-distinct-integers",
+        "pname": "Subarrays With At Most K Distinct Integers",
+        "lang": "cpp"
+      },
+      "897411": {
+        "slug": "divisible-by-13",
+        "pname": "Divisible by 13",
+        "lang": "cpp"
+      },
+      "898063": {
+        "slug": "group-balls-by-sequence",
+        "pname": "Group Balls by Sequence",
+        "lang": "cpp"
+      },
+      "898512": {
+        "slug": "ascii-range-sum",
+        "pname": "ASCII Range Sum",
+        "lang": "cpp"
+      },
+      "899513": {
+        "slug": "difference-check",
+        "pname": "Difference Check",
+        "lang": "cpp"
+      },
+      "904498": {
+        "slug": "search-in-fully-rotated-sorted-2d-matrix",
+        "pname": "Search in fully rotated sorted 2D matrix",
+        "lang": "cpp"
+      },
+      "906883": {
+        "slug": "max-xor-subarray-of-size-k",
+        "pname": "Max Xor Subarray of size K",
+        "lang": "cpp"
+      },
+      "911734": {
+        "slug": "string-stack--165812",
+        "pname": "String stack",
+        "lang": "cpp"
+      }
+    },
+    "Easy": {
+      "700005": {
+        "slug": "reverse-a-linked-list",
+        "pname": "Reverse a linked list",
+        "lang": "cpp"
+      },
+      "700019": {
+        "slug": "occurence-of-an-integer-in-a-linked-list",
+        "pname": "Frequency in a Linked List",
+        "lang": "cpp"
+      },
+      "700040": {
+        "slug": "node-at-a-given-index-in-linked-list",
+        "pname": "Node at a given index in linked list",
+        "lang": "cpp"
+      },
+      "700131": {
+        "slug": "delete-node-in-doubly-linked-list",
+        "pname": "Delete in a Doubly Linked List",
+        "lang": "cpp"
+      },
+      "700137": {
+        "slug": "reverse-a-doubly-linked-list",
+        "pname": "Reverse a Doubly Linked List",
+        "lang": "cpp"
+      },
+      "700155": {
+        "slug": "mirror-tree",
+        "pname": "Mirror Tree",
+        "lang": "cpp"
+      },
+      "700164": {
+        "slug": "height-of-binary-tree",
+        "pname": "Height of Binary Tree",
+        "lang": "cpp"
+      },
+      "700170": {
+        "slug": "nth-node-from-end-of-linked-list",
+        "pname": "Kth from End of Linked List",
+        "lang": "cpp"
+      },
+      "700171": {
+        "slug": "finding-middle-element-in-a-linked-list",
+        "pname": "Middle of a Linked List",
+        "lang": "cpp"
+      },
+      "700172": {
+        "slug": "circular-linked-list",
+        "pname": "Check If Circular Linked List",
+        "lang": "cpp"
+      },
+      "700174": {
+        "slug": "left-view-of-binary-tree",
+        "pname": "Left View of Binary Tree",
+        "lang": "cpp"
+      },
+      "700194": {
+        "slug": "find-transition-point-1587115620",
+        "pname": "Find Transition Point",
+        "lang": "cpp"
+      },
+      "700199": {
+        "slug": "postorder-traversal",
+        "pname": "Postorder Traversal",
+        "lang": "cpp"
+      },
+      "700201": {
+        "slug": "level-order-traversal-in-spiral-form",
+        "pname": "Level Order in spiral form",
+        "lang": "cpp"
+      },
+      "700203": {
+        "slug": "depth-first-traversal-for-a-graph",
+        "pname": "DFS of Graph",
+        "lang": "cpp"
+      },
+      "700207": {
+        "slug": "implement-stack-using-linked-list",
+        "pname": "Stack using Linked List",
+        "lang": "cpp"
+      },
+      "700217": {
+        "slug": "bfs-traversal-of-graph",
+        "pname": "BFS of graph",
+        "lang": "cpp"
+      },
+      "700226": {
+        "slug": "square-root",
+        "pname": "Square Root",
+        "lang": "cpp"
+      },
+      "700232": {
+        "slug": "insert-a-node-in-doubly-linked-list",
+        "pname": "Insertion at doubly linked list",
+        "lang": "cpp"
+      },
+      "700238": {
+        "slug": "binary-search-1587115620",
+        "pname": "Binary Search",
+        "lang": "cpp"
+      },
+      "700245": {
+        "slug": "largest-subarray-of-0s-and-1s",
+        "pname": "Largest subarray of 0's and 1's",
+        "lang": "cpp"
+      },
+      "700258": {
+        "slug": "remove-duplicates-in-small-prime-array",
+        "pname": "Remove Duplicates from an array",
+        "lang": "cpp"
+      },
+      "700291": {
+        "slug": "toeplitz-matrix",
+        "pname": "Toeplitz matrix",
+        "lang": "cpp"
+      },
+      "700336": {
+        "slug": "multiply-two-linked-lists",
+        "pname": "Multiply two linked lists",
+        "lang": "cpp"
+      },
+      "700402": {
+        "slug": "max-distance-between-same-elements",
+        "pname": "Max distance between same elements",
+        "lang": "cpp"
+      },
+      "700437": {
+        "slug": "find-duplicates-in-an-array",
+        "pname": "Array Duplicates",
+        "lang": "cpp"
+      },
+      "700541": {
+        "slug": "split-singly-linked-list-alternatingly",
+        "pname": "Split Linked List Alternatingly",
+        "lang": "cpp"
+      },
+      "700545": {
+        "slug": "minimum-element-in-bst",
+        "pname": "Minimum element in BST",
+        "lang": "cpp"
+      },
+      "700594": {
+        "slug": "find-the-sum-of-last-n-nodes-of-the-linked-list",
+        "pname": "Find the Sum of Last N nodes of the Linked List",
+        "lang": "cpp"
+      },
+      "700639": {
+        "slug": "linked-list-matrix",
+        "pname": "Linked List Matrix",
+        "lang": "cpp"
+      },
+      "700889": {
+        "slug": "reverse-an-array",
+        "pname": "Reverse an Array",
+        "lang": "cpp"
+      },
+      "700944": {
+        "slug": "if-loop-python",
+        "pname": "If conditional statement- Python",
+        "lang": "python3"
+      },
+      "700945": {
+        "slug": "check-the-status",
+        "pname": "Check the status - Python",
+        "lang": "python3"
+      },
+      "700946": {
+        "slug": "mark-even-and-odd",
+        "pname": "Mark Even and Odd - Python",
+        "lang": "python3"
+      },
+      "700947": {
+        "slug": "for-loop-python",
+        "pname": "For loop - Python",
+        "lang": "python3"
+      },
+      "700948": {
+        "slug": "for-loop-2-python",
+        "pname": "For Loop 2- Python",
+        "lang": "python3"
+      },
+      "700949": {
+        "slug": "while-loop-in-python",
+        "pname": "While loop in Python",
+        "lang": "python3"
+      },
+      "700951": {
+        "slug": "jumping-through-while-python",
+        "pname": "Jumping through While - Python",
+        "lang": "python3"
+      },
+      "700972": {
+        "slug": "mean-finder",
+        "pname": "Mean Finder",
+        "lang": "python3"
+      },
+      "700980": {
+        "slug": "neighbor-of-10",
+        "pname": "Neighbour of 10",
+        "lang": "python3"
+      },
+      "701203": {
+        "slug": "equilibrium-point-1587115620",
+        "pname": "Equilibrium Point",
+        "lang": "cpp"
+      },
+      "701210": {
+        "slug": "leaders-in-an-array-1587115620",
+        "pname": "Array Leaders",
+        "lang": "cpp"
+      },
+      "701228": {
+        "slug": "roof-top-1587115621",
+        "pname": "Roof Top",
+        "lang": "cpp"
+      },
+      "701247": {
+        "slug": "print-adjacency-list-1587115620",
+        "pname": "Print adjacency list",
+        "lang": "cpp"
+      },
+      "701288": {
+        "slug": "anagram-1587115620",
+        "pname": "Anagram",
+        "lang": "cpp"
+      },
+      "701308": {
+        "slug": "reverse-words-in-a-given-string5459",
+        "pname": "Reverse Words",
+        "lang": "cpp"
+      },
+      "701322": {
+        "slug": "non-repeating-character-1587115620",
+        "pname": "Non Repeating Character",
+        "lang": "cpp"
+      },
+      "701331": {
+        "slug": "parenthesis-checker2744",
+        "pname": "Parenthesis Checker",
+        "lang": "cpp"
+      },
+      "701364": {
+        "slug": "n-meetings-in-one-room-1587115620",
+        "pname": "N meetings in one room",
+        "lang": "cpp"
+      },
+      "701730": {
+        "slug": "union-of-two-arrays3538",
+        "pname": "Union of Arrays with Duplicates",
+        "lang": "cpp"
+      },
+      "701889": {
+        "slug": "missing-number-in-array1416",
+        "pname": "Missing in Array",
+        "lang": "cpp"
+      },
+      "702020": {
+        "slug": "product-array-puzzle4525",
+        "pname": "Product array puzzle",
+        "lang": "cpp"
+      },
+      "702678": {
+        "slug": "find-missing-and-repeating2512",
+        "pname": "Missing And Repeating",
+        "lang": "cpp"
+      },
+      "702788": {
+        "slug": "minimum-element-in-a-sorted-and-rotated-array3611",
+        "pname": "Sorted and Rotated Minimum",
+        "lang": "cpp"
+      },
+      "702797": {
+        "slug": "search-in-a-matrix17201720",
+        "pname": "Search in a Row-Column sorted matrix",
+        "lang": "cpp"
+      },
+      "702806": {
+        "slug": "move-all-zeroes-to-end-of-array0751",
+        "pname": "Move All Zeroes to End",
+        "lang": "cpp"
+      },
+      "702817": {
+        "slug": "move-all-negative-elements-to-end1813",
+        "pname": "Move all negative elements to end",
+        "lang": "cpp"
+      },
+      "702863": {
+        "slug": "pairs-with-difference-k1713",
+        "pname": "Pairs with difference k",
+        "lang": "cpp"
+      },
+      "702879": {
+        "slug": "swap-and-maximize5859",
+        "pname": "Swap and Maximize",
+        "lang": "cpp"
+      },
+      "702915": {
+        "slug": "single-number1014",
+        "pname": "Single Number",
+        "lang": "cpp"
+      },
+      "702922": {
+        "slug": "array-of-alternate-ve-and-ve-nos1401",
+        "pname": "Alternate Positive Negative",
+        "lang": "cpp"
+      },
+      "702982": {
+        "slug": "kth-distance3757",
+        "pname": "Kth distance",
+        "lang": "cpp"
+      },
+      "703037": {
+        "slug": "nearest-multiple-of-102437",
+        "pname": "Nearest multiple of 10",
+        "lang": "cpp"
+      },
+      "703042": {
+        "slug": "reorganize-the-array4810",
+        "pname": "Reorganize The Array",
+        "lang": "cpp"
+      },
+      "703047": {
+        "slug": "facing-the-sun2126",
+        "pname": "Facing the sun",
+        "lang": "cpp"
+      },
+      "703089": {
+        "slug": "second-largest3735",
+        "pname": "Second Largest",
+        "lang": "cpp"
+      },
+      "703092": {
+        "slug": "key-pair5616",
+        "pname": "Two Sum - Pair with Given Sum",
+        "lang": "cpp"
+      },
+      "703129": {
+        "slug": "number-of-occurrence2259",
+        "pname": "Number of occurrence",
+        "lang": "cpp"
+      },
+      "703183": {
+        "slug": "ease-the-array0633",
+        "pname": "Modify the Array",
+        "lang": "cpp"
+      },
+      "703192": {
+        "slug": "pair-in-array-whose-sum-is-closest-to-x1124",
+        "pname": "Sum Pair closest to target",
+        "lang": "cpp"
+      },
+      "703282": {
+        "slug": "substrings-with-similar-first-and-last-characters3644",
+        "pname": "Substrings with same first and last characters",
+        "lang": "cpp"
+      },
+      "703284": {
+        "slug": "count-pairs-with-given-sum5022",
+        "pname": "Two sum -Pairs with 0 Sum",
+        "lang": "cpp"
+      },
+      "703439": {
+        "slug": "palindrome-string0817",
+        "pname": "Palindrome String",
+        "lang": "cpp"
+      },
+      "703451": {
+        "slug": "total-count2415",
+        "pname": "Total count",
+        "lang": "cpp"
+      },
+      "703485": {
+        "slug": "pair-with-given-sum-in-a-sorted-array4940",
+        "pname": "Pair with given sum in a sorted array",
+        "lang": "cpp"
+      },
+      "703601": {
+        "slug": "largest-number-in-one-swap1520",
+        "pname": "Largest number in one swap",
+        "lang": "cpp"
+      },
+      "703836": {
+        "slug": "max-sum-subarray-of-size-k5313",
+        "pname": "Max Sum Subarray of size K",
+        "lang": "cpp"
+      },
+      "703897": {
+        "slug": "count-digits5716",
+        "pname": "Count Digits",
+        "lang": "cpp"
+      },
+      "703915": {
+        "slug": "palindrome0746",
+        "pname": "Palindrome",
+        "lang": "cpp"
+      },
+      "704205": {
+        "slug": "assign-mice-holes3053",
+        "pname": "Assign Mice Holes",
+        "lang": "cpp"
+      },
+      "704477": {
+        "slug": "perfect-numbers3207",
+        "pname": "Perfect Numbers",
+        "lang": "cpp"
+      },
+      "704633": {
+        "slug": "find-all-factorial-numbers-less-than-or-equal-to-n3548",
+        "pname": "Factorials Less than or Equal to n",
+        "lang": "cpp"
+      },
+      "705067": {
+        "slug": "juggler-sequence3930",
+        "pname": "Juggler Sequence",
+        "lang": "cpp"
+      },
+      "705233": {
+        "slug": "coverage-of-all-zeros-in-a-binary-matrix4024",
+        "pname": "Coverage of all Zeros in a Binary Matrix",
+        "lang": "cpp"
+      },
+      "709986": {
+        "slug": "smallest-window-containing-0-1-and-2--170637",
+        "pname": "Smallest window containing 0, 1 and 2",
+        "lang": "cpp"
+      },
+      "712197": {
+        "slug": "buy-stock-2",
+        "pname": "Stock Buy and Sell – Max one Transaction Allowed",
+        "lang": "cpp"
+      },
+      "712251": {
+        "slug": "search-in-linked-list-1664434326",
+        "pname": "Search in Linked List",
+        "lang": "cpp"
+      },
+      "712390": {
+        "slug": "lemonade-change",
+        "pname": "Bus Ticket Change",
+        "lang": "cpp"
+      },
+      "712529": {
+        "slug": "introduction-to-linked-list",
+        "pname": "Array to Linked List",
+        "lang": "cpp"
+      },
+      "712532": {
+        "slug": "introduction-to-trees",
+        "pname": "Introduction to Trees",
+        "lang": "cpp"
+      },
+      "712534": {
+        "slug": "introduction-to-doubly-linked-list",
+        "pname": "Introduction to Doubly Linked List",
+        "lang": "cpp"
+      },
+      "712710": {
+        "slug": "binary-tree-representation",
+        "pname": "Binary Tree Representation",
+        "lang": "cpp"
+      },
+      "716855": {
+        "slug": "high-frequency--170655",
+        "pname": "High Frequency",
+        "lang": "cpp"
+      },
+      "869905": {
+        "slug": "split-an-array-into-two-equal-sum-subarrays",
+        "pname": "Split an array into two equal Sum subarrays",
+        "lang": "cpp"
+      },
+      "869923": {
+        "slug": "pair-sum--120604",
+        "pname": "Largest Pair Sum",
+        "lang": "cpp"
+      },
+      "875836": {
+        "slug": "two-swaps--155623",
+        "pname": "Two Swaps",
+        "lang": "cpp"
+      },
+      "875838": {
+        "slug": "maximize-partitions-in-a-string",
+        "pname": "Maximize partitions in a String",
+        "lang": "cpp"
+      },
+      "876297": {
+        "slug": "attend-all-meetings",
+        "pname": "Meeting Rooms",
+        "lang": "cpp"
+      },
+      "876434": {
+        "slug": "minxor",
+        "pname": "MinXOR",
+        "lang": "cpp"
+      },
+      "876441": {
+        "slug": "count-pairs-whose-sum-is-less-than-target",
+        "pname": "Count Pairs whose sum is less than target",
+        "lang": "cpp"
+      },
+      "876770": {
+        "slug": "intersection-of-two-arrays-with-duplicate-elements",
+        "pname": "Intersection of Two arrays with Duplicate Elements",
+        "lang": "cpp"
+      },
+      "878217": {
+        "slug": "fizz-buzz",
+        "pname": "Fizz Buzz",
+        "lang": "cpp"
+      },
+      "878378": {
+        "slug": "search-in-a-row-wise-sorted-matrix",
+        "pname": "Search in a row-wise sorted matrix",
+        "lang": "cpp"
+      },
+      "878967": {
+        "slug": "search-in-a-matrix--021840",
+        "pname": "Search in a  Matrix",
+        "lang": "cpp"
+      },
+      "881908": {
+        "slug": "array-balancing-cost",
+        "pname": "Array Balancing Cost",
+        "lang": "cpp"
+      },
+      "881918": {
+        "slug": "weak-subarrays",
+        "pname": "Weak Subarrays",
+        "lang": "cpp"
+      },
+      "882739": {
+        "slug": "find-n-th-term",
+        "pname": "Find n-th Term",
+        "lang": "cpp"
+      },
+      "884374": {
+        "slug": "number-difference",
+        "pname": "Number Difference",
+        "lang": "python3"
+      }
+    },
+    "Hard": {
+      "700013": {
+        "slug": "reverse-a-linked-list-in-groups-of-given-size",
+        "pname": "Linked List Group Reverse",
+        "lang": "cpp"
+      },
+      "700144": {
+        "slug": "binary-tree-to-dll",
+        "pname": "Binary Tree  to DLL",
+        "lang": "cpp"
+      },
+      "700186": {
+        "slug": "clone-a-linked-list-with-next-and-random-pointer",
+        "pname": "Clone List with Next and Random",
+        "lang": "cpp"
+      },
+      "700366": {
+        "slug": "lru-cache",
+        "pname": "LRU Cache",
+        "lang": "cpp"
+      },
+      "701211": {
+        "slug": "trapping-rain-water-1587115621",
+        "pname": "Trapping Rain Water",
+        "lang": "cpp"
+      },
+      "701216": {
+        "slug": "max-circular-subarray-sum-1587115620",
+        "pname": "Max Circular Subarray Sum",
+        "lang": "cpp"
+      },
+      "701310": {
+        "slug": "smallest-window-in-a-string-containing-all-the-characters-of-another-string-1587115621",
+        "pname": "Smallest window containing all characters",
+        "lang": "cpp"
+      },
+      "701375": {
+        "slug": "solve-the-sudoku-1587115621",
+        "pname": "Solve the Sudoku",
+        "lang": "cpp"
+      },
+      "702853": {
+        "slug": "the-painters-partition-problem1535",
+        "pname": "The Painter's Partition Problem-II",
+        "lang": "cpp"
+      },
+      "703003": {
+        "slug": "count-palindrome-sub-strings-of-a-string0652",
+        "pname": "Palindrome SubStrings",
+        "lang": "cpp"
+      },
+      "703119": {
+        "slug": "search-pattern0205",
+        "pname": "Search Pattern",
+        "lang": "cpp"
+      },
+      "703402": {
+        "slug": "longest-prefix-suffix2527",
+        "pname": "Longest Prefix Suffix",
+        "lang": "cpp"
+      },
+      "703681": {
+        "slug": "circle-of-strings4530",
+        "pname": "Circle of strings",
+        "lang": "cpp"
+      },
+      "703845": {
+        "slug": "sub-arrays-with-equal-number-of-occurences3901",
+        "pname": "Sub-arrays with equal number of occurences",
+        "lang": "cpp"
+      },
+      "705195": {
+        "slug": "longest-valid-parentheses5657",
+        "pname": "Longest valid Parentheses",
+        "lang": "cpp"
+      },
+      "705336": {
+        "slug": "n-queen-problem0315",
+        "pname": "N-Queen Problem",
+        "lang": "cpp"
+      },
+      "709865": {
+        "slug": "minimum-characters-to-be-added-at-front-to-make-string-palindrome",
+        "pname": "Min Chars to Add for Palindrome",
+        "lang": "cpp"
+      },
+      "885632": {
+        "slug": "meeting-rooms-iii",
+        "pname": "Meeting Rooms III",
+        "lang": "cpp"
+      }
+    },
+    "Basic": {
+      "700004": {
+        "slug": "print-linked-list-elements",
+        "pname": "Print Linked List",
+        "lang": "cpp"
+      },
+      "700039": {
+        "slug": "count-nodes-of-linked-list",
+        "pname": "Find Length of Linked List",
+        "lang": "cpp"
+      },
+      "700210": {
+        "slug": "implement-queue-using-linked-list",
+        "pname": "Queue using Linked List",
+        "lang": "cpp"
+      },
+      "700211": {
+        "slug": "implement-queue-using-array",
+        "pname": "Queue Using Array",
+        "lang": "cpp"
+      },
+      "700339": {
+        "slug": "c-stl-set-1-vector",
+        "pname": "C++ STL | Set 1 (vector)",
+        "lang": "cpp"
+      },
+      "700525": {
+        "slug": "linked-list-insertion-1587115620",
+        "pname": "Linked List Insertion At End",
+        "lang": "cpp"
+      },
+      "700573": {
+        "slug": "linked-list-length-even-or-odd",
+        "pname": "Is Linked List Length Even?",
+        "lang": "cpp"
+      },
+      "700585": {
+        "slug": "identical-linked-lists",
+        "pname": "Identical Linked Lists",
+        "lang": "cpp"
+      },
+      "700634": {
+        "slug": "modular-node",
+        "pname": "Modular Node",
+        "lang": "cpp"
+      },
+      "700653": {
+        "slug": "triplet-family",
+        "pname": "Triplet Family",
+        "lang": "cpp"
+      },
+      "700665": {
+        "slug": "insert-in-middle-of-linked-list",
+        "pname": "Insert in Middle of Linked List",
+        "lang": "cpp"
+      },
+      "700952": {
+        "slug": "zero-converter-python",
+        "pname": "Zero Converter - Python",
+        "lang": "python3"
+      },
+      "700976": {
+        "slug": "two-digit-sum",
+        "pname": "Two digit Sum",
+        "lang": "python3"
+      },
+      "700982": {
+        "slug": "awesum",
+        "pname": "AweSum",
+        "lang": "python3"
+      },
+      "701189": {
+        "slug": "print-1-to-n-without-using-loops-1587115620",
+        "pname": "Print 1 To N Without Loop",
+        "lang": "cpp"
+      },
+      "701217": {
+        "slug": "search-an-element-in-an-array-1587115621",
+        "pname": "Array Search",
+        "lang": "cpp"
+      },
+      "701595": {
+        "slug": "reverse-a-string",
+        "pname": "Reverse a String",
+        "lang": "cpp"
+      },
+      "702927": {
+        "slug": "alternative-sorting1311",
+        "pname": "Alternative Sorting",
+        "lang": "cpp"
+      },
+      "702951": {
+        "slug": "check-for-subsequence4930",
+        "pname": "Check for subsequence",
+        "lang": "cpp"
+      },
+      "703298": {
+        "slug": "cyclically-rotate-an-array-by-one2614",
+        "pname": "Rotate Array by One",
+        "lang": "cpp"
+      },
+      "703457": {
+        "slug": "find-minimum-and-maximum-element-in-an-array4428",
+        "pname": "Min and Max in Array",
+        "lang": "cpp"
+      },
+      "703781": {
+        "slug": "java-hello-world4004",
+        "pname": "Java Hello World",
+        "lang": "java"
+      },
+      "704144": {
+        "slug": "gf-series3535",
+        "pname": "G.F Series",
+        "lang": "cpp"
+      },
+      "704472": {
+        "slug": "for-loop-1",
+        "pname": "For Loop - 1",
+        "lang": "python3"
+      },
+      "704807": {
+        "slug": "repetitive-addition-of-digits2221",
+        "pname": "Repetitive Addition Of Digits",
+        "lang": "cpp"
+      },
+      "705368": {
+        "slug": "java-switch-case-statement3529",
+        "pname": "Java Switch Case statement",
+        "lang": "cpp"
+      },
+      "712535": {
+        "slug": "data-type-1666706751",
+        "pname": "Data Type",
+        "lang": "cpp"
+      },
+      "870890": {
+        "slug": "bit-maximization",
+        "pname": "Bit Maximization",
+        "lang": "cpp"
+      },
+      "876872": {
+        "slug": "string-operation",
+        "pname": "String Operation",
+        "lang": "cpp"
+      }
+    }
+  },
+  "count": 327
+}

@@ -41,7 +41,10 @@ export const CodingPlatformStats = pgTable('CodingPlatformStats', {
   hardCount: varchar('hardCount').default('0'),
   fundamentalCount: varchar('fundamentalCount').default('0'),
   totalcontest: varchar('totalcontest').default('0'),
+  languageStats: json('languageStats'), // Language breakdown {cpp: 100, python3: 20}
 });
+
+
 
 // MasterQuestions table - for storing questions
 export const MasterQuestions = pgTable('MasterQuestions', {
@@ -80,7 +83,7 @@ export const codingPlatformStatsRelations = relations(CodingPlatformStats, ({ on
     fields: [CodingPlatformStats.clerkId],
     references: [ProfileData.clerkId],
   }),
- 
+
 }));
 
 export const masterQuestionsRelations = relations(MasterQuestions, ({ many }) => ({

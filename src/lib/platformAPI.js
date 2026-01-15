@@ -92,6 +92,7 @@ export async function fetchGeeksForGeeksStats(username) {
     });
 
     let easyCount = "0", mediumCount = "0", hardCount = "0", fundamentalCount = "0", solvedCount = "0";
+    let languageStats = {};
 
     if (apiResponse.ok) {
       const apiData = await apiResponse.json();
@@ -105,6 +106,17 @@ export async function fetchGeeksForGeeksStats(username) {
         hardCount = result.Hard ? Object.keys(result.Hard).length.toString() : "0";
         fundamentalCount = (schoolCount + basicCount).toString();
         solvedCount = apiData.count?.toString() || (schoolCount + basicCount + parseInt(easyCount) + parseInt(mediumCount) + parseInt(hardCount)).toString();
+
+        // Collect language statistics
+        for (const difficulty in result) {
+          const problems = result[difficulty];
+          for (const problemId in problems) {
+            const lang = problems[problemId].lang;
+            if (lang) {
+              languageStats[lang] = (languageStats[lang] || 0) + 1;
+            }
+          }
+        }
       }
     }
 
@@ -131,13 +143,14 @@ export async function fetchGeeksForGeeksStats(username) {
       platform: "GeeksforGeeks",
       username,
       solvedCount,
-      rating: "0",
+      rating: codingScore,
       globalRank: instituteRank,
       easyCount,
       mediumCount,
       hardCount,
       fundamentalCount,
       codingScore,
+      languageStats,
       lastUpdated: new Date().toISOString(),
     };
   } catch (error) {
@@ -149,6 +162,7 @@ export async function fetchGeeksForGeeksStats(username) {
     };
   }
 }
+
 
 
 export async function fetchCodeforcesStats(username) {

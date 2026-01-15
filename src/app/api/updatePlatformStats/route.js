@@ -2,11 +2,11 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { CodingPlatformStats } from "@/db/schema";
-import { 
-  fetchLeetCodeStats, 
-  fetchGeeksForGeeksStats, 
-  fetchCodeforcesStats, 
-  fetchCodeChefStats 
+import {
+  fetchLeetCodeStats,
+  fetchGeeksForGeeksStats,
+  fetchCodeforcesStats,
+  fetchCodeChefStats
 } from "@/lib/platformAPI";
 import { eq, and } from "drizzle-orm";
 
@@ -39,8 +39,11 @@ export async function POST(req) {
         mediumCount: stats.mediumCount || "0",
         hardCount: stats.hardCount || "0",
         fundamentalCount: stats.fundamentalCount || "0",
-        totalcontest: stats.totalcontest || "0"
+        totalcontest: stats.totalcontest || "0",
+        languageStats: stats.languageStats || null,
       };
+
+
 
       const existingRecord = await db
         .select()
