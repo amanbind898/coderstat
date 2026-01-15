@@ -1,7 +1,6 @@
-import { db } from '../../../db/index'; // Adjust based on your actual db client location
-
+import { db } from '../../../db/index';
 import { eq } from 'drizzle-orm';
-import { ProfileData, CodingPlatformStats } from "../../../db/schema"; // Adjust path as needed
+import { ProfileData, CodingPlatformStats } from "../../../db/schema";
 
 export async function POST(req) {
   try {
@@ -18,7 +17,7 @@ export async function POST(req) {
     const profile = await db
       .select()
       .from(ProfileData)
-      .where(eq(ProfileData.clerkId, userId));
+      .where(eq(ProfileData.userId, userId));
 
     if (!profile || profile.length === 0) {
       return new Response(
@@ -41,9 +40,8 @@ export async function POST(req) {
     const stats = await db
       .select()
       .from(CodingPlatformStats)
-      .where(eq(CodingPlatformStats.clerkId, userId));
+      .where(eq(CodingPlatformStats.userId, userId));
 
-    
     return new Response(
       JSON.stringify({
         profile: {

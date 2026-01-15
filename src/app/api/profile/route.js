@@ -6,16 +6,16 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { clerkId } = body;
+    const { userId } = body;
 
-    if (!clerkId) {
-      return NextResponse.json({ error: "Missing clerkId" }, { status: 400 });
+    if (!userId) {
+      return NextResponse.json({ error: "Missing userId" }, { status: 400 });
     }
 
     const profileData = await db
       .select()
       .from(ProfileData)
-      .where(eq(ProfileData.clerkId, clerkId))
+      .where(eq(ProfileData.userId, userId))
       .limit(1);
 
     if (profileData.length > 0) {

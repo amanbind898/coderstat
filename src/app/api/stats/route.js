@@ -5,13 +5,13 @@ import { NextResponse } from "next/server";
 
 export async function POST(request) {
   try {
-    const { clerkId } = await request.json();
-    
+    const { userId } = await request.json();
+
     // Fetch all platform stats for the user
     const userStats = await db
       .select()
       .from(CodingPlatformStats)
-      .where(eq(CodingPlatformStats.clerkId, clerkId));
+      .where(eq(CodingPlatformStats.userId, userId));
 
     if (userStats.length > 0) {
       return NextResponse.json({ userStats }, { status: 200 });

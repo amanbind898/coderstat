@@ -1,17 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/nextjs'
-
 import Navbar from "./components/Navbar";
-import { FileArchiveIcon } from "lucide-react";
 import Footer from "./components/Footer";
+import AuthProvider from "./components/AuthProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,7 +30,7 @@ export const metadata = {
     "coding progress",
     "software developer tools"
   ],
-  
+
   metadataBase: new URL("https://coderstat.vercel.app"),
   openGraph: {
     title: "CoderSTAT – Track Your Coding Journey",
@@ -64,21 +55,19 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <head>
-          <meta name="google-adsense-account" content="ca-pub-8096601763375595"></meta>
-        </head>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en">
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-8096601763375595"></meta>
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <AuthProvider>
           <Navbar />
-        
           <div className="min-h-[calc(100vh-72px)]">
             {children}
           </div>
           <Footer />
-
-        </body>
-      </html>
-    </ClerkProvider>
+        </AuthProvider>
+      </body>
+    </html>
   );
 }

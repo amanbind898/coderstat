@@ -7,21 +7,21 @@ import { NextResponse } from 'next/server';
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const limit = parseInt(searchParams.get('limit') || '10');
-  
+
   try {
     // Query to get the solved counts for each user
     const leaderboardData = await db
       .select({
-        clerkId: UserQuestionProgress.clerkId,
+        oderId: UserQuestionProgress.userId,
         name: ProfileData.name,
         solvedCount: sql`COUNT(${UserQuestionProgress.id})`.as('solvedCount'),
         lastSolvedDate: sql`MAX(${UserQuestionProgress.solvedDate})`.as('lastSolvedDate')
       })
       .from(UserQuestionProgress)
-      .leftJoin(ProfileData, eq(UserQuestionProgress.clerkId, ProfileData.clerkId))
+      .leftJoin(ProfileData, eq(UserQuestionProgress.userId, ProfileData.userId))
       .where(eq(UserQuestionProgress.status, 'solved'))
       .groupBy(
-        UserQuestionProgress.clerkId,
+        UserQuestionProgress.userId,
         ProfileData.name
       )
       .orderBy(
@@ -32,8 +32,8 @@ export async function GET(request) {
 
     const rankedLeaderboard = leaderboardData.map((entry, index) => ({
       rank: index + 1,
-      clerkId: entry.clerkId,
-      name: entry.name || `User ${entry.clerkId.substring(0, 6)}...`,
+      userId: entry.userId,
+      name: entry.name || `User ${entry.userId?.substring(0, 6) || ''}...`,
       solvedCount: Number(entry.solvedCount),
       lastSolvedDate: entry.lastSolvedDate
     }));

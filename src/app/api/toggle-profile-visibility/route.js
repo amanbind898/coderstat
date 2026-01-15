@@ -1,24 +1,23 @@
 import { NextResponse } from 'next/server';
-import { db } from '../../../db/index'; // Adjust based on your actual db client location
-import { ProfileData } from '../../../db/schema'; // Adjust if schema is in a different path
+import { db } from '../../../db/index';
+import { ProfileData } from '../../../db/schema';
 import { eq } from 'drizzle-orm';
 
 export async function POST(req) {
   try {
-    const { clerkId, isPublic } = await req.json();
+    const { userId, isPublic } = await req.json();
 
-    if (!clerkId) {
+    if (!userId) {
       return NextResponse.json(
         { error: 'User ID is required' },
         { status: 400 }
       );
     }
 
-
     const result = await db
       .update(ProfileData)
       .set({ isPublic })
-      .where(eq(ProfileData.clerkId, clerkId))
+      .where(eq(ProfileData.userId, userId))
       .returning();
 
     return NextResponse.json(

@@ -12,7 +12,7 @@ import { eq, and } from "drizzle-orm";
 
 export async function POST(req) {
   try {
-    const { clerkId, leetCode, geeksforgeeks, codeforces, codechef } = await req.json();
+    const { userId, leetCode, geeksforgeeks, codeforces, codechef } = await req.json();
 
     const platforms = [
       leetCode && { name: 'LeetCode', username: leetCode, fetchFn: fetchLeetCodeStats },
@@ -43,14 +43,12 @@ export async function POST(req) {
         languageStats: stats.languageStats || null,
       };
 
-
-
       const existingRecord = await db
         .select()
         .from(CodingPlatformStats)
         .where(
           and(
-            eq(CodingPlatformStats.clerkId, clerkId),
+            eq(CodingPlatformStats.userId, userId),
             eq(CodingPlatformStats.platform, platform.name)
           )
         )
@@ -62,7 +60,7 @@ export async function POST(req) {
           .set(dataToInsertOrUpdate)
           .where(
             and(
-              eq(CodingPlatformStats.clerkId, clerkId),
+              eq(CodingPlatformStats.userId, userId),
               eq(CodingPlatformStats.platform, platform.name)
             )
           );
@@ -70,7 +68,7 @@ export async function POST(req) {
         await db
           .insert(CodingPlatformStats)
           .values({
-            clerkId,
+            userId,
             platform: platform.name,
             ...dataToInsertOrUpdate
           });
