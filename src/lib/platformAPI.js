@@ -84,43 +84,60 @@ export async function fetchLeetCodeStats(username) {
  */
 export async function fetchGeeksForGeeksStats(username) {
   try {
-    // New profile URL structure - must include tab=activity for stats in RSC payload
-    const response = await fetch(`https://www.geeksforgeeks.org/profile/${username}?tab=activity`);
-    if (!response.ok) {
-      throw new Error(`GeeksforGeeks Fetch Error: ${response.status} ${response.statusText}`);
+    // 1. Fetch problem counts from Practice API (reliable structured data)
+    const apiResponse = await fetch('https://practiceapi.geeksforgeeks.org/api/v1/user/problems/submissions/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ handle: username })
+    });
+
+    let easyCount = "0", mediumCount = "0", hardCount = "0", fundamentalCount = "0", solvedCount = "0";
+
+    if (apiResponse.ok) {
+      const apiData = await apiResponse.json();
+      if (apiData.status === 'success' && apiData.result) {
+        const result = apiData.result;
+        // Count problems in each difficulty category
+        const schoolCount = result.School ? Object.keys(result.School).length : 0;
+        const basicCount = result.Basic ? Object.keys(result.Basic).length : 0;
+        easyCount = result.Easy ? Object.keys(result.Easy).length.toString() : "0";
+        mediumCount = result.Medium ? Object.keys(result.Medium).length.toString() : "0";
+        hardCount = result.Hard ? Object.keys(result.Hard).length.toString() : "0";
+        fundamentalCount = (schoolCount + basicCount).toString();
+        solvedCount = apiData.count?.toString() || (schoolCount + basicCount + parseInt(easyCount) + parseInt(mediumCount) + parseInt(hardCount)).toString();
+      }
     }
-    const html = await response.text();
 
-    const extract = (regex) => {
-      const match = html.match(regex);
-      return match ? match[1] : null;
-    };
+    // 2. Fetch profile page for coding score and institute rank (from RSC payload)
+    let codingScore = "0", instituteRank = null;
 
-    // Extract Stats from RSC Payload (handles both literal and escaped quotes)
-    const codingScore = extract(/\\?"score\\?":\s*(\d+)/) || "0";
-    const totalSolved = extract(/\\?"total_problems_solved\\?":\s*(\d+)/) || "0";
-    const instituteRank = extract(/\\?"institute_rank\\?":\s*(\d+)/);
+    const profileResponse = await fetch(`https://www.geeksforgeeks.org/profile/${username}?tab=activity`);
+    if (profileResponse.ok) {
+      const html = await profileResponse.text();
+      const extract = (regex) => {
+        const match = html.match(regex);
+        return match ? match[1] : null;
+      };
+      codingScore = extract(/\\?"score\\?":\s*(\d+)/) || "0";
+      instituteRank = extract(/\\?"institute_rank\\?":\s*(\d+)/);
 
-    // Difficulty Breakdown
-    const schoolCount = extract(/\\?"SCHOOL\\?":\s*(\d+)/) || "0";
-    const basicCount = extract(/\\?"BASIC\\?":\s*(\d+)/) || "0";
-    const easyCount = extract(/\\?"EASY\\?":\s*(\d+)/) || "0";
-    const mediumCount = extract(/\\?"MEDIUM\\?":\s*(\d+)/) || "0";
-    const hardCount = extract(/\\?"HARD\\?":\s*(\d+)/) || "0";
-
-    const fundamentalCount = (parseInt(schoolCount) + parseInt(basicCount)).toString();
+      // Fallback for solved count if API didn't return it
+      if (solvedCount === "0") {
+        solvedCount = extract(/\\?"total_problems_solved\\?":\s*(\d+)/) || "0";
+      }
+    }
 
     return {
       platform: "GeeksforGeeks",
       username,
-      solvedCount: totalSolved,
+      solvedCount,
       rating: "0",
       globalRank: instituteRank,
-      easyCount: easyCount,
-      mediumCount: mediumCount,
-      hardCount: hardCount,
-      fundamentalCount: fundamentalCount,
-      codingScore: codingScore,
+      easyCount,
+      mediumCount,
+      hardCount,
+      fundamentalCount,
+      codingScore,
       lastUpdated: new Date().toISOString(),
     };
   } catch (error) {
