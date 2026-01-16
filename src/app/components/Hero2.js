@@ -4,39 +4,44 @@ import Link from 'next/link';
 
 function Hero2() {
   return (
-    <div className="relative w-full px-4 sm:px-6 lg:px-16 mt-20">
-      {/* Mascot */}
-      <div className="absolute right-0 bottom-0 z-0 transform translate-x-12 translate-y-2 hidden sm:block">
-        <Image
-          src="/mascot.png"
-          alt="CoderSTAT Mascot"
-          width={180}
-          height={250}
-          priority
-        />
-      </div>
+    <div className="w-full relative px-4 sm:px-6 lg:px-8 py-16 sm:py-24 bg-slate-50/50">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
 
-      {/* Main Text */}
-      <div className="text-center mb-12 sm:mb-16">
-        <p className="max-w-xl sm:max-w-2xl lg:max-w-3xl mx-auto text-lg sm:text-xl text-gray-600 dark:text-gray-300">
-          Start solving <strong>450+ curated questions</strong> from Striver's SDE Sheet. Click to mark progress, track questions solved,
-          and visualize your <strong>topic-wise preparation</strong> with ease.
-        </p>
-      </div>
+        {/* Text Content */}
+        <div className="flex-1 text-center lg:text-left order-2 lg:order-1">
+          <h2 className="text-3xl sm:text-4xl font-bold font-heading text-slate-900 mb-6">
+            Master Data Structures <br /> & Algorithms
+          </h2>
+          <p className="text-lg text-slate-600 mb-8 leading-relaxed">
+            Systematically solve <strong>450+ curated questions</strong> from the Striver's SDE Sheet.
+            Visualize your topic-wise strength, mark progress, and build consistency with our intuitive tracker.
+          </p>
 
-      {/* Dashboard Preview Image */}
-      <div className="w-full shadow-xl rounded-lg overflow-hidden border border-[var(--primary-gray)">
-        <Image
-          src="/landing_light2.png"
-          alt="CoderSTAT Dashboard Preview"
-          width={1200}
-          height={700}
-          className="w-full h-auto"
-          priority
-        />
-      </div>
+          <Link
+            href="/question-tracker"
+            className="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-indigo-600 hover:bg-slate-900 rounded-lg shadow transition-colors duration-300"
+          >
+            Start Solving Questions
+          </Link>
+        </div>
 
-     
+        {/* Feature Image */}
+        <div className="flex-1 w-full relative order-1 lg:order-2">
+          {/* Decorative blob */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-blue-100/50 rounded-full blur-3xl -z-10"></div>
+
+          <div className="rounded-xl overflow-hidden shadow-xl border border-slate-200 bg-white transform rotate-2 hover:rotate-0 transition-transform duration-500">
+            <Image
+              src="/landing_light2.png"
+              alt="Question Tracker UI"
+              width={800}
+              height={500}
+              className="w-full h-auto"
+            />
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }

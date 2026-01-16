@@ -18,7 +18,7 @@ const navLinks = [
 const UserGreeting = ({ session }) => {
   const firstName = session?.user?.name?.split(' ')[0] || 'User';
   return (
-    <span className="text-sm text-gray-700 hidden lg:inline">
+    <span className="text-sm text-slate-700 hidden lg:inline font-medium">
       Hi, {firstName}
     </span>
   );
@@ -32,7 +32,7 @@ const UserDropdown = ({ session }) => {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 transition-colors"
+        className="flex items-center gap-2 p-1 rounded-full hover:bg-slate-100 transition-colors border-2 border-transparent hover:border-slate-200"
       >
         {session?.user?.image ? (
           <Image
@@ -43,7 +43,7 @@ const UserDropdown = ({ session }) => {
             className="w-8 h-8 rounded-full"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
+          <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-medium">
             {session?.user?.name?.[0] || 'U'}
           </div>
         )}
@@ -52,16 +52,16 @@ const UserDropdown = ({ session }) => {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 py-1 z-50">
-            <div className="px-4 py-2 border-b border-gray-100">
-              <p className="text-sm font-medium text-gray-900">{session?.user?.name}</p>
-              <p className="text-xs text-gray-500 truncate">{session?.user?.email}</p>
+          <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-slate-100 py-2 z-50">
+            <div className="px-4 py-3 border-b border-slate-100">
+              <p className="text-sm font-semibold text-slate-900">{session?.user?.name}</p>
+              <p className="text-xs text-slate-500 truncate">{session?.user?.email}</p>
             </div>
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
-              className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+              className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors text-left"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-4 h-4 ml-0.5" />
               Sign out
             </button>
           </div>
@@ -75,32 +75,32 @@ const UserDropdown = ({ session }) => {
 const MobileUserInfo = ({ session }) => {
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-4 py-2 px-4 bg-gray-50 rounded-lg">
+      <div className="flex items-center gap-4 py-3 px-4 bg-slate-50 rounded-xl border border-slate-100">
         {session?.user?.image ? (
           <Image
             src={session.user.image}
             alt="Profile"
-            width={32}
-            height={32}
-            className="w-8 h-8 rounded-full"
+            width={40}
+            height={40}
+            className="w-10 h-10 rounded-full"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium">
+          <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white text-sm font-medium">
             {session?.user?.name?.[0] || 'U'}
           </div>
         )}
         <div>
-          <p className="text-sm font-medium text-gray-900">
+          <p className="text-sm font-semibold text-slate-900">
             {session?.user?.name || 'User'}
           </p>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-slate-500">
             {session?.user?.email || 'User account'}
           </p>
         </div>
       </div>
       <button
         onClick={() => signOut({ callbackUrl: '/' })}
-        className="w-full flex items-center justify-center gap-2 px-4 py-2 text-sm text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+        className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium text-red-600 bg-red-50 rounded-xl hover:bg-red-100 transition-colors"
       >
         <LogOut className="w-4 h-4" />
         Sign out
@@ -164,34 +164,29 @@ export default function Navbar() {
   const MobileNavLink = ({ href, label, icon }) => (
     <Link
       href={href}
-      className={`flex items-center w-full px-5 py-3 text-sm transition-all duration-300 ${pathname === href
-        ? "bg-blue-50 border-l-4 border-blue-700 text-blue-700 font-medium"
-        : "text-gray-700 hover:bg-gray-50 hover:pl-7"
+      className={`flex items-center w-full px-5 py-3.5 text-sm transition-all duration-200 border-l-4 ${pathname === href
+        ? "bg-slate-50 border-indigo-600 text-indigo-700 font-semibold"
+        : "border-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900"
         }`}
     >
-      <span className="mr-3 text-lg">{icon}</span>
+      <span className="mr-3 text-lg opacity-80">{icon}</span>
       {label}
-      {pathname === href && <ChevronRight className="ml-auto w-5 h-5 text-blue-700" />}
+      {pathname === href && <ChevronRight className="ml-auto w-4 h-4 text-indigo-600" />}
     </Link>
   );
 
   const DesktopNavLink = ({ href, label, icon }) => (
     <Link
       href={href}
-      className={`relative px-4 py-2 group transition-all duration-200 ${pathname === href
-        ? "text-blue-700 font-medium"
-        : "text-gray-600 hover:text-blue-700"
+      className={`relative px-4 py-2 group transition-all duration-200 text-sm font-medium ${pathname === href
+        ? "text-slate-900 bg-slate-50/80 rounded-lg"
+        : "text-slate-500 hover:text-slate-900 hover:bg-slate-50 rounded-lg"
         }`}
     >
       <div className="flex items-center gap-2">
-        <span className="text-lg">{icon}</span>
+        <span className="text-lg opacity-80 group-hover:opacity-100 transition-opacity">{icon}</span>
         <span className="hidden lg:inline">{label}</span>
       </div>
-      {pathname === href ? (
-        <span className="absolute bottom-0 left-0 w-full h-1 bg-blue-700 rounded-t-md"></span>
-      ) : (
-        <span className="absolute bottom-0 left-0 w-0 h-1 bg-blue-700 rounded-t-md group-hover:w-full transition-all duration-300"></span>
-      )}
     </Link>
   );
 
@@ -200,25 +195,11 @@ export default function Navbar() {
   // Don't render until mounted to avoid hydration issues
   if (!mounted) {
     return (
-      <nav className="sticky top-0 z-50 bg-white">
+      <nav className="sticky top-0 z-50 bg-white border-b border-white">
         <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto">
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={150}
-              height={60}
-              className="max-w-[150px]"
-            />
+          <Link href="/" className="flex items-center gap-2">
+            <span className="text-xl font-bold text-slate-900">CoderSTAT</span>
           </Link>
-          <div className="hidden md:flex items-center space-x-6">
-            {navLinks.map((link) => (
-              <div key={link.href} className="w-20 h-8 bg-gray-100 rounded animate-pulse"></div>
-            ))}
-          </div>
-          <div className="md:hidden">
-            <Menu className="w-6 h-6 text-gray-600" />
-          </div>
         </div>
       </nav>
     );
@@ -227,43 +208,43 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`sticky top-0 z-50 transition-all duration-300 border-b border-gray-100 ${isScrolled
-          ? "bg-white/95 backdrop-blur-sm shadow-sm"
-          : "bg-white"
+        className={`sticky top-0 z-50 transition-all duration-300 border-b ${isScrolled
+          ? "bg-white/90 backdrop-blur-md shadow-sm border-slate-200/60"
+          : "bg-white border-transparent"
           }`}
       >
-        <div className="flex items-center justify-between px-4 py-2 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between px-4 py-2.5 max-w-7xl mx-auto">
           {/* Logo */}
-          <Link href="/" className="flex items-center group">
-            <div className="overflow-hidden">
-              <Image
-                src="/logo.png"
-                alt="Logo"
-                width={130}
-                height={52}
-                className="max-w-[130px] transition-transform duration-300 group-hover:scale-105"
-                priority
-              />
-            </div>
+          <Link href="/" className="flex items-center gap-2 group">
+            <Image
+              src="/mascot-head.png"
+              alt="Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
+            <span className="font-bold text-xl tracking-tight text-slate-900 font-heading group-hover:text-indigo-600 transition-colors">CoderSTAT</span>
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center space-x-2 lg:space-x-6">
+          <div className="hidden md:flex items-center space-x-1 lg:space-x-3">
             {navLinks.map((link) => (
               <DesktopNavLink key={link.href} {...link} />
             ))}
 
+            <div className="h-6 w-px bg-slate-200 mx-2"></div>
+
             {/* Auth Buttons */}
             {isLoading ? (
-              <div className="w-20 h-10 bg-gray-100 rounded-full animate-pulse"></div>
+              <div className="w-20 h-9 bg-slate-100 rounded-lg animate-pulse"></div>
             ) : !isAuthenticated ? (
               <Link href="/sign-in">
-                <button className="px-6 py-2 font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-full hover:shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105">
-                  Login
+                <button className="px-5 py-2 text-sm font-semibold text-white bg-slate-900 rounded-lg hover:bg-indigo-600 transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                  Sign In
                 </button>
               </Link>
             ) : (
-              <div className="flex items-center space-x-3 px-4 py-1 rounded-full bg-gray-50 border border-gray-100 hover:bg-gray-100 transition-colors">
+              <div className="flex items-center space-x-3 pl-2">
                 <UserGreeting session={session} />
                 <UserDropdown session={session} />
               </div>
@@ -274,7 +255,7 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={toggleMenu}
-              className={`p-2 rounded-full transition-all duration-200 ${isOpen ? "bg-blue-50 text-blue-600 rotate-90" : "text-gray-600 hover:bg-gray-50"
+              className={`p-2 rounded-lg transition-all duration-200 ${isOpen ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
                 }`}
               aria-label="Toggle menu"
               aria-expanded={isOpen}
@@ -290,25 +271,30 @@ export default function Navbar() {
         <>
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+            className="fixed inset-0 bg-slate-900/20 backdrop-blur-sm z-40 md:hidden"
             onClick={() => setIsOpen(false)}
           />
 
           {/* Mobile Menu */}
-          <div className="md:hidden bg-white border-t border-gray-100 shadow-xl fixed w-full h-[calc(100vh-60px)] left-0 top-[60px] z-50 animate-slide-in">
-            <div className="flex flex-col py-2 h-full overflow-y-auto">
-              {navLinks.map((link) => (
-                <MobileNavLink key={link.href} {...link} />
-              ))}
+          <div className="md:hidden bg-white border-t border-slate-100 shadow-2xl fixed w-full h-[calc(100vh-60px)] left-0 top-[60px] z-50 animate-slide-in">
+            <div className="flex flex-col py-4 h-full overflow-y-auto">
+              <div className="px-4 mb-6">
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Menu</p>
+                <div className="space-y-1">
+                  {navLinks.map((link) => (
+                    <MobileNavLink key={link.href} {...link} />
+                  ))}
+                </div>
+              </div>
 
-              <div className="mt-auto border-t border-gray-100 p-6">
+              <div className="mt-auto border-t border-slate-100 p-6 bg-slate-50/50">
                 {!isAuthenticated ? (
                   <Link href="/sign-in">
                     <button
-                      className="w-full font-medium text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg px-4 py-3 hover:shadow-md transition-all duration-200 transform hover:scale-[1.02]"
+                      className="w-full font-semibold text-white bg-slate-900 rounded-xl px-4 py-3.5 hover:bg-indigo-600 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5"
                       onClick={() => setIsOpen(false)}
                     >
-                      Login
+                      Login to Continue
                     </button>
                   </Link>
                 ) : (
@@ -325,7 +311,7 @@ export default function Navbar() {
         @keyframes slide-in {
           from { 
             opacity: 0; 
-            transform: translateY(-20px); 
+            transform: translateY(-10px); 
           }
           to { 
             opacity: 1; 
@@ -333,22 +319,7 @@ export default function Navbar() {
           }
         }
         .animate-slide-in {
-          animation: slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        /* Smooth scrollbar */
-        ::-webkit-scrollbar {
-          width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-          background: #f9fafb;
-        }
-        ::-webkit-scrollbar-thumb {
-          background: #374151;
-          border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-          background: #111827;
+          animation: slide-in 0.2s ease-out forwards;
         }
       `}</style>
     </>

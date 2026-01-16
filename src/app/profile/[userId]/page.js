@@ -3,61 +3,22 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import PropTypes from "prop-types";
-import {
-  FaMapMarkerAlt, FaUniversity, FaEnvelope, FaBirthdayCake,
-  FaGithub, FaMedal, FaInstagram, FaLinkedin,
-  FaTwitter, FaGlobe,
-} from "react-icons/fa";
-import {
-  SiLeetcode, SiCodeforces, SiCodechef, SiGeeksforgeeks
-} from "react-icons/si";
+import { Share2, Globe, Medal, MapPin, School, Mail } from "lucide-react";
 
 import PlatformCards from "../../components/PlatfromCards";
 import DsaStatsCard from "../../components/DsaStatsCard";
 import CPStatsCard from "../../components/CPStatsCard";
+import UserProfile from "../../components/UserProfile";
+import Loader from "../../components/Loader";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Share2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Info Item component from the first component
-const InfoItem = ({ icon: Icon, text, link, className = "" }) => {
-  if (!text) return null;
-
-  const content = (
-    <div className={`flex items-center space-x-2 sm:space-x-4 p-3 sm:p-4 rounded-xl bg-gray-100 border border-gray-300 hover:border-gray-400 hover:bg-gray-200 transition-all duration-300 min-h-[3rem] sm:min-h-[3.5rem] ${className}`}>
-      <div className="flex-shrink-0">
-        <Icon className="text-gray-700 w-4 h-4 sm:w-5 sm:h-5" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <span className="text-gray-900 text-sm sm:text-base break-all">{text}</span>
-      </div>
-    </div>
-  );
-
-  return link ? (
-    <a href={link} target="_blank" rel="noopener noreferrer" className="block">
-      {content}
-    </a>
-  ) : content;
-};
-
-// Section Title component from the first component
-const SectionTitle = ({ icon: Icon, title }) => (
-  <div className="flex items-center space-x-2 mb-3 sm:mb-4 pb-2 border-b-2 border-blue-200">
-    <div className="p-1.5 bg-blue-50 rounded-lg">
-      <Icon className="text-blue-700 w-4 h-4 sm:w-5 sm:h-5" />
-    </div>
-    <h3 className="text-sm sm:text-base font-bold text-gray-900">{title}</h3>
-  </div>
-);
-
 const NoDataCard = ({ message }) => (
-  <Card className="bg-gray-50/80 backdrop-blur-sm shadow-lg transition-all duration-300">
+  <Card className="bg-slate-50 border border-slate-100">
     <CardContent className="flex items-center justify-center min-h-[12rem]">
-      <p className="text-sm sm:text-base text-gray-500 px-4 text-center">{message}</p>
+      <p className="text-sm sm:text-base text-slate-400 font-medium px-4 text-center">{message}</p>
     </CardContent>
   </Card>
 );
@@ -81,14 +42,14 @@ export default function PublicProfile() {
           body: JSON.stringify({ userId }),
         });
 
-        if (!response.ok) throw new Error("Failed to fetch profile data");
+        if (!response.ok) throw new Error("Profile not found or is private");
 
         const data = await response.json();
         setProfileData(data.profile);
         setUserData(data.stats);
       } catch (err) {
         console.error("Error fetching public profile:", err);
-        setError("Profile not found or is not public");
+        setError(err.message);
       } finally {
         setIsLoading(false);
       }
@@ -97,15 +58,10 @@ export default function PublicProfile() {
     if (userId) fetchPublicProfileData();
   }, [userId]);
 
-  // Show CTA modal after 5 seconds if user hasn't dismissed it before
   useEffect(() => {
     const hasSeenCTA = localStorage.getItem('coderstar_cta_dismissed');
-    
     if (!hasSeenCTA && !isLoading && !error) {
-      const timer = setTimeout(() => {
-        setShowCTAModal(true);
-      }, 5000); // Show after 5 seconds
-
+      const timer = setTimeout(() => setShowCTAModal(true), 5000);
       return () => clearTimeout(timer);
     }
   }, [isLoading, error]);
@@ -114,16 +70,17 @@ export default function PublicProfile() {
     setShowCTAModal(false);
     localStorage.setItem('coderstar_cta_dismissed', 'true');
   };
+
   if (isLoading) {
     return (
       <div className="container mx-auto p-4 sm:p-6 lg:p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-4">
-            <Skeleton className="h-[500px] rounded-xl" />
+            <Skeleton className="h-[600px] rounded-2xl" />
           </div>
           <div className="lg:col-span-8 space-y-6">
-            <Skeleton className="h-[180px] rounded-xl" />
-            <Skeleton className="h-[350px] rounded-xl" />
+            <Skeleton className="h-[200px] rounded-2xl" />
+            <Skeleton className="h-[400px] rounded-2xl" />
           </div>
         </div>
       </div>
@@ -132,16 +89,16 @@ export default function PublicProfile() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/20 to-gray-50 pt-20 pb-12 flex items-center justify-center">
-        <Card className="w-full max-w-md mx-auto shadow-lg">
+      <div className="min-h-screen bg-slate-50 pt-20 pb-12 flex items-center justify-center px-4">
+        <Card className="w-full max-w-md mx-auto shadow-xl border-slate-200">
           <CardContent className="p-8 text-center">
             <div className="mb-6">
-              <Image src="/mascot.png" alt="Mascot" width={120} height={120} className="mx-auto" />
+              <Image src="/mascot-head.png" alt="Mascot" width={100} height={100} className="mx-auto" />
             </div>
-            <h1 className="text-2xl font-bold text-red-600 mb-4">{error}</h1>
-            <p className="text-gray-600 mb-6">This profile may not exist or is not set to public.</p>
-            <Button onClick={() => (window.location.href = "/")} className="w-full">
-              Go Home
+            <h1 className="text-xl font-bold text-slate-900 mb-2 font-heading">Oops! Profile Hidden</h1>
+            <p className="text-slate-500 mb-8 text-sm leading-relaxed">This profile might be private or doesn't exist anymore.</p>
+            <Button onClick={() => (window.location.href = "/")} className="w-full bg-slate-900 hover:bg-indigo-600 transition-colors py-6">
+              Go Back Home
             </Button>
           </CardContent>
         </Card>
@@ -150,192 +107,97 @@ export default function PublicProfile() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/20 to-gray-50 pt-20 pb-12">
+    <div className="min-h-screen bg-slate-50 py-8">
       <div className="container mx-auto px-4 max-w-7xl">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-4">
-            <div className="lg:sticky lg:top-8 space-y-4">
-              <div className="rounded-xl sm:rounded-2xl overflow-hidden bg-white shadow-xl sm:shadow-2xl border border-gray-200">
-                <div className="relative h-24 sm:h-32 bg-gradient-to-r from-blue-600 to-blue-700">
-                  {profileData && (
-                    <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-1/2 z-10">
-                      <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-xl sm:rounded-2xl border-4 border-white shadow-md overflow-hidden bg-white">
-                        <Image
-                          src={profileData.profilePic || "https://i.postimg.cc/3NNXX6kQ/mascot-head.png"}
-                          alt={profileData.name || "User"}
-                          width={128}
-                          height={128}
-                          className="object-cover"
-                          priority
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
 
-                <div className="px-3 sm:px-6 pt-16 sm:pt-20 pb-4 sm:pb-6 relative z-0">
-                  {profileData ? (
-                    <>
-                      <div className="text-center">
-                        <h2 className="text-xl sm:text-3xl font-bold text-gray-900">
-                          {profileData.name || "Anonymous User"}
-                        </h2>
-                        {profileData.bio && (
-                          <p className="mt-3 sm:mt-4 text-gray-600 text-xs sm:text-sm max-w-xl mx-auto break-words">
-                            {profileData.bio}
-                          </p>
-                        )}
-                      </div>
+        {/* Profile Hero Section */}
+        <div className="mb-8">
+          <div className="relative overflow-hidden bg-slate-900 rounded-3xl shadow-xl border border-slate-800">
+            {/* Subtle pattern */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
 
-                      <div className="mt-6 sm:mt-8 space-y-6 sm:space-y-8">
-                        <div>
-                          <SectionTitle icon={FaEnvelope} title="Personal Information" />
-                          <div className="space-y-3 sm:space-y-4">
-                            {profileData.primaryEmail && <InfoItem icon={FaEnvelope} text={profileData.primaryEmail} />}
-                            <InfoItem icon={FaMapMarkerAlt} text={profileData.location || "Location not specified"} />
-                            <InfoItem
-                              icon={FaBirthdayCake}
-                              text={profileData.dateOfBirth ? new Date(profileData.dateOfBirth).toLocaleDateString() : "Birth date not specified"}
-                            />
-                            <InfoItem
-                              icon={FaUniversity}
-                              text={profileData.institute || "Institute not specified"}
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <SectionTitle icon={FaGlobe} title="Social Links" />
-                          <div className="space-y-3 sm:space-y-4">
-                            {[
-                              { icon: FaGithub, name: "github", link: profileData.github },
-                              { icon: FaLinkedin, name: "linkedin", link: profileData.linkedin },
-                              { icon: FaTwitter, name: "twitter", link: profileData.twitter },
-                              { icon: FaInstagram, name: "instagram", link: profileData.instagram },
-                              { icon: FaGlobe, name: "portfolio", link: profileData.portfolio },
-                            ].map(({ icon, name, link }) => (
-                              <InfoItem
-                                key={name}
-                                icon={icon}
-                                text={link ? link : `${name.charAt(0).toUpperCase() + name.slice(1)}`}
-                                link={link}
-                              />
-                            ))}
-                          </div>
-                        </div>
-
-                        <div>
-                          <SectionTitle icon={FaMedal} title="Coding Profiles" />
-                          <div className="space-y-3 sm:space-y-4">
-                            {[
-                              { icon: SiLeetcode, name: "leetCode", username: profileData.leetCode, base: "https://leetcode.com" },
-                              { icon: SiCodeforces, name: "codeforces", username: profileData.codeforces, base: "https://codeforces.com/profile" },
-                              { icon: SiCodechef, name: "codechef", username: profileData.codechef, base: "https://www.codechef.com/users" },
-                              { icon: SiGeeksforgeeks, name: "geeksforgeeks", username: profileData.geeksforgeeks, base: "https://auth.geeksforgeeks.org/user" },
-                            ].map(({ icon, name, username, base }) => (
-                              <InfoItem
-                                key={name}
-                                icon={icon}
-                                text={username || name}
-                                link={username ? `${base}/${username}` : undefined}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-
-                      {profileData.createdAt && (
-                        <div className="mt-6 sm:mt-8 text-[10px] sm:text-xs text-gray-400 text-right">
-                          Member since: {new Date(profileData.createdAt).toLocaleDateString()}
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <NoDataCard message="No profile data available" />
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-8 space-y-6">
-            {/* Hero Header */}
-            <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-blue-700 to-gray-900 rounded-2xl shadow-2xl">
-              <div className="absolute inset-0 bg-black/10"></div>
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE0YzMuMzEgMCA2IDIuNjkgNiA2cy0yLjY5IDYtNiA2LTYtMi42OS02LTYgMi42OS02IDYtNnpNNiAxNGMzLjMxIDAgNiAyLjY5IDYgNnMtMi42OSA2LTYgNi02LTIuNjktNi02IDIuNjktNiA2LTZ6TTM2IDQ0YzMuMzEgMCA2IDIuNjkgNiA2cy0yLjY5IDYtNiA2LTYtMi42OS02LTYgMi42OS02IDYtNnpNNiA0NGMzLjMxIDAgNiAyLjY5IDYgNnMtMi42OSA2LTYgNi02LTIuNjktNi02IDIuNjktNiA2LTZ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
-              
-              <div className="relative px-6 py-12 sm:px-12 sm:py-16">
-                <div className="flex flex-col items-center text-center gap-4">
+            <div className="relative px-6 py-10 sm:px-12 sm:py-16">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+                <div className="flex flex-col md:flex-row items-center gap-8">
                   {profileData?.profilePic && (
-                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border-4 border-white/30 shadow-2xl overflow-hidden bg-white ring-4 ring-white/20">
+                    <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-2xl border-4 border-slate-800 shadow-2xl overflow-hidden bg-slate-900 ring-4 ring-slate-800/50">
                       <Image
                         src={profileData.profilePic}
                         alt={profileData.name || "User"}
-                        width={96}
-                        height={96}
+                        width={128}
+                        height={128}
                         className="object-cover w-full h-full"
                       />
                     </div>
                   )}
                   <div>
-                    <div className="flex items-center justify-center gap-3 mb-3">
-                      <span className="text-blue-200 text-lg sm:text-xl font-medium tracking-wide">the</span>
-                      <span className="text-yellow-300 text-2xl sm:text-3xl font-black tracking-tight drop-shadow-lg">coderSTAR</span>
-                      <span className="text-blue-200 text-lg sm:text-xl font-medium">:</span>
+                    <div className="flex items-center justify-center md:justify-start gap-2 mb-2">
+                      <span className="text-slate-400 text-sm font-bold tracking-widest uppercase">The CoderSTAR</span>
                     </div>
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2 tracking-tight">
+                    <h1 className="text-3xl sm:text-5xl font-black text-white mb-2 tracking-tight font-heading">
                       {profileData?.name || 'Anonymous User'}
                     </h1>
-                    <p className="text-blue-100 text-sm sm:text-base max-w-2xl mx-auto">
-                      {profileData?.bio || 'Coding achievements and statistics'}
+                    <p className="text-slate-400 text-sm sm:text-base max-w-xl italic">
+                      {profileData?.bio || 'Building the future, one line of code at a time.'}
                     </p>
                   </div>
-                  
-                  <div className="flex flex-wrap gap-3 justify-center mt-4">
-                    {profileData?.location && (
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20">
-                        <div className="flex items-center gap-2 text-white">
-                          <FaMapMarkerAlt className="w-4 h-4" />
-                          <span className="text-sm font-medium">{profileData.location}</span>
-                        </div>
+                </div>
+
+                <div className="flex flex-wrap gap-3 justify-center md:justify-end">
+                  {userData && (
+                    <div className="bg-slate-800/50 backdrop-blur-md rounded-2xl px-8 py-4 border border-slate-700 text-center">
+                      <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Impact Score</div>
+                      <div className="text-3xl font-black text-white font-heading">
+                        {(parseInt(userData.find(s => s.platform === 'LeetCode')?.solvedCount || 0) +
+                          parseInt(userData.find(s => s.platform === 'GeeksforGeeks')?.solvedCount || 0)).toLocaleString()}
                       </div>
-                    )}
-                    {profileData?.institute && (
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20">
-                        <div className="flex items-center gap-2 text-white">
-                          <FaUniversity className="w-4 h-4" />
-                          <span className="text-sm font-medium">{profileData.institute}</span>
-                        </div>
-                      </div>
-                    )}
-                    {userData && Array.isArray(userData) && userData.length > 0 && (
-                      <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20">
-                        <div className="flex items-center gap-2 text-white">
-                          <FaMedal className="w-4 h-4" />
-                          <span className="text-sm font-medium">
-                            {parseInt(userData.find(s => s.platform === 'LeetCode')?.solvedCount || 0) + 
-                             parseInt(userData.find(s => s.platform === 'GeeksforGeeks')?.solvedCount || 0)} Problems Solved
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
+          </div>
+        </div>
 
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-4 lg:sticky lg:top-8 self-start">
+            <UserProfile profileData={profileData} showImage={false} isEditing={false} />
+
+            {/* Action Buttons */}
+            <div className="mt-6 flex flex-col gap-3">
+              <Button
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert("Profile link copied!");
+                }}
+                className="w-full bg-white text-slate-900 border border-slate-200 hover:bg-slate-50 py-6"
+              >
+                <Share2 className="w-4 h-4 mr-2" /> Share Profile
+              </Button>
+              <a href="/" className="w-full">
+                <Button className="w-full bg-slate-900 hover:bg-indigo-600 transition-colors py-6">
+                  Create Your Own ✨
+                </Button>
+              </a>
+            </div>
+          </div>
+
+          <div className="lg:col-span-8 space-y-8">
+            {/* Statistics Section */}
             <div className="space-y-4">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900">Statistics Overview</h2>
-                <p className="text-sm text-gray-500 mt-1">Performance across all platforms</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-black text-slate-900 font-heading">Performance Dashboard</h2>
+                  <p className="text-sm text-slate-500 font-medium">Real-time statistics from coding platforms</p>
+                </div>
               </div>
-              
-              <Card className="shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-200">
-                <CardContent className="p-6 space-y-8">
+
+              <Card className="shadow-sm border-slate-100 bg-white">
+                <CardContent className="p-6 space-y-10">
                   {userData ? (
                     <>
                       <DsaStatsCard stats={userData} />
-                      <div className="border-t border-gray-200 pt-6">
+                      <div className="border-t border-slate-100 pt-10">
                         <CPStatsCard stats={userData} />
                       </div>
                     </>
@@ -346,13 +208,14 @@ export default function PublicProfile() {
               </Card>
             </div>
 
+            {/* Platform Progress Section */}
             <div className="space-y-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Platform Progress</h2>
-                <p className="text-sm text-gray-500 mt-1">Detailed breakdown by platform</p>
+                <h2 className="text-2xl font-black text-slate-900 font-heading">Platform breakdown</h2>
+                <p className="text-sm text-slate-500 font-medium">Detailed metrics per platform</p>
               </div>
-              
-              <Card className="shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-200">
+
+              <Card className="shadow-sm border-slate-100 bg-white">
                 <CardContent className="p-6">
                   {userData ? (
                     <PlatformCards stats={userData} />
@@ -366,85 +229,48 @@ export default function PublicProfile() {
         </div>
       </div>
 
-      {/* CTA Modal */}
+      {/* Modern CTA Modal */}
       {showCTAModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fadeIn">
-          {/* Backdrop */}
-          <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={handleCloseCTA}
-          ></div>
-          
-          {/* Modal Content */}
-          <div className="relative bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-2xl max-w-lg w-full p-8 transform animate-slideUp">
-            {/* Close Button */}
-            <button
-              onClick={handleCloseCTA}
-              className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-200 transition-colors"
-              aria-label="Close"
-            >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-300">
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={handleCloseCTA}></div>
+          <div className="relative bg-white rounded-3xl shadow-2xl max-w-lg w-full p-10 transform animate-in slide-in-from-bottom-10 duration-500">
+            <button onClick={handleCloseCTA} className="absolute top-6 right-6 p-2 rounded-xl hover:bg-slate-100 transition-colors">
+              <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
-            {/* Content */}
             <div className="text-center mb-8">
-              <div className="mb-4">
-                <span className="text-6xl">🌟</span>
+              <div className="mb-6 inline-flex p-5 bg-indigo-50 rounded-3xl">
+                <Globe className="w-10 h-10 text-indigo-600" />
               </div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-3">
-                Love This Profile?
-              </h2>
-              <p className="text-gray-600 text-lg mb-2">
-                Create your own <span className="font-bold text-yellow-600">coderSTAR</span> profile
-              </p>
-              <p className="text-gray-500 text-sm">
-                Track your coding journey across LeetCode, CodeChef, Codeforces & more!
-              </p>
+              <h2 className="text-3xl font-black text-slate-900 mb-2 font-heading tracking-tight">Claim Your Profile</h2>
+              <p className="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">Join the best developers and track your journey across all platforms.</p>
             </div>
 
-            {/* Features */}
-            <div className="space-y-3 mb-8">
-              <div className="flex items-center gap-3 text-sm text-gray-700">
-                <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
+            <div className="space-y-4 mb-10">
+              {[
+                "Auto-sync LeetCode, GFG & more",
+                "Personalized performance dashboard",
+                "Shareable professional profile"
+              ].map((f, i) => (
+                <div key={i} className="flex items-center gap-3 text-sm font-bold text-slate-700 bg-slate-50 p-3 rounded-2xl">
+                  <div className="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center">
+                    <svg className="w-3.5 h-3.5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" /></svg>
+                  </div>
+                  {f}
                 </div>
-                <span>Auto-sync stats from all platforms</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-gray-700">
-                <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span>Beautiful shareable profile page</span>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-gray-700">
-                <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <span>Track questions & maintain streaks</span>
-              </div>
+              ))}
             </div>
 
-            {/* Buttons */}
-            <div className="flex gap-3">
-              <button
-                onClick={handleCloseCTA}
-                className="flex-1 px-6 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-100 transition-all"
-              >
-                Maybe Later
-              </button>
-              <a
-                href="/"
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-xl hover:from-blue-700 hover:to-gray-900 shadow-lg hover:shadow-xl transition-all text-center"
-              >
-                Create Profile ✨
+            <div className="flex gap-4">
+              <Button onClick={handleCloseCTA} variant="outline" className="flex-1 py-7 rounded-2xl font-bold text-slate-600 border-slate-200">
+                Dismiss
+              </Button>
+              <a href="/" className="flex-1">
+                <Button className="w-full py-7 rounded-2xl font-bold bg-slate-900 hover:bg-indigo-600 transition-all shadow-lg hover:shadow-indigo-500/25">
+                  Get Started
+                </Button>
               </a>
             </div>
           </div>

@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Calendar, ExternalLink, RefreshCw, Filter, Clock } from 'lucide-react';
+import { Calendar as CalendarIcon, ExternalLink, RefreshCw, Filter, Clock, ChevronRight, Check, X } from 'lucide-react';
 import ContestCalendar from '../components/ContestCalendar';
+import Image from 'next/image';
 
 const PLATFORM_LOGOS = {
   "codechef.com": "codechef.jpg",
@@ -124,9 +125,9 @@ export default function CodingContestTracker() {
   const formatDateTime = useCallback((dateTimeString) => {
     const istDate = convertToIST(new Date(dateTimeString));
     return istDate.toLocaleString('en-US', {
-      month: '2-digit', day: '2-digit', year: 'numeric',
+      month: 'short', day: '2-digit',
       hour: '2-digit', minute: '2-digit', hour12: true
-    }) + ' IST';
+    });
   }, []);
 
   const getRelativeTimeString = useCallback((dateTimeString) => {
@@ -136,9 +137,9 @@ export default function CodingContestTracker() {
     const diffMins = Math.floor(diffMs / 60000);
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
-    if (diffDays > 0) return `${diffDays} day${diffDays > 1 ? 's' : ''} from now`;
-    if (diffHours > 0) return `${diffHours} hour${diffHours > 1 ? 's' : ''} from now`;
-    if (diffMins > 0) return `${diffMins} minute${diffMins > 1 ? 's' : ''} from now`;
+    if (diffDays > 0) return `${diffDays}d left`;
+    if (diffHours > 0) return `${diffHours}h left`;
+    if (diffMins > 0) return `${diffMins}m left`;
     return "Starting now";
   }, []);
 
@@ -172,241 +173,190 @@ export default function CodingContestTracker() {
     })), [filteredContests]
   );
 
-  // Calendar event click handler
   const handleCalendarEventClick = useCallback((event) => {
     if (event.url) window.open(event.url, '_blank');
   }, []);
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-gray-50/50 min-h-screen">
       <div className="max-w-7xl mx-auto p-4 pt-8">
         {/* Header */}
-        <header className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-800">Coding Contest Tracker</h1>
-          <p className="text-gray-600 mt-2">Stay updated with upcoming coding competitions across platforms</p>
+        <header className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 font-heading">Event Tracker</h1>
+            <p className="text-slate-500 mt-1 text-sm">Upcoming coding contests & hackathons</p>
+          </div>
+          <button
+            onClick={fetchContests}
+            disabled={isRefreshing}
+            className={`px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 transition-all shadow-sm flex items-center justify-center gap-2 ${isRefreshing ? 'opacity-70 cursor-not-allowed' : ''}`}
+          >
+            <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            {isRefreshing ? 'Syncing...' : 'Sync Events'}
+          </button>
         </header>
 
         {/* Filters */}
-        <section className="mb-8 bg-white rounded-xl shadow-md p-6 border border-gray-100" aria-label="Contest filters">
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-            {/* Platform Filter */}
-            <div className="w-full lg:w-auto">
-              <div className="flex items-center gap-2 mb-3 text-gray-700">
-                <Filter className="h-5 w-5" />
-                <h2 className="font-semibold">Platforms</h2>
-              </div>
-              <div className="flex flex-wrap gap-2" role="group" aria-label="Platform filter">
-                {Object.keys(PLATFORM_LOGOS).map(platform => (
-                  <button
-                    key={platform}
-                    onClick={() => handlePlatformToggle(platform)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200 flex items-center gap-1 focus:outline-indigo-600 ${
-                      selectedPlatforms.includes(platform)
-                        ? 'bg-indigo-100 text-indigo-700 border border-indigo-300'
-                        : 'bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-200'
-                    }`}
-                    aria-pressed={selectedPlatforms.includes(platform)}
-                    tabIndex={0}
-                    aria-label={`Filter by ${PLATFORM_DISPLAY_NAMES[platform]}`}
-                  >
-                    {PLATFORM_LOGOS[platform] && (
-                      <span className="w-4 h-4 rounded-full overflow-hidden">
-                        <img
-                          src={`/${PLATFORM_LOGOS[platform]}`}
-                          alt={`${PLATFORM_DISPLAY_NAMES[platform]} logo`}
-                          className="w-full h-full object-cover"
-                        />
-                      </span>
-                    )}
-                    <span>{PLATFORM_DISPLAY_NAMES[platform]}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-            {/* Time Filter */}
-            <div className="w-full lg:w-auto">
-              <div className="flex items-center gap-2 mb-3 text-gray-700">
-                <Clock className="h-5 w-5" />
-                <h2 className="font-semibold">Time Range</h2>
-              </div>
-              <div className="flex gap-2" role="group" aria-label="Time range filter">
-                <button
-                  onClick={() => setShowTodayOnly(true)}
-                  className={`px-4 py-2 rounded-md font-medium transition-all duration-200 focus:outline-indigo-600 ${
-                    showTodayOnly ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                  aria-pressed={showTodayOnly}
-                  tabIndex={0}
-                  aria-label="Show today's contests"
-                >
-                  Today
-                </button>
-                <button
-                  onClick={() => setShowTodayOnly(false)}
-                  className={`px-4 py-2 rounded-md font-medium transition-all duration-200 focus:outline-indigo-600 ${
-                    !showTodayOnly ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                  aria-pressed={!showTodayOnly}
-                  tabIndex={0}
-                  aria-label="Show all upcoming contests"
-                >
-                  All Upcoming
-                </button>
-              </div>
-            </div>
-            {/* Refresh */}
-            <div className="w-full lg:w-auto">
+        <section className="mb-6 space-y-4">
+          {/* Time Filter Tabs */}
+          <div className="flex justify-center md:justify-start">
+            <div className="inline-flex bg-white rounded-lg p-1 border border-slate-200 shadow-sm">
               <button
-                onClick={fetchContests}
-                disabled={isRefreshing}
-                className={`w-full lg:w-auto px-4 py-2 bg-indigo-600 text-white rounded-md font-medium hover:bg-indigo-700 transition-all duration-200 flex items-center justify-center gap-2 ${isRefreshing ? 'opacity-70 cursor-not-allowed' : ''}`}
-                aria-busy={isRefreshing}
-                aria-label="Refresh contests"
+                onClick={() => setShowTodayOnly(false)}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${!showTodayOnly ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
               >
-                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-                {isRefreshing ? 'Refreshing...' : 'Refresh Contests'}
+                All Upcoming
+              </button>
+              <button
+                onClick={() => setShowTodayOnly(true)}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${showTodayOnly ? 'bg-slate-900 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+              >
+                Today
               </button>
             </div>
           </div>
-        </section>
 
-        {/* Calendar Grid */}
-        <section className="mb-8 bg-white rounded-xl shadow-md p-6 border border-gray-100" aria-label="Contest calendar">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Contest Calendar</h2>
-          <ContestCalendar events={calendarEvents} onEventClick={handleCalendarEventClick} />
-        </section>
-
-        {/* Contest Cards */}
-        <section className="bg-white rounded-xl shadow-md p-6 border border-gray-100" aria-label="Contest list">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800">
-              {showTodayOnly ? "Today's Contests" : "Upcoming Contests"}
-            </h2>
-            <span className="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
-              {filteredContests.length} contest{filteredContests.length !== 1 ? 's' : ''}
-            </span>
+          {/* Platform Filters */}
+          <div className="flex flex-wrap gap-2">
+            {Object.keys(PLATFORM_LOGOS).map(platform => (
+              <button
+                key={platform}
+                onClick={() => handlePlatformToggle(platform)}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 flex items-center gap-1.5 border ${selectedPlatforms.includes(platform)
+                    ? 'bg-indigo-600 border-indigo-600 text-white shadow-sm'
+                    : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
+                  }`}
+              >
+                {selectedPlatforms.includes(platform) && <Check className="w-3 h-3" />}
+                <span>{PLATFORM_DISPLAY_NAMES[platform]}</span>
+              </button>
+            ))}
           </div>
-          {isLoading ? (
-            <div className="flex justify-center items-center h-64" aria-busy="true">
-              <span className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></span>
+        </section>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Contest List */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
+                <CalendarIcon className="w-5 h-5 text-indigo-500" />
+                {showTodayOnly ? "Today's Schedule" : "Upcoming Events"}
+              </h2>
+              <span className="text-xs font-medium bg-slate-100 text-slate-600 px-2 py-1 rounded-full">
+                {filteredContests.length} events
+              </span>
             </div>
-          ) : error ? (
-            <div className="flex flex-col items-center justify-center text-center py-12 text-red-500" role="alert">
-              <div className="mb-4 bg-red-50 p-3 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
+
+            {isLoading ? (
+              <div className="grid gap-4">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className="h-24 bg-white rounded-xl border border-slate-100 animate-pulse"></div>
+                ))}
               </div>
-              <p className="text-lg font-medium">{error}</p>
-            </div>
-          ) : filteredContests.length === 0 ? (
-            <div className="flex flex-col items-center justify-center text-center py-12 text-gray-500">
-              <div className="mb-4 bg-gray-100 p-3 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            ) : error ? (
+              <div className="text-center py-12 bg-white rounded-xl border border-slate-200">
+                <p className="text-red-500 font-medium">{error}</p>
               </div>
-              <p className="text-lg font-medium">No contests found</p>
-              <p className="mt-1">"First In First Out" says Queue,<br />We have nothing to show you!</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredContests.map((contest, index) => {
-                const [date, time] = formatDateTime(contest.start).split(', ');
-                const relativeTime = getRelativeTimeString(contest.start);
-                const istStartDate = convertToIST(new Date(contest.start));
-                const isStartingSoon = istStartDate - new Date() < 43200000; // 12 hours in ms
-                return (
-                  <article
-                    key={index}
-                    className={`border rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg focus-within:ring-2 focus-within:ring-indigo-400 ${
-                      isStartingSoon
-                        ? 'border-orange-200 bg-orange-50'
-                        : 'border-gray-200 bg-white hover:border-indigo-200'
-                    }`}
-                    tabIndex={0}
-                    aria-label={`Contest: ${contest.event}`}
-                  >
-                    <div className="p-5 flex flex-col h-full">
-                      {/* Platform badge */}
-                      <div className="flex justify-between items-start mb-3">
-                        <span
-                          className={`px-2.5 py-1 rounded-md text-xs font-medium flex items-center gap-1 ${
-                            isStartingSoon ? 'bg-orange-100 text-orange-800' : 'bg-indigo-100 text-indigo-800'
-                          }`}
-                        >
-                          {PLATFORM_LOGOS[contest.resource] && (
-                            <span className="w-3 h-3 rounded-full overflow-hidden flex-shrink-0">
-                              <img
-                                src={`/${PLATFORM_LOGOS[contest.resource]}`}
-                                alt={`${PLATFORM_DISPLAY_NAMES[contest.resource]}`}
-                                className="w-full h-full object-cover"
-                              />
-                            </span>
+            ) : filteredContests.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-xl border border-dashed border-slate-300">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-slate-50 mb-3">
+                  <Filter className="w-6 h-6 text-slate-400" />
+                </div>
+                <p className="text-slate-900 font-medium">No events found</p>
+                <p className="text-slate-500 text-sm mt-1">Try adjusting your filters</p>
+                <button
+                  onClick={() => { setSelectedPlatforms(Object.keys(PLATFORM_LOGOS)); setShowTodayOnly(false); }}
+                  className="mt-4 text-indigo-600 hover:text-indigo-700 text-sm font-medium"
+                >
+                  Reset Filters
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredContests.map((contest, index) => {
+                  const istStartDate = convertToIST(new Date(contest.start));
+                  const isStartingSoon = istStartDate - new Date() < 43200000; // 12 hours
+                  const formattedDate = formatDateTime(contest.start);
+
+                  return (
+                    <div
+                      key={index}
+                      className="group bg-white rounded-xl p-4 border border-slate-200 shadow-sm hover:shadow-md transition-all hover:border-indigo-100 flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center relative overflow-hidden"
+                    >
+                      {isStartingSoon && (
+                        <div className="absolute top-0 right-0 w-2 h-full bg-amber-500"></div>
+                      )}
+
+                      <div className="flex items-start gap-4">
+                        <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-100 p-1.5 flex-shrink-0">
+                          {PLATFORM_LOGOS[contest.resource] ? (
+                            <img
+                              src={`/${PLATFORM_LOGOS[contest.resource]}`}
+                              alt={contest.resource}
+                              className="w-full h-full object-contain"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-indigo-100 rounded-md"></div>
                           )}
-                          <span>{PLATFORM_DISPLAY_NAMES[contest.resource]}</span>
-                        </span>
-                        {isStartingSoon && (
-                          <span className="bg-orange-100 text-orange-800 px-2 py-0.5 rounded text-xs font-medium">
-                            Soon
-                          </span>
-                        )}
-                      </div>
-                      {/* Contest title */}
-                      <h3 className="font-semibold text-lg line-clamp-2 mb-3 text-gray-800">{contest.event}</h3>
-                      {/* Contest details */}
-                      <div className="text-sm flex-grow space-y-2">
-                        <div className="flex items-start">
-                          <Calendar className="h-4 w-4 mr-2 mt-0.5 text-gray-500" />
-                          <div>
-                            <div className="text-gray-700">{date}</div>
-                            <div className="text-gray-500">{time} IST</div>
+                        </div>
+                        <div>
+                          <h3 className="text-slate-900 font-semibold leading-tight group-hover:text-indigo-600 transition-colors">
+                            {contest.event}
+                          </h3>
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1 text-sm text-slate-500">
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-3.5 h-3.5" />
+                              {formattedDate}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Filter className="w-3.5 h-3.5" />
+                              {formatDuration(contest.duration)}
+                            </span>
+                            {isStartingSoon && (
+                              <span className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+                                Starting Soon
+                              </span>
+                            )}
                           </div>
                         </div>
-                        <div className="flex items-center">
-                          <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                          <div>
-                            <span className="text-gray-700">{formatDuration(contest.duration)}</span>
-                            <span className="text-gray-500 text-xs ml-1">duration</span>
-                          </div>
-                        </div>
-                        <div className="text-sm font-medium">
-                          <span className={isStartingSoon ? "text-orange-600" : "text-indigo-600"}>
-                            {relativeTime}
-                          </span>
-                        </div>
                       </div>
-                      {/* Action buttons */}
-                      <div className="mt-4 grid grid-cols-2 gap-3 pt-3 border-t border-gray-100">
+
+                      <div className="flex items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-slate-50">
                         <button
                           onClick={() => addToGoogleCalendar(contest)}
-                          className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-indigo-600"
-                          aria-label="Add to Google Calendar"
+                          className="flex-1 sm:flex-none px-3 py-2 text-xs font-medium text-slate-600 bg-slate-50 hover:bg-slate-100 rounded-lg transition-colors text-center"
                         >
-                          <Calendar className="h-4 w-4 mr-1.5" />
-                          <span>Add to Calendar</span>
+                          Add to Calendar
                         </button>
                         <a
                           href={contest.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center justify-center bg-indigo-100 hover:bg-indigo-200 text-indigo-700 py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-indigo-600"
-                          aria-label="Visit contest page"
+                          className="flex-1 sm:flex-none px-4 py-2 text-xs font-medium text-white bg-slate-900 hover:bg-indigo-600 rounded-lg transition-colors flex items-center justify-center gap-1.5"
                         >
-                          <span>Visit</span>
-                          <ExternalLink className="h-4 w-4 ml-1.5" />
+                          Participate <ExternalLink className="w-3 h-3" />
                         </a>
                       </div>
                     </div>
-                  </article>
-                );
-              })}
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Calendar View (Sidebar) */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-xl border border-slate-200 p-4 shadow-sm sticky top-24">
+              <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4">Calendar View</h3>
+              <div className="calendar-container text-xs">
+                <ContestCalendar events={calendarEvents} onEventClick={handleCalendarEventClick} />
+              </div>
             </div>
-          )}
-        </section>
-        {/* Footer */}
-        <footer className="mt-8 text-center text-gray-500 text-sm">
-          <p>Last updated: {new Date().toLocaleDateString()}</p>
+          </div>
+        </div>
+
+        <footer className="mt-12 text-center text-slate-400 text-xs">
+          <p>Last synced: {new Date().toLocaleDateString()} • Powered by Clist API</p>
         </footer>
       </div>
     </div>

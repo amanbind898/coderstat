@@ -1,17 +1,19 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AuthProvider from "./components/AuthProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const outfit = Outfit({
   subsets: ["latin"],
+  variable: "--font-outfit",
+  display: "swap",
 });
 
 export const metadata = {
@@ -59,7 +61,7 @@ export default function RootLayout({ children }) {
       <head>
         <meta name="google-adsense-account" content="ca-pub-8096601763375595"></meta>
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${inter.variable} ${outfit.variable} font-sans antialiased bg-gray-50/50`}>
         <AuthProvider>
           <Navbar />
           <div className="min-h-[calc(100vh-72px)]">

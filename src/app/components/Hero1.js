@@ -4,54 +4,61 @@ import Link from 'next/link';
 
 function Hero1() {
   return (
-    <div className="w-full relative px-4 sm:px-8 lg:px-16 ">
+    <div className="w-full relative px-4 sm:px-6 lg:px-8 pt-12 sm:pt-20 pb-16">
       {/* Headings */}
-      <div className="text-center mb-2 sm:mb-16">
-        
-        <h2 className="mb-10 text-xl sm:text-2xl md:text-3xl font-normal text-[var(--primary-gray)]">
-          <span className="text-[var(--logo-blue)] font-bold">CoderSTAT</span> helps you navigate and track your<br className="hidden sm:inline" />
-          coding journey to success
-        </h2>
+      <div className="text-center max-w-4xl mx-auto mb-16">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold font-heading text-slate-900 tracking-tight mb-6">
+          Your Coding Journey, <br className="hidden sm:inline" />
+          <span className="text-indigo-600">Tracked & Visualize.</span>
+        </h1>
+
+        <p className="text-lg sm:text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+          The ultimate companion for competitive programmers. Track progress, manage contest schedules, and analyze your growth across platforms.
+        </p>
 
         {/* Buttons */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          <Link
-            href="/question-tracker"
-            className="px-5 py-2 sm:px-6 sm:py-3 text-base sm:text-lg font-medium border border-[var(--primary-gray)] rounded-lg hover:bg-[var(--primary-gray)/10] transition"
-          >
-            Question Tracker
-          </Link>
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
           <Link
             href="/profile-tracker"
-            className="px-5 py-2 sm:px-6 sm:py-3 text-base sm:text-lg font-medium text-white bg-[var(--logo-blue)] hover:bg-[var(--graph-blue)] rounded-lg shadow transition"
+            className="px-8 py-4 text-base font-semibold text-white bg-slate-900 hover:bg-indigo-600 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
           >
-            Profile Tracker →
+            Track Profile →
+          </Link>
+          <Link
+            href="/question-tracker"
+            className="px-8 py-4 text-base font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 rounded-xl shadow-sm hover:shadow-md transition-all duration-300"
+          >
+            View Questions
           </Link>
         </div>
       </div>
 
-      {/* Mascot & Dashboard */}
-      <div className="relative w-full max-w-7xl mx-auto">
-        {/* Mascot */}
-        <div className="absolute left-0 bottom-4 z-0 transform -translate-x-16 translate-y-2 hidden sm:block">
+      {/* Hero Image Container */}
+      <div className="relative w-full max-w-6xl mx-auto">
+        {/* Abstract Background Element - Subtle */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-indigo-50/50 rounded-full blur-3xl -z-10 opacity-60"></div>
+
+        {/* Mascot - Positioned elegantly */}
+        <div className="absolute -left-12 bottom-0 z-10 hidden xl:block animate-fade-in-up">
           <Image
             src="/mascot.png"
             alt="CoderSTAT Mascot"
-            width={150}
-            height={220}
+            width={160}
+            height={160}
+            className="drop-shadow-lg transform rotate-6 hover:rotate-12 transition-transform duration-500"
             priority
-            className="animate-wave"
           />
         </div>
 
-        {/* Dashboard Image */}
-        <div className="relative z-12 w-full shadow-xl rounded-lg overflow-hidden border border-[var(--primary-gray)]">
+        {/* Main Dashboard Preview */}
+        <div className="relative z-0 rounded-2xl overflow-hidden shadow-2xl border border-slate-200/60 bg-white">
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/5 to-transparent pointer-events-none"></div>
           <Image
             src="/landing_light.png"
             alt="CoderSTAT Dashboard Preview"
-            width={1200}
-            height={700}
-            className="w-full h-auto"
+            width={1400}
+            height={800}
+            className="w-full h-auto object-cover"
             priority
           />
         </div>

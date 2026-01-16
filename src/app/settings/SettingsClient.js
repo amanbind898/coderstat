@@ -11,12 +11,10 @@ import Loader from "../components/Loader"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
-  Edit3, RefreshCw, User, Mail, Key, Save, X, MapPin, Calendar,
-  Github, Linkedin, Twitter, Instagram, Globe, Code, Bell, Shield,
-  Palette, Database, Lock, Eye, EyeOff, Settings as SettingsIcon,
-  ChevronRight, Check, AlertCircle, Trash2, Info
+  Edit3, RefreshCw, User, Mail, Save, X, MapPin, Calendar,
+  Github, Linkedin, Twitter, Instagram, Globe, Code,
+  Settings as SettingsIcon, ChevronRight, Info
 } from "lucide-react";
-import Image from "next/image";
 
 function Settings() {
   const { data: session } = useSession();
@@ -31,7 +29,6 @@ function Settings() {
     coding: false
   });
 
-  // Use this ref to prevent duplicate profile creation
   const profileCreationAttempted = useRef(false);
 
   useEffect(() => {
@@ -41,7 +38,6 @@ function Settings() {
 
   const fetchProfileData = async () => {
     try {
-      // First check if we already have a profile
       const userProfile = await db
         .select()
         .from(ProfileData)
@@ -49,19 +45,14 @@ function Settings() {
         .then((results) => results[0] || null);
 
       if (!userProfile) {
-        // Only try to create a profile if we haven't tried before
         if (!profileCreationAttempted.current) {
           profileCreationAttempted.current = true;
-
-          // Create a new profile
           await db.insert(ProfileData).values({
             primaryEmail: session?.user?.email || "",
             name: session?.user?.name || "",
             userId: userId,
             createdAt: new Date().toISOString(),
           });
-
-          // Fetch the newly created profile
           const newProfile = await db
             .select()
             .from(ProfileData)
@@ -75,7 +66,6 @@ function Settings() {
           }
         }
       } else {
-        // We found an existing profile
         setProfileData(userProfile);
       }
     } catch (error) {
@@ -88,13 +78,11 @@ function Settings() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    // Trim bio to 500 characters for server-side safety
     const trimmedValue = name === 'bio' ? value.slice(0, 500) : value;
     setProfileData((prevData) => ({ ...prevData, [name]: trimmedValue }));
   };
 
   const updateCodingStats = async () => {
-    // Check if any coding platform username is provided
     const hasCodingProfiles = profileData.leetCode ||
       profileData.geeksforgeeks ||
       profileData.codeforces ||
@@ -120,7 +108,6 @@ function Settings() {
         const error = await response.json();
         throw new Error(error.message || "Failed to update stats");
       }
-
       toast.success("Stats updated successfully!");
     } catch (error) {
       console.error("Error refreshing coding stats:", error);
@@ -155,7 +142,6 @@ function Settings() {
       setIsNew(false);
       toast.success("Profile updated successfully!");
 
-
       if (profileData.leetCode ||
         profileData.codeforces ||
         profileData.codechef ||
@@ -179,25 +165,25 @@ function Settings() {
     }));
   };
 
-  const SectionCard = ({ title, icon: Icon, children, sectionKey, iconColor }) => (
-    <div className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all hover:shadow-lg">
+  const SectionCard = ({ title, icon: Icon, children, sectionKey }) => (
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden transition-all hover:shadow-md">
       <button
         onClick={() => toggleSection(sectionKey)}
-        className="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+        className="w-full px-6 py-5 flex items-center justify-between hover:bg-slate-50 transition-colors"
       >
-        <div className="flex items-center gap-3">
-          <div className={`p-2 rounded-lg ${iconColor}`}>
+        <div className="flex items-center gap-4">
+          <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600">
             <Icon className="w-5 h-5" />
           </div>
-          <h2 className="text-lg font-bold text-gray-900">{title}</h2>
+          <h2 className="text-lg font-bold text-slate-900 font-heading">{title}</h2>
         </div>
         <ChevronRight
-          className={`w-5 h-5 text-gray-400 transition-transform ${expandedSections[sectionKey] ? 'rotate-90' : ''
+          className={`w-5 h-5 text-slate-400 transition-transform duration-200 ${expandedSections[sectionKey] ? 'rotate-90' : ''
             }`}
         />
       </button>
       {expandedSections[sectionKey] && (
-        <div className="px-6 py-6 border-t border-gray-100 bg-gray-50">
+        <div className="px-6 py-6 border-t border-slate-100 bg-white">
           {children}
         </div>
       )}
@@ -207,11 +193,8 @@ function Settings() {
   const renderPersonalInfo = () => (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-300 transition-all">
-          <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2 mb-3">
-            <div className="p-1.5 bg-blue-50 rounded">
-              <User className="w-4 h-4 text-blue-600" />
-            </div>
+        <div className="bg-slate-50 rounded-lg p-5 border border-slate-200 transition-all focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500">
+          <label className="block text-sm font-semibold text-slate-700 flex items-center gap-2 mb-3">
             Profile Picture URL
           </label>
           <input
@@ -220,21 +203,19 @@ function Settings() {
             value={profileData?.profilePic || ""}
             onChange={handleInputChange}
             placeholder="https://example.com/profile.jpg"
-            className={`w-full p-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-blue-700 transition-all ${isEditing ? 'bg-white border-gray-300' : 'bg-gray-50 border-gray-200'
-              }`}
+            className={`w-full p-2.5 bg-white border rounded-lg focus:outline-none focus:border-indigo-500 transition-all ${isEditing ? 'border-slate-300' : 'border-transparent bg-transparent pl-0'}`}
             disabled={!isEditing}
           />
-          <p className="text-xs text-gray-500 mt-2 flex items-center gap-1">
-            <Info className="w-3 h-3" />
-            Enter a URL for your profile picture
-          </p>
+          {isEditing && (
+            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+              <Info className="w-3 h-3" />
+              Enter a URL for your profile picture
+            </p>
+          )}
         </div>
 
-        <div className="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-300 transition-all">
-          <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2 mb-3">
-            <div className="p-1.5 bg-blue-50 rounded">
-              <Calendar className="w-4 h-4 text-blue-600" />
-            </div>
+        <div className="bg-slate-50 rounded-lg p-5 border border-slate-200 transition-all focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500">
+          <label className="block text-sm font-semibold text-slate-700 flex items-center gap-2 mb-3">
             Date of Birth
           </label>
           <input
@@ -242,17 +223,13 @@ function Settings() {
             name="dateOfBirth"
             value={profileData?.dateOfBirth || ""}
             onChange={handleInputChange}
-            className={`w-full p-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-blue-700 transition-all ${isEditing ? 'bg-white border-gray-300' : 'bg-gray-50 border-gray-200'
-              }`}
+            className={`w-full p-2.5 bg-white border rounded-lg focus:outline-none focus:border-indigo-500 transition-all ${isEditing ? 'border-slate-300' : 'border-transparent bg-transparent pl-0'}`}
             disabled={!isEditing}
           />
         </div>
 
-        <div className="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-300 transition-all">
-          <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2 mb-3">
-            <div className="p-1.5 bg-blue-50 rounded">
-              <MapPin className="w-4 h-4 text-blue-600" />
-            </div>
+        <div className="bg-slate-50 rounded-lg p-5 border border-slate-200 transition-all focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500">
+          <label className="block text-sm font-semibold text-slate-700 flex items-center gap-2 mb-3">
             Location
           </label>
           <input
@@ -261,17 +238,13 @@ function Settings() {
             value={profileData?.location || ""}
             onChange={handleInputChange}
             placeholder="City, Country"
-            className={`w-full p-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-blue-700 transition-all ${isEditing ? 'bg-white border-gray-300' : 'bg-gray-50 border-gray-200'
-              }`}
+            className={`w-full p-2.5 bg-white border rounded-lg focus:outline-none focus:border-indigo-500 transition-all ${isEditing ? 'border-slate-300' : 'border-transparent bg-transparent pl-0'}`}
             disabled={!isEditing}
           />
         </div>
 
-        <div className="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-300 transition-all">
-          <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2 mb-3">
-            <div className="p-1.5 bg-blue-50 rounded">
-              <Code className="w-4 h-4 text-blue-600" />
-            </div>
+        <div className="bg-slate-50 rounded-lg p-5 border border-slate-200 transition-all focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500">
+          <label className="block text-sm font-semibold text-slate-700 flex items-center gap-2 mb-3">
             Institute
           </label>
           <input
@@ -280,18 +253,14 @@ function Settings() {
             value={profileData?.institute || ""}
             onChange={handleInputChange}
             placeholder="Your institute/university"
-            className={`w-full p-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-blue-700 transition-all ${isEditing ? 'bg-white border-gray-300' : 'bg-gray-50 border-gray-200'
-              }`}
+            className={`w-full p-2.5 bg-white border rounded-lg focus:outline-none focus:border-indigo-500 transition-all ${isEditing ? 'border-slate-300' : 'border-transparent bg-transparent pl-0'}`}
             disabled={!isEditing}
           />
         </div>
       </div>
 
-      <div className="bg-white rounded-lg p-4 border border-gray-200 hover:border-blue-300 transition-all">
-        <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2 mb-3">
-          <div className="p-1.5 bg-blue-50 rounded">
-            <Info className="w-4 h-4 text-blue-600" />
-          </div>
+      <div className="bg-slate-50 rounded-lg p-5 border border-slate-200 transition-all focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500">
+        <label className="block text-sm font-semibold text-slate-700 flex items-center gap-2 mb-3">
           Bio
         </label>
         <textarea
@@ -301,19 +270,20 @@ function Settings() {
           placeholder="Tell us about yourself..."
           rows={4}
           maxLength={500}
-          className={`w-full p-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-700 focus:border-blue-700 transition-all resize-none ${isEditing ? 'bg-white border-gray-300' : 'bg-gray-50 border-gray-200'
-            }`}
+          className={`w-full p-3 bg-white border rounded-lg focus:outline-none focus:border-indigo-500 transition-all resize-none ${isEditing ? 'border-slate-300' : 'border-transparent bg-transparent pl-0'}`}
           disabled={!isEditing}
         />
-        <div className="flex items-center justify-between mt-2">
-          <p className="text-xs text-gray-500 flex items-center gap-1">
-            <Info className="w-3 h-3" />
-            Max 500 characters
-          </p>
-          <span className="text-xs text-gray-400">
-            {profileData?.bio?.length || 0} / 500
-          </span>
-        </div>
+        {isEditing && (
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-xs text-slate-500 flex items-center gap-1">
+              <Info className="w-3 h-3" />
+              Max 500 characters
+            </p>
+            <span className="text-xs text-slate-400">
+              {profileData?.bio?.length || 0} / 500
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -328,25 +298,23 @@ function Settings() {
 
   const renderSocialLinks = () => (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-xl p-4 shadow-sm">
+      <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4">
         <div className="flex items-start gap-3">
-          <div className="p-2 bg-purple-100 rounded-lg">
-            <Globe className="w-5 h-5 text-purple-700" />
+          <div className="p-2 bg-white rounded-lg border border-indigo-100 shadow-sm">
+            <Globe className="w-5 h-5 text-indigo-600" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-purple-900 mb-1">Connect Your Social Profiles</h4>
-            <p className="text-xs text-purple-700">Add links to your social media profiles to showcase your online presence</p>
+            <h4 className="text-sm font-bold text-slate-900 mb-1">Connect Your Social Profiles</h4>
+            <p className="text-xs text-slate-600">Add links to your social media profiles to showcase your online presence</p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4">
         {socialLinks.map(({ name, icon: Icon, label, placeholder }) => (
-          <div key={name} className="bg-white rounded-lg p-4 border border-gray-200 hover:border-purple-300 transition-all">
-            <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2 mb-3">
-              <div className="p-1.5 bg-purple-50 rounded">
-                <Icon className="w-4 h-4 text-purple-600" />
-              </div>
+          <div key={name} className="bg-slate-50 rounded-lg p-4 border border-slate-200 transition-all hover:bg-white focus-within:bg-white focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500">
+            <label className="block text-sm font-semibold text-slate-700 flex items-center gap-2 mb-2">
+              <Icon className="w-4 h-4 text-slate-500" />
               {label}
             </label>
             <input
@@ -355,8 +323,7 @@ function Settings() {
               value={profileData?.[name] || ""}
               onChange={handleInputChange}
               placeholder={placeholder}
-              className={`w-full p-3 border-2 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all ${isEditing ? 'bg-white border-gray-300' : 'bg-gray-50 border-gray-200'
-                }`}
+              className={`w-full p-2.5 bg-white border rounded-lg focus:outline-none focus:border-indigo-500 transition-all ${isEditing ? 'border-slate-300' : 'border-transparent bg-transparent pl-0'}`}
               disabled={!isEditing}
             />
           </div>
@@ -374,25 +341,25 @@ function Settings() {
 
   const renderCodingProfiles = () => (
     <div className="space-y-6">
-      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4 shadow-sm">
+      <div className="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4">
         <div className="flex items-start gap-3">
-          <div className="p-2 bg-green-100 rounded-lg">
-            <Code className="w-5 h-5 text-green-700" />
+          <div className="p-2 bg-white rounded-lg border border-indigo-100 shadow-sm">
+            <Code className="w-5 h-5 text-indigo-600" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-green-900 mb-1">Coding Platform Profiles</h4>
-            <p className="text-xs text-green-700">Link your coding profiles to automatically sync and display your programming statistics</p>
+            <h4 className="text-sm font-bold text-slate-900 mb-1">Coding Platform Profiles</h4>
+            <p className="text-xs text-slate-600">Link your coding profiles to automatically sync and display your programming statistics</p>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {codingPlatforms.map(({ name, label, icon, placeholder }) => (
-          <div key={name} className="bg-white rounded-lg p-4 border border-gray-200 hover:border-green-300 transition-all">
-            <label className="block text-sm font-semibold text-gray-700 flex items-center gap-2 mb-3">
-              <div className="p-1.5 bg-green-50 rounded flex items-center justify-center">
-                <img src={icon} alt={label} className="w-4 h-4 rounded" />
-              </div>
+          <div key={name} className="bg-slate-50 rounded-lg p-4 border border-slate-200 transition-all hover:bg-white focus-within:bg-white focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500">
+            <label className="block text-sm font-semibold text-slate-700 flex items-center gap-2 mb-2">
+              <span className="w-4 h-4 relative flex items-center justify-center">
+                <img src={icon} alt={label} className="max-w-full max-h-full object-contain filter grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all" />
+              </span>
               {label} Username
             </label>
             <input
@@ -401,8 +368,7 @@ function Settings() {
               value={profileData?.[name] || ""}
               onChange={handleInputChange}
               placeholder={placeholder}
-              className={`w-full p-3 border-2 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all ${isEditing ? 'bg-white border-gray-300' : 'bg-gray-50 border-gray-200'
-                }`}
+              className={`w-full p-2.5 bg-white border rounded-lg focus:outline-none focus:border-indigo-500 transition-all ${isEditing ? 'border-slate-300' : 'border-transparent bg-transparent pl-0'}`}
               disabled={!isEditing}
             />
           </div>
@@ -412,7 +378,7 @@ function Settings() {
       {!isEditing && (profileData?.leetCode || profileData?.codeforces || profileData?.codechef || profileData?.geeksforgeeks) && (
         <button
           onClick={handleRefreshCodingStats}
-          className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3.5 px-4 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+          className="w-full flex items-center justify-center gap-3 bg-indigo-600 text-white py-3 px-4 rounded-xl hover:bg-slate-900 transition-all font-semibold shadow-md hover:shadow-lg"
         >
           <RefreshCw className="w-5 h-5" />
           <span>Refresh Coding Statistics</span>
@@ -426,71 +392,63 @@ function Settings() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-6xl">
-        {/* Hero Section */}
-        <div className="mb-8">
-          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div className="relative h-48 bg-gradient-to-r from-blue-600 to-blue-700 ">
-              <div className="absolute inset-0 bg-black/10"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center text-white">
-                  <SettingsIcon className="w-16 h-16 mx-auto mb-3 opacity-90" />
-                  <h1 className="text-3xl font-bold tracking-tight">Account Settings</h1>
-                  <p className="text-blue-100 mt-2">Manage your profile and preferences</p>
-                </div>
+    <div className="min-h-screen bg-gray-50/50 py-8">
+      <div className="max-w-5xl mx-auto px-4">
+        {/* Header */}
+        <div className="mb-8 flex items-center gap-3">
+          <div className="p-3 bg-white rounded-xl shadow-sm border border-slate-200">
+            <SettingsIcon className="w-6 h-6 text-slate-900" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 font-heading">Settings</h1>
+            <p className="text-slate-500 text-sm">Manage your profile and account preferences</p>
+          </div>
+        </div>
+
+        {/* Profile Info Card */}
+        <div className="mb-8 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div className="p-6 md:p-8 flex flex-col md:flex-row gap-8 items-start">
+            {/* Avatar */}
+            <div className="relative group shrink-0">
+              <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-slate-50 shadow-inner bg-slate-100">
+                {isLoading ? (
+                  <Skeleton circle height="100%" />
+                ) : (
+                  <img
+                    src={profileData?.profilePic || "mascot-head.png"}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                )}
               </div>
             </div>
 
-            {/* Profile Quick View */}
-            <div className="p-6 bg-gradient-to-br from-gray-50 to-white">
-              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-                <div className="relative">
-                  {isLoading ? (
-                    <Skeleton circle={true} height={96} width={96} />
-                  ) : (
-                    <img
-                      src={profileData?.profilePic || "mascot-head.png"}
-                      alt="Profile"
-                      className="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover ring-2 ring-blue-100"
-                    />
-                  )}
-                </div>
-                <div className="flex-1 text-center sm:text-left">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-1">
-                    {isLoading ? <Skeleton width={180} /> : session?.user?.name}
+            {/* User Details */}
+            <div className="flex-grow space-y-4 w-full">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-900">
+                    {isLoading ? <Skeleton width={200} /> : session?.user?.name}
                   </h2>
-                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-sm text-gray-600 mb-3">
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4" />
-                      <span>{isLoading ? <Skeleton width={150} /> : session?.user?.email}</span>
-                    </div>
-                    {!isLoading && profileData?.location && (
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4" />
-                        <span>{profileData.location}</span>
-                      </div>
-                    )}
+                  <div className="flex items-center gap-2 text-slate-500 text-sm mt-1">
+                    <Mail className="w-4 h-4" />
+                    {isLoading ? <Skeleton width={150} /> : session?.user?.email}
                   </div>
-                  {!isLoading && profileData?.bio && (
-                    <p className="text-gray-600 text-sm max-w-2xl">{profileData.bio}</p>
-                  )}
                 </div>
 
-                {/* Edit/Save Buttons */}
-                <div className="flex gap-3">
+                <div className="flex gap-3 w-full md:w-auto">
                   {isEditing ? (
                     <>
                       <button
                         onClick={handleSave}
-                        className="flex items-center gap-2 bg-blue-700 text-white py-2.5 px-5 rounded-lg hover:bg-gray-900 transition-all font-medium shadow-md hover:shadow-lg"
+                        className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-900 text-white py-2 px-5 rounded-lg hover:bg-emerald-600 transition-all font-medium shadow-sm hover:shadow-md"
                       >
                         <Save className="w-4 h-4" />
                         Save
                       </button>
                       <button
                         onClick={() => setIsEditing(false)}
-                        className="flex items-center gap-2 border-2 border-gray-300 text-gray-700 py-2.5 px-5 rounded-lg hover:bg-gray-50 transition-all font-medium"
+                        className="flex-1 md:flex-none flex items-center justify-center gap-2 border border-slate-200 text-slate-700 py-2 px-5 rounded-lg hover:bg-slate-50 transition-all font-medium"
                       >
                         <X className="w-4 h-4" />
                         Cancel
@@ -499,25 +457,36 @@ function Settings() {
                   ) : (
                     <button
                       onClick={() => setIsEditing(true)}
-                      className="flex items-center gap-2 bg-blue-700 text-white py-2.5 px-5 rounded-lg hover:bg-gray-900 transition-all font-medium shadow-md hover:shadow-lg"
+                      className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 py-2 px-5 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-all font-medium shadow-sm"
                     >
                       <Edit3 className="w-4 h-4" />
-                      {isNew ? "Complete" : "Edit"}
+                      {isNew ? "Complete Profile" : "Edit Profile"}
                     </button>
                   )}
                 </div>
               </div>
+
+              {!isLoading && profileData?.location && (
+                <div className="flex items-center gap-2 text-slate-600 text-sm">
+                  <MapPin className="w-4 h-4 text-slate-400" />
+                  {profileData.location}
+                </div>
+              )}
+              {!isLoading && profileData?.bio && (
+                <p className="text-slate-600 text-sm leading-relaxed max-w-2xl bg-slate-50 p-4 rounded-lg border border-slate-100">
+                  {profileData.bio}
+                </p>
+              )}
             </div>
           </div>
         </div>
 
         {/* Settings Sections */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           <SectionCard
             title="Personal Information"
             icon={User}
             sectionKey="personal"
-            iconColor="bg-blue-100 text-blue-700"
           >
             {renderPersonalInfo()}
           </SectionCard>
@@ -526,7 +495,6 @@ function Settings() {
             title="Social Media Links"
             icon={Globe}
             sectionKey="social"
-            iconColor="bg-purple-100 text-purple-700"
           >
             {renderSocialLinks()}
           </SectionCard>
@@ -535,7 +503,6 @@ function Settings() {
             title="Coding Platforms"
             icon={Code}
             sectionKey="coding"
-            iconColor="bg-green-100 text-green-700"
           >
             {renderCodingProfiles()}
           </SectionCard>

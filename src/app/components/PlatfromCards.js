@@ -1,18 +1,16 @@
+"use client";
 import React, { useMemo } from 'react';
-import { AlertCircle, TrendingUp, Award, Calendar, Globe2, Flag, Code, Loader2 } from 'lucide-react';
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, TrendingUp, Award, Calendar, Globe2, Code } from 'lucide-react';
 import { Skeleton } from "@/components/ui/skeleton";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
 const StatItem = ({ label, value, icon: Icon }) => (
-  <div className="flex items-center justify-between p-2 sm:p-3" role="group" aria-label={`${label} stat`}>
-    <div className="flex items-center gap-2">
-      <div className="p-1.5 sm:p-2 rounded-lg bg-gray-100 border border-gray-300">
-        <Icon className="w-3 h-3 sm:w-4 sm:h-4 text-gray-700" />
-      </div>
-      <span className="text-xs sm:text-sm font-medium text-gray-700">{label}</span>
+  <div className="flex items-center justify-between p-2.5 bg-slate-50/50 rounded-lg border border-slate-100/50">
+    <div className="flex items-center gap-2.5">
+      <Icon className="w-4 h-4 text-slate-400" />
+      <span className="text-xs font-medium text-slate-500">{label}</span>
     </div>
-    <span className="text-xs sm:text-sm font-bold text-gray-900">{value || "N/A"}</span>
+    <span className="text-sm font-bold text-slate-900">{value || "N/A"}</span>
   </div>
 );
 
@@ -22,13 +20,12 @@ const ProblemDistributionChart = ({ categories, stats, totalSolved }) => {
       const rawColor = color.replace('bg-', '');
       let actualColor;
 
-      // Map Tailwind color classes to hex values - Updated Theme
       switch (rawColor) {
-        case 'emerald-400': actualColor = '#22c55e'; break; // green-500
-        case 'amber-400': actualColor = '#fb923c'; break;   // orange-400
-        case 'rose-400': actualColor = '#ef4444'; break;    // red-500
-        case 'blue-400': actualColor = '#1d4ed8'; break;    // blue-700
-        default: actualColor = '#374151'; // gray-700 as fallback
+        case 'emerald-400': actualColor = '#10b981'; break;
+        case 'amber-400': actualColor = '#f59e0b'; break;
+        case 'rose-400': actualColor = '#f43f5e'; break;
+        case 'blue-400': actualColor = '#6366f1'; break;
+        default: actualColor = '#64748b';
       }
 
       const count = level === "Fundamental"
@@ -43,196 +40,92 @@ const ProblemDistributionChart = ({ categories, stats, totalSolved }) => {
     }).filter(item => item.value > 0);
   }, [categories, stats]);
 
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const { name, value } = payload[0].payload;
-      const percentage = totalSolved > 0 ? ((value / totalSolved) * 100).toFixed(1) : 0;
-
-      return (
-        <div className="bg-white p-2 shadow-md rounded border border-gray-200 text-xs">
-          <p className="font-medium">{name}</p>
-          <p>{value} problems ({percentage}%)</p>
-        </div>
-      );
-    }
-    return null;
-  };
-
-  // Don't render chart if no data or all zeros
-  if (chartData.length === 0 || chartData.every(item => item.value === 0)) {
-    return null;
-  }
+  if (chartData.length === 0) return null;
 
   return (
-    <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
-      <h3 className="text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Problems Distribution</h3>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Pie Chart */}
-        <div className="flex justify-center items-center h-48">
+    <div className="mt-4 pt-4 border-t border-slate-100">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Simple Legend/List */}
+        <div className="space-y-2 justify-center flex flex-col">
+          {chartData.map((item) => {
+            const percentage = totalSolved > 0 ? (item.value / totalSolved) * 100 : 0;
+            return (
+              <div key={item.name} className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
+                <div className="flex-1 flex justify-between text-xs">
+                  <span className="text-slate-600">{item.name}</span>
+                  <span className="font-medium text-slate-900">{item.value} ({percentage.toFixed(0)}%)</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        {/* Tiny Chart */}
+        <div className="h-24">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={chartData}
                 cx="50%"
                 cy="50%"
-                innerRadius={36}
-                outerRadius={60}
+                innerRadius={25}
+                outerRadius={40}
                 paddingAngle={2}
                 dataKey="value"
                 startAngle={90}
                 endAngle={450}
-                animationDuration={1000}
               >
                 {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
                 ))}
               </Pie>
-              <Tooltip content={<CustomTooltip />} />
-              <Legend
-                layout="horizontal"
-                verticalAlign="bottom"
-                align="center"
-                iconSize={10}
-                iconType="circle"
-                formatter={(value) => (
-                  <span className="text-xs text-gray-700">{value}</span>
-                )}
-              />
             </PieChart>
           </ResponsiveContainer>
         </div>
-
-        {/* Bar Progress */}
-        <div className="flex flex-col justify-center space-y-3">
-          {Object.entries(categories).map(([level, { color }]) => {
-            const count = level === "Fundamental"
-              ? parseInt(stats.fundamentalCount || 0)
-              : parseInt(stats[`${level.toLowerCase()}Count`] || 0);
-            const percentage = totalSolved > 0 ? (count / totalSolved) * 100 : 0;
-
-            return (
-              <div key={level} className="flex items-center gap-2" role="group" aria-label={`${level} problems`}>
-                <span className="text-xs text-gray-600 w-20">{level}</span>
-                <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full ${color} transition-all duration-500`}
-                    style={{ width: `${percentage}%` }}
-                    role="progressbar"
-                    aria-valuenow={percentage}
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  />
-                </div>
-                <span className="text-xs font-medium text-gray-800 min-w-[3rem] text-right">
-                  {count}
-                </span>
-              </div>
-            );
-          })}
-        </div>
       </div>
     </div>
   );
 };
 
-// Language Distribution Chart for GFG
 const LanguageDistributionChart = ({ languageStats }) => {
-  const langData = useMemo(() => {
-    if (!languageStats || typeof languageStats !== 'object') return [];
-
-    const langColors = {
-      cpp: '#00599C',
-      'c++': '#00599C',
-      python3: '#3776AB',
-      python: '#3776AB',
-      java: '#ED8B00',
-      javascript: '#F7DF1E',
-      c: '#A8B9CC',
-      csharp: '#239120',
-      go: '#00ADD8',
-      rust: '#DEA584',
-      kotlin: '#7F52FF',
-      swift: '#FA7343',
-    };
-
+  const chartData = useMemo(() => {
+    if (!languageStats) return [];
     return Object.entries(languageStats)
-      .map(([lang, count]) => ({
-        name: lang.toUpperCase(),
-        value: count,
-        color: langColors[lang.toLowerCase()] || '#6B7280'
-      }))
-      .sort((a, b) => b.value - a.value);
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 5); // Show top 5 languages
   }, [languageStats]);
 
-  const totalProblems = useMemo(() =>
-    langData.reduce((sum, item) => sum + item.value, 0),
-    [langData]
-  );
+  if (chartData.length === 0) return null;
 
-  if (langData.length === 0) return null;
+  const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#f43f5e', '#8b5cf6'];
 
   return (
-    <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
-      <h3 className="text-xs sm:text-sm font-medium text-gray-700 mb-2 sm:mb-3">Languages Used</h3>
-      <div className="space-y-2">
-        {langData.map(({ name, value, color }) => {
-          const percentage = totalProblems > 0 ? (value / totalProblems) * 100 : 0;
-          return (
-            <div key={name} className="flex items-center gap-2">
-              <span className="text-xs text-gray-600 w-16 font-medium">{name}</span>
-              <div className="flex-1 h-2.5 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full transition-all duration-500 rounded-full"
-                  style={{ width: `${percentage}%`, backgroundColor: color }}
-                />
-              </div>
-              <span className="text-xs font-medium text-gray-800 min-w-[3.5rem] text-right">
-                {value} ({percentage.toFixed(0)}%)
-              </span>
-            </div>
-          );
-        })}
+    <div className="mt-4 pt-4 border-t border-slate-100">
+      <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+        <Code className="w-3 h-3" />
+        Language Stats
+      </h4>
+      <div className="flex flex-wrap gap-2">
+        {chartData.map((item, index) => (
+          <div key={item.name} className="flex items-center gap-1.5 bg-slate-50 border border-slate-100 px-2 py-1 rounded-md">
+            <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+            <span className="text-[10px] font-semibold text-slate-700">{item.name}</span>
+            <span className="text-[10px] font-bold text-slate-400">{item.value}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
 
-const SkeletonCard = () => (
-  <div className="rounded-xl sm:rounded-2xl overflow-hidden bg-white border border-gray-200">
-    <div className="p-3 sm:p-4 bg-gray-100 border-b border-gray-200">
-      <div className="flex items-center gap-3">
-        <Skeleton className="h-8 w-8 rounded-lg" />
-        <div className="flex-1">
-          <Skeleton className="h-4 w-24 mb-1" />
-          <Skeleton className="h-3 w-16" />
-        </div>
-      </div>
-    </div>
-    <div className="p-3 sm:p-4 bg-gray-50">
-      <div className="grid grid-cols-2 gap-2 sm:gap-3">
-        {[1, 2, 3, 4].map(i => (
-          <Skeleton key={i} className="h-8" />
-        ))}
-      </div>
-      <div className="mt-4 pt-4 border-t border-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Skeleton className="h-48" />
-          <Skeleton className="h-48" />
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
 const PlatformCard = ({ platform, stats, isLoading }) => {
-  if (isLoading) return <SkeletonCard />;
+  if (isLoading) return <div className="h-40 bg-slate-100 animate-pulse rounded-xl" />;
   if (!stats) return null;
 
   const platformConfig = useMemo(() => ({
     LeetCode: {
       logo: "/leetcode.png",
-      bgColor: "bg-yellow-50",
       categories: {
         Easy: { color: "bg-emerald-400" },
         Medium: { color: "bg-amber-400" },
@@ -242,35 +135,28 @@ const PlatformCard = ({ platform, stats, isLoading }) => {
     },
     Codeforces: {
       logo: "/codeforces.jpg",
-      bgColor: "bg-blue-50",
       totalOnly: true,
       rankLabel: "Rank"
     },
     CodeChef: {
       logo: "/codechef.jpg",
-      bgColor: "bg-gray-100",
       totalOnly: true,
       rankLabel: "Rank"
     },
     GeeksforGeeks: {
       logo: "/gfg.png",
-      bgColor: "bg-green-50",
       categories: {
         Easy: { color: "bg-emerald-400" },
         Medium: { color: "bg-amber-400" },
         Hard: { color: "bg-rose-400" },
         Fundamental: { color: "bg-blue-400" }
       },
-      rankLabel: "Coding Score"
+      rankLabel: "Institute Rank"
     }
   }), []);
 
-  const details = platformConfig[platform] || {
-    bgColor: "bg-gray-100",
-    rankLabel: "Rank"
-  };
-
-  const { logo, bgColor, categories, totalOnly, rankLabel } = details;
+  const details = platformConfig[platform] || { rankLabel: "Rank" };
+  const { logo, categories, totalOnly, rankLabel } = details;
 
   const totalSolved = useMemo(() => {
     if (totalOnly) return parseInt(stats.solvedCount) || 0;
@@ -286,71 +172,38 @@ const PlatformCard = ({ platform, stats, isLoading }) => {
   }, [stats, totalOnly, platform]);
 
   return (
-    <div
-      className="rounded-xl sm:rounded-2xl overflow-hidden bg-white border border-gray-200 transition-all duration-300 hover:border-gray-400 hover:shadow-md"
-      role="article"
-      aria-label={`${platform} statistics`}
-    >
-      <div className={`p-3 sm:p-4 ${bgColor} border-b border-gray-200`}>
+    <div className="bg-white rounded-xl border border-slate-100 p-4 sm:p-5 hover:border-slate-300 transition-colors">
+      <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <div className="p-1.5 sm:p-2 bg-white/50 rounded-lg border border-gray-300">
-            <img
-              src={logo}
-              alt={`${platform} Logo`}
-              className="h-6 w-6 sm:h-8 sm:w-8 rounded-lg"
-              loading="lazy"
-            />
+          <img src={logo} alt={platform} className="w-8 h-8 rounded-lg" />
+          <div>
+            <h3 className="text-base font-bold text-slate-900">{platform}</h3>
+            {stats.rating && (
+              <p className="text-xs text-slate-500 font-medium">Rating: <span className="text-slate-900">{stats.rating}</span></p>
+            )}
           </div>
-          <div className="flex-1">
-            <h2 className="text-base sm:text-lg font-bold text-gray-900">{platform}</h2>
-            <p className="text-[10px] sm:text-xs text-gray-600">{stats.lastUpdated}</p>
-          </div>
-          {stats.rating && (
-            <div className="text-right">
-              <div className="text-[10px] sm:text-xs text-gray-600">Rating</div>
-              <div className="text-sm sm:text-base font-bold text-gray-900">{stats.rating}</div>
-            </div>
-          )}
+        </div>
+        <div className="text-right">
+          <p className="text-xs text-slate-400">{stats.lastUpdated}</p>
         </div>
       </div>
 
-      <div className="p-3 sm:p-4 bg-gray-50">
-        <div className="grid grid-cols-2 gap-2 sm:gap-3">
-          <StatItem label="Problems" value={totalSolved} icon={Code} />
-          <StatItem label="Contests" value={stats.totalcontest} icon={Award} />
-          <StatItem label="Best" value={stats.highestRating} icon={TrendingUp} />
-          <StatItem label={rankLabel} value={stats.globalRank} icon={Globe2} />
-        </div>
-
-        {!totalOnly && categories && totalSolved > 0 && (
-          <ProblemDistributionChart
-            categories={categories}
-            stats={stats}
-            totalSolved={totalSolved}
-          />
-        )}
-
-        {/* Language Distribution for GFG */}
-        {platform === "GeeksforGeeks" && stats.languageStats && (
-          <LanguageDistributionChart languageStats={stats.languageStats} />
-        )}
+      <div className="grid grid-cols-2 gap-2 mb-4">
+        <StatItem label="Problems" value={totalSolved} icon={Code} />
+        <StatItem label={rankLabel} value={stats.globalRank} icon={Globe2} />
       </div>
-    </div>
-  );
-};
 
-const EmptyState = ({ message, isLoading }) => {
-  if (isLoading) return <SkeletonCard />;
+      {!totalOnly && categories && totalSolved > 0 && (
+        <ProblemDistributionChart
+          categories={categories}
+          stats={stats}
+          totalSolved={totalSolved}
+        />
+      )}
 
-  return (
-    <div className="w-full rounded-xl sm:rounded-2xl bg-white border border-gray-200 p-4 sm:p-8">
-      <div className="flex flex-col items-center justify-center text-center space-y-3 sm:space-y-4">
-        <AlertCircle className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400" />
-        <div className="space-y-1 sm:space-y-2">
-          <h3 className="font-semibold text-base sm:text-lg text-gray-900">No Data Available</h3>
-          <p className="text-xs sm:text-sm text-gray-600">{message}</p>
-        </div>
-      </div>
+      {platform === "GeeksforGeeks" && stats.languageStats && (
+        <LanguageDistributionChart languageStats={stats.languageStats} />
+      )}
     </div>
   );
 };
@@ -369,23 +222,16 @@ const PlatformCards = ({ stats, isLoading }) => {
   }, [stats, platforms]);
 
   if (!stats && !isLoading) {
-    return <EmptyState message="Connect your coding platforms to see your stats" />;
+    return <div className="text-center p-8 text-slate-500">Connect platforms to view stats</div>;
   }
 
   if (availableStats.length === 0 && !isLoading) {
-    return <EmptyState message="No platform data found" />;
+    return <div className="text-center p-8 text-slate-500">No platform data found</div>;
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div>
-        <h2 className="text-lg sm:text-2xl font-bold text-gray-900">Coding Platforms</h2>
-        <p className="text-xs sm:text-sm text-gray-600">
-          {availableStats.length} of {platforms.length} platforms connected
-        </p>
-      </div>
-
-      <div className="grid gap-4 sm:gap-6">
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {platforms.map(({ id, name }) => (
           <PlatformCard
             key={id}
@@ -395,14 +241,6 @@ const PlatformCards = ({ stats, isLoading }) => {
           />
         ))}
       </div>
-
-      {!isLoading && availableStats.length > 0 && availableStats.length < platforms.length && (
-        <Alert className="bg-gray-100 border-gray-200 text-gray-800">
-          <AlertDescription className="text-xs sm:text-sm">
-            💡 Connect more coding platforms to track all your progress
-          </AlertDescription>
-        </Alert>
-      )}
     </div>
   );
 };

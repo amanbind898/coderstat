@@ -3,35 +3,29 @@ import React, { useState, useMemo } from "react";
 import { Trophy, Circle, AlertTriangle, Target, Info, ChevronDown, ChevronUp } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 
-const StatItem = ({ icon: Icon, label, value, color, tooltip }) => {
-  const [showTooltip, setShowTooltip] = useState(false);
+const StatItem = ({ icon: Icon, label, value, colorType }) => {
+  // Map types to solid flat colors
+  const colors = {
+    green: "text-emerald-600 bg-emerald-50",
+    yellow: "text-amber-600 bg-amber-50",
+    red: "text-rose-600 bg-rose-50",
+    blue: "text-indigo-600 bg-indigo-50",
+    gray: "text-slate-600 bg-slate-50",
+  }[colorType] || "text-slate-600 bg-slate-50";
+
+  const iconColor = colors.split(" ")[0];
+  const bgColor = colors.split(" ")[1];
 
   return (
-    <div className="group relative p-4 sm:p-6 bg-white rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-300 shadow-sm hover:shadow-md">
-      <div className="absolute -top-3 -right-3 flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 bg-gray-50 border border-gray-200 rounded-lg">
-        <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${color}`} />
-      </div>
-      <div className="space-y-1 sm:space-y-2">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <p className="text-2xl sm:text-3xl font-bold text-gray-900">
-            {value.toLocaleString()}
-          </p>
-          {tooltip && (
-            <div className="relative">
-              <Info
-                className="w-3 h-3 sm:w-4 sm:h-4 text-gray-400 cursor-help hover:text-gray-700 transition-colors"
-                onMouseEnter={() => setShowTooltip(true)}
-                onMouseLeave={() => setShowTooltip(false)}
-              />
-              {showTooltip && (
-                <div className="absolute -top-2 left-6 px-3 py-1.5 sm:px-4 sm:py-2 bg-white shadow-lg border border-gray-200 text-gray-900 text-xs rounded-lg whitespace-nowrap z-10">
-                  {tooltip}
-                </div>
-              )}
-            </div>
-          )}
+    <div className="flex flex-col p-4 rounded-xl border border-slate-100 bg-white hover:border-slate-200 transition-colors">
+      <div className="flex items-center gap-3 mb-2">
+        <div className={`p-2 rounded-lg ${bgColor}`}>
+          <Icon className={`w-4 h-4 ${iconColor}`} />
         </div>
-        <p className="text-xs sm:text-sm text-gray-500 uppercase tracking-wider">{label}</p>
+        <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">{label}</span>
+      </div>
+      <div className="text-2xl font-bold text-slate-900 font-heading">
+        {value.toLocaleString()}
       </div>
     </div>
   );
@@ -39,26 +33,24 @@ const StatItem = ({ icon: Icon, label, value, color, tooltip }) => {
 
 const DsaDistributionChart = ({ stats }) => {
   const [expanded, setExpanded] = useState(false);
-  
-  // Prepare data for pie chart
+
   const chartData = useMemo(() => [
-    { name: 'Easy', value: stats.easyCount, color: '#22c55e' },  // green-500
-    { name: 'Medium', value: stats.mediumCount, color: '#fb923c' }, // orange-400
-    { name: 'Hard', value: stats.hardCount, color: '#ef4444' },  // red-500
-    { name: 'Fundamental', value: stats.fundamentalCount, color: '#1d4ed8' }  // blue-700
+    { name: 'Easy', value: stats.easyCount, color: '#10b981' },   // emerald-500
+    { name: 'Medium', value: stats.mediumCount, color: '#f59e0b' }, // amber-500
+    { name: 'Hard', value: stats.hardCount, color: '#f43f5e' },   // rose-500
+    { name: 'Fundamental', value: stats.fundamentalCount, color: '#6366f1' } // indigo-500
   ].filter(item => item.value > 0), [stats]);
 
   const totalProblems = stats.totalDSASolved;
-  
+
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const { name, value } = payload[0].payload;
       const percentage = totalProblems > 0 ? ((value / totalProblems) * 100).toFixed(1) : 0;
-      
       return (
-        <div className="px-3 py-2 bg-white shadow-lg border border-black/10 rounded-lg text-xs">
-          <p className="font-semibold">{name}</p>
-          <p>{value} problems ({percentage}%)</p>
+        <div className="px-3 py-2 bg-slate-800 text-white text-xs rounded-lg shadow-xl border border-slate-700">
+          <p className="font-semibold mb-0.5">{name}</p>
+          <p className="text-slate-300">{value} ({percentage}%)</p>
         </div>
       );
     }
@@ -68,44 +60,45 @@ const DsaDistributionChart = ({ stats }) => {
   if (chartData.length === 0) return null;
 
   return (
-    <div className="mt-6 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
-      <div 
-        className="flex justify-between items-center cursor-pointer" 
+    <div className="mt-6 pt-6 border-t border-slate-100">
+      <button
+        className="flex w-full justify-between items-center group"
         onClick={() => setExpanded(!expanded)}
       >
-        <h3 className="text-sm font-medium text-gray-700">Problem Distribution</h3>
-        {expanded ? 
-          <ChevronUp className="w-4 h-4 text-gray-500" /> : 
-          <ChevronDown className="w-4 h-4 text-gray-500" />
+        <span className="text-sm font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">Problem Distribution</span>
+        {expanded ?
+          <ChevronUp className="w-4 h-4 text-slate-400 group-hover:text-indigo-600" /> :
+          <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-indigo-600" />
         }
-      </div>
-      
+      </button>
+
       {expanded && (
-        <div className="mt-4 h-64 bg-gray-50 rounded-lg p-4">
+        <div className="mt-6 h-64">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={chartData}
                 cx="50%"
                 cy="50%"
-                innerRadius={50}
+                innerRadius={60}
                 outerRadius={80}
-                paddingAngle={3}
+                paddingAngle={4}
                 dataKey="value"
                 startAngle={90}
                 endAngle={450}
-                animationDuration={1000}
+                cornerRadius={4}
               >
                 {chartData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                layout="horizontal" 
-                verticalAlign="bottom" 
-                align="center"
-                formatter={(value) => <span className="text-xs text-gray-700">{value}</span>}
+              <Legend
+                verticalAlign="bottom"
+                height={36}
+                iconType="circle"
+                iconSize={8}
+                formatter={(value) => <span className="text-xs font-medium text-slate-600 ml-1">{value}</span>}
               />
             </PieChart>
           </ResponsiveContainer>
@@ -117,59 +110,45 @@ const DsaDistributionChart = ({ stats }) => {
 
 const PlatformBreakdown = ({ stats }) => {
   const [expanded, setExpanded] = useState(false);
-  
-  const leetcodeCount = parseInt(
-    stats.statsArray.find(s => s.platform === 'LeetCode')?.solvedCount || 0,
-    10
-  );
-  
-  const gfgCount = parseInt(
-    stats.statsArray.find(s => s.platform === 'GeeksforGeeks')?.solvedCount || 0,
-    10
-  );
-  
+
+  const leetcodeCount = parseInt(stats.statsArray.find(s => s.platform === 'LeetCode')?.solvedCount || 0, 10);
+  const gfgCount = parseInt(stats.statsArray.find(s => s.platform === 'GeeksforGeeks')?.solvedCount || 0, 10);
   const total = stats.totalDSASolved;
   const leetcodePercentage = total > 0 ? (leetcodeCount / total) * 100 : 0;
   const gfgPercentage = total > 0 ? (gfgCount / total) * 100 : 0;
-  
+
   return (
-    <div className="mt-4 p-4 bg-white rounded-xl border border-gray-200 shadow-sm">
-      <div 
-        className="flex justify-between items-center cursor-pointer"
+    <div className="mt-4 pt-4 border-t border-slate-100">
+      <button
+        className="flex w-full justify-between items-center group"
         onClick={() => setExpanded(!expanded)}
       >
-        <h3 className="text-sm font-medium text-gray-700">Platform Breakdown</h3>
-        {expanded ? 
-          <ChevronUp className="w-4 h-4 text-gray-500" /> : 
-          <ChevronDown className="w-4 h-4 text-gray-500" />
+        <span className="text-sm font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">Platform Breakdown</span>
+        {expanded ?
+          <ChevronUp className="w-4 h-4 text-slate-400 group-hover:text-indigo-600" /> :
+          <ChevronDown className="w-4 h-4 text-slate-400 group-hover:text-indigo-600" />
         }
-      </div>
-      
+      </button>
+
       {expanded && (
-        <div className="mt-4 space-y-3">
-          <div className="space-y-1">
-            <div className="flex justify-between items-center text-xs">
-              <span>LeetCode</span>
-              <span className="font-medium">{leetcodeCount} problems</span>
+        <div className="mt-4 space-y-4">
+          <div className="space-y-2">
+            <div className="flex justify-between items-center text-xs font-medium">
+              <span className="text-slate-700">LeetCode</span>
+              <span className="text-slate-900">{leetcodeCount}</span>
             </div>
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-yellow-400"
-                style={{ width: `${leetcodePercentage}%` }}
-              />
+            <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-full bg-amber-400 rounded-full" style={{ width: `${leetcodePercentage}%` }} />
             </div>
           </div>
-          
-          <div className="space-y-1">
-            <div className="flex justify-between items-center text-xs">
-              <span>GeeksforGeeks</span>
-              <span className="font-medium">{gfgCount} problems</span>
+
+          <div className="space-y-2">
+            <div className="flex justify-between items-center text-xs font-medium">
+              <span className="text-slate-700">GeeksforGeeks</span>
+              <span className="text-slate-900">{gfgCount}</span>
             </div>
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-green-500"
-                style={{ width: `${gfgPercentage}%` }}
-              />
+            <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${gfgPercentage}%` }} />
             </div>
           </div>
         </div>
@@ -203,62 +182,47 @@ const DsaStatsCard = ({ stats }) => {
     { totalSolved: 0, easyCount: 0, mediumCount: 0, hardCount: 0, fundamentalCount: 0, totalDSASolved: 0 }
   );
 
-  const enhancedStats = {
-    ...totalStats,
-    statsArray
-  };
+  const enhancedStats = { ...totalStats, statsArray };
 
   return (
-    <div className="w-full max-w-3xl p-4 sm:p-8 rounded-2xl bg-white border border-gray-200 shadow-lg">
-      <div className="flex justify-between items-start mb-6 sm:mb-8">
-        <div className="space-y-1">
-          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-gray-900">
-            DSA Matrix
-          </h1>
-          <p className="text-xs sm:text-sm text-gray-500 uppercase tracking-widest">LeetCode + GeeksforGeeks</p>
+    <div className="w-full">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2.5 bg-indigo-50 rounded-xl">
+          <Trophy className="w-5 h-5 text-indigo-600" />
         </div>
-        <div className="relative flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-blue-50 border border-blue-200">
-          <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-blue-700" />
+        <div>
+          <h2 className="text-lg font-bold text-slate-900 font-heading leading-tight">DSA Performance</h2>
+          <p className="text-xs text-slate-500 font-medium">LeetCode & GeeksforGeeks</p>
         </div>
       </div>
 
-      <div className="mb-6 sm:mb-8 p-3 sm:p-4 rounded-xl bg-gray-50 border border-gray-200 shadow-sm">
-        <div className="flex justify-between items-center">
-          <span className="text-xs sm:text-sm font-medium text-gray-600 uppercase tracking-wider">Total Problems Solved</span>
-          <span className="text-2xl sm:text-3xl font-bold text-blue-700">
-            {totalStats.totalDSASolved.toLocaleString()}
-          </span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatItem
           icon={Circle}
           label="Easy"
           value={totalStats.easyCount}
-          color="text-emerald-500"
+          colorType="green"
         />
         <StatItem
           icon={AlertTriangle}
           label="Medium"
           value={totalStats.mediumCount}
-          color="text-amber-500"
+          colorType="yellow"
         />
         <StatItem
           icon={Target}
           label="Hard"
           value={totalStats.hardCount}
-          color="text-rose-500"
+          colorType="red"
         />
         <StatItem
           icon={Info}
-          label="Fundamentals"
+          label="Base"
           value={totalStats.fundamentalCount}
-          color="text-blue-700"
-          tooltip="GFG Fundamental Problems"
+          colorType="blue"
         />
       </div>
-      
+
       <DsaDistributionChart stats={enhancedStats} />
       <PlatformBreakdown stats={enhancedStats} />
     </div>
